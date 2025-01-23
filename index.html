@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Career Explorer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Construction Career Explorer</h1>
+        
+        <form id="careerForm" class="needs-validation" novalidate>
+            <!-- Section 1: Self-Reflection -->
+            <div class="section mb-5">
+                <h2>Section 1: Self-Reflection</h2>
+                
+                <div class="mb-3">
+                    <label class="form-label">What motivates you to consider a career in construction or oil and gas?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="motivation" value="hands-on">
+                        <label class="form-check-label">Hands-on work</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="motivation" value="leadership">
+                        <label class="form-check-label">Leadership opportunities</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="motivation" value="creativity">
+                        <label class="form-check-label">Creativity</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="motivation" value="financial">
+                        <label class="form-check-label">Financial stability</label>
+                    </div>
+                </div>
+
+                <!-- MBTI Assessment -->
+                <div class="mb-3">
+                    <h3>Myers-Briggs Type Indicator</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Energy</label>
+                            <select class="form-select" name="mbti-energy" required>
+                                <option value="">Choose...</option>
+                                <option value="E">Extrovert (E)</option>
+                                <option value="I">Introvert (I)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Information</label>
+                            <select class="form-select" name="mbti-info" required>
+                                <option value="">Choose...</option>
+                                <option value="S">Sensing (S)</option>
+                                <option value="N">Intuition (N)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Industry Knowledge -->
+            <div class="section mb-5">
+                <h2>Section 2: Industry Knowledge</h2>
+                
+                <div class="mb-3">
+                    <label class="form-label">Which areas of construction/oil and gas are you most familiar with?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="knowledge" value="heavy-machinery">
+                        <label class="form-check-label">Heavy Machinery Operations</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="knowledge" value="trades">
+                        <label class="form-check-label">Trades (Electrical, Plumbing, etc.)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="knowledge" value="engineering">
+                        <label class="form-check-label">Engineering/Design</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="knowledge" value="safety">
+                        <label class="form-check-label">Safety/Quality Control</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Career Preferences -->
+            <div class="section mb-5">
+                <h2>Section 3: Career Preferences</h2>
+                
+                <div class="mb-3">
+                    <label class="form-label">Work Environment Preference</label>
+                    <select class="form-select" name="environment" required>
+                        <option value="">Choose...</option>
+                        <option value="outdoor">Primarily Outdoors</option>
+                        <option value="indoor">Primarily Indoors</option>
+                        <option value="mixed">Mix of Both</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Career Path Interest</label>
+                    <select class="form-select" name="career-path" required>
+                        <option value="">Choose...</option>
+                        <option value="trades">Trades</option>
+                        <option value="heavy-machinery">Heavy Machinery</option>
+                        <option value="engineering">Engineering</option>
+                        <option value="management">Project Management</option>
+                        <option value="safety">Safety/Quality Control</option>
+                        <option value="technology">Construction Technology</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Section 4: Education & Training -->
+            <div class="section mb-5">
+                <h2>Section 4: Education & Training</h2>
+                
+                <div class="mb-3">
+                    <label class="form-label">Current Education Level</label>
+                    <select class="form-select" name="education" required>
+                        <option value="">Choose...</option>
+                        <option value="high-school">High School</option>
+                        <option value="trade-school">Trade School</option>
+                        <option value="college">College Diploma</option>
+                        <option value="university">University Degree</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Willing to Pursue Further Education?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="further-education" value="yes" required>
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="further-education" value="no">
+                        <label class="form-check-label">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Get Career Recommendations</button>
+        </form>
+
+        <!-- Enhanced Results Section -->
+        <div id="results" class="mt-5" style="display: none;">
+            <h2>Your Career Recommendations</h2>
+            <div id="resultsContent"></div>
+            <div id="careerFlowchart" class="mt-4">
+                <h3>Career Progression Path</h3>
+                <div class="flowchart-container"></div>
+            </div>
+            <div id="trainingResources" class="mt-4">
+                <h3>Training & Resources</h3>
+                <div class="resources-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
