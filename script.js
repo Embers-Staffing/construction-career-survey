@@ -190,8 +190,49 @@ function createCareerFlowchart(container, primaryCareer) {
             'Regional Safety Director',
             'Corporate Safety Director',
             'VP of Safety'
+        ],
+        'Property Developer': [
+            'Property Developer Assistant',
+            'Property Developer',
+            'Senior Property Developer',
+            'Real Estate Investment Manager',
+            'Director of Property Development'
+        ],
+        'Facilities Management': [
+            'Maintenance Worker',
+            'Facilities Coordinator',
+            'Facilities Manager',
+            'Director of Operations',
+            'Chief Operating Officer'
+        ],
+        'Engineering Management': [
+            'Engineer',
+            'Project Engineer',
+            'Project Manager',
+            'Senior Project Manager',
+            'Engineering Director'
+        ],
+        'Safety Management': [
+            'Tradesperson',
+            'Safety Officer',
+            'Safety Supervisor',
+            'Safety Manager',
+            'Safety Director'
+        ],
+        'Entrepreneurial': [
+            'Skilled Tradesperson',
+            'Independent Contractor',
+            'Small Business Owner',
+            'Multiple Crews Owner',
+            'Construction Company CEO'
+        ],
+        'Technology Specialist': [
+            'Construction Technologist',
+            'Drone Operations Specialist',
+            'VR Construction Designer',
+            'Construction AI Specialist',
+            'Digital Innovation Director'
         ]
-        // Add more career paths...
     };
 
     const path = careerPaths[primaryCareer] || [];
@@ -226,8 +267,21 @@ function getStepRequirements(step) {
         'Lead Operator': '• Advanced Certification\n• Supervisory Experience',
         'Small Business Owner': '• Business License\n• Management Experience\n• Financial Planning',
         'Construction Company Owner': '• Business Degree or equivalent\n• 10+ years experience\n• Project Management Professional (PMP)',
-        'Corporate Safety Director': '• CRSP Certification\n• 15+ years experience\n• Advanced Safety Certifications'
-        // Add more requirements...
+        'Corporate Safety Director': '• CRSP Certification\n• 15+ years experience\n• Advanced Safety Certifications',
+        'Property Developer Assistant': '• Bachelor\'s in Real Estate or Business\n• Basic understanding of property markets',
+        'Property Developer': '• 3-5 years experience\n• Project management skills\n• Financial analysis capability',
+        'Senior Property Developer': '• 7+ years experience\n• Portfolio of successful projects\n• Advanced financial modeling',
+        'Real Estate Investment Manager': '• 10+ years experience\n• MBA preferred\n• Investment strategy expertise',
+        'Director of Property Development': '• 15+ years experience\n• Executive leadership skills\n• Strategic planning expertise',
+        'Maintenance Worker': '• Technical certification\n• Basic maintenance skills\n• Safety training',
+        'Facilities Coordinator': '• 2-3 years experience\n• Project coordination skills\n• CMMS knowledge',
+        'Facilities Manager': '• 5+ years experience\n• FMP certification\n• Team management',
+        'Director of Operations': '• 10+ years experience\n• CFM certification\n• Strategic planning',
+        'Construction Technologist': '• IT degree or certification\n• Construction software expertise',
+        'Drone Operations Specialist': '• FAA certification\n• Construction mapping experience',
+        'VR Construction Designer': '• 3D modeling expertise\n• VR/AR development skills',
+        'Construction AI Specialist': '• Computer Science degree\n• AI/ML expertise\n• Construction knowledge',
+        'Digital Innovation Director': '• 10+ years experience\n• Technology strategy\n• Innovation management'
     };
     
     return requirements[step] || 'Requirements vary by location and employer';
@@ -253,6 +307,22 @@ function addTrainingResources(container, career) {
             { name: 'International Construction Management', provider: 'Global Construction Institute' },
             { name: 'Cross-Cultural Communication', provider: 'International Business School' },
             { name: 'Global Project Management', provider: 'PMI Global' }
+        ],
+        'Property Developer': [
+            { name: 'Real Estate Development Certificate', provider: 'Urban Land Institute' },
+            { name: 'Financial Modeling for Real Estate', provider: 'ARGUS Software' },
+            { name: 'Property Development Strategy', provider: 'Real Estate Institute' }
+        ],
+        'Facilities Management': [
+            { name: 'Facility Management Professional (FMP)', provider: 'IFMA' },
+            { name: 'Certified Facility Manager (CFM)', provider: 'IFMA' },
+            { name: 'Building Systems Maintenance', provider: 'BOMI International' }
+        ],
+        'Technology Specialist': [
+            { name: 'Drone Pilot Certification', provider: 'FAA' },
+            { name: 'VR Development for Construction', provider: 'Autodesk' },
+            { name: 'AI in Construction Management', provider: 'Construction Tech Institute' },
+            { name: 'BIM Management Certificate', provider: 'Autodesk' }
         ]
     };
 
