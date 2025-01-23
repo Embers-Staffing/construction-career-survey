@@ -1,65 +1,249 @@
-.section {
+/* General Styles */
+body {
     background-color: #f8f9fa;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    color: #343a40;
 }
 
+.container {
+    max-width: 900px;
+}
+
+/* Section Styling */
+.section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.section h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* Form Elements */
 .form-label {
     font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.75rem;
 }
 
+.form-check {
+    margin-bottom: 0.5rem;
+    padding-left: 2rem;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-select {
+    border-radius: 8px;
+    border-color: #dee2e6;
+}
+
+.form-select:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* Card Styling for Holland Codes */
+.card {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1rem;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card-body ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.card-body li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.card-body li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #0d6efd;
+}
+
+/* Results Section */
 #results {
-    background-color: #e9ecef;
+    background-color: white;
     padding: 2rem;
-    border-radius: 10px;
-    margin-top: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
 
 .career-path {
-    background-color: white;
-    padding: 1rem;
-    margin: 1rem 0;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
 }
 
+/* Career Flowchart */
 .career-flowchart {
     display: flex;
-    flex-wrap: nowrap;
     overflow-x: auto;
     padding: 2rem 0;
-    gap: 1rem;
+    gap: 1.5rem;
+    align-items: center;
 }
 
 .career-step {
-    display: flex;
-    align-items: center;
-    min-width: 200px;
+    min-width: 220px;
+    text-align: center;
 }
 
 .step-content {
     background-color: white;
-    padding: 1rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1.25rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.step-content h4 {
+    color: #0d6efd;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.step-content p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
 }
 
 .step-arrow {
-    margin: 0 1rem;
-    color: #6c757d;
+    color: #0d6efd;
     font-size: 1.5rem;
+    margin: 0 0.5rem;
 }
 
+/* Resources List */
 .resources-list {
     list-style: none;
     padding: 0;
 }
 
 .resources-list li {
-    background-color: white;
+    background-color: #f8f9fa;
     padding: 1rem;
-    margin-bottom: 0.5rem;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
+    border-left: 4px solid #0d6efd;
+}
+
+/* Submit Button */
+.btn-primary {
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .section {
+        padding: 1.5rem;
+    }
+
+    .career-flowchart {
+        padding: 1rem 0;
+    }
+
+    .career-step {
+        min-width: 180px;
+    }
+
+    .step-content {
+        padding: 1rem;
+    }
+}
+
+/* Progress Indicator */
+.progress-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding: 0;
+    list-style: none;
+}
+
+.progress-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.progress-step:not(:last-child):after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 20px);
+    width: calc(100% - 40px);
+    height: 2px;
+    background-color: #dee2e6;
+    z-index: 1;
+}
+
+.progress-step.active:not(:last-child):after {
+    background-color: #0d6efd;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    background-color: #dee2e6;
+    color: #6c757d;
+    margin: 0 auto 0.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.progress-step.active .step-number {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.step-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.progress-step.active .step-label {
+    color: #0d6efd;
+    font-weight: 600;
 } 

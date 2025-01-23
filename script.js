@@ -92,6 +92,27 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('There was an error submitting your form. Please try again.');
         }
     });
+
+    // Add to the DOMContentLoaded event listener:
+    const sections = document.querySelectorAll('.section');
+    const progressSteps = document.querySelectorAll('.progress-step');
+
+    // Update progress indicator based on scroll position
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        
+        sections.forEach((section, index) => {
+            if (index < progressSteps.length) {
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    progressSteps.forEach(step => step.classList.remove('active'));
+                    progressSteps[index].classList.add('active');
+                }
+            }
+        });
+    });
 });
 
 function displayResults(results) {
