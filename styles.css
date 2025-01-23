@@ -18,7 +18,7 @@ body {
 }
 
 .section h2 {
-    color: #2c3e50;
+    color: #333333;
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #e9ecef;
@@ -37,8 +37,8 @@ body {
 }
 
 .form-check-input:checked {
-    background-color: #0d6efd;
-    border-color: #0d6efd;
+    background-color: #00BCD4;
+    border-color: #00BCD4;
 }
 
 .form-select {
@@ -47,8 +47,8 @@ body {
 }
 
 .form-select:focus {
-    border-color: #86b7fe;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    border-color: #00BCD4;
+    box-shadow: 0 0 0 0.25rem rgba(0, 188, 212, 0.25);
 }
 
 /* Card Styling for Holland Codes */
@@ -88,7 +88,7 @@ body {
     content: "•";
     position: absolute;
     left: 0;
-    color: #0d6efd;
+    color: #00BCD4;
 }
 
 /* Results Section */
@@ -128,7 +128,7 @@ body {
 }
 
 .step-content h4 {
-    color: #0d6efd;
+    color: #00BCD4;
     margin-bottom: 0.75rem;
     font-size: 1.1rem;
 }
@@ -140,7 +140,7 @@ body {
 }
 
 .step-arrow {
-    color: #0d6efd;
+    color: #00BCD4;
     font-size: 1.5rem;
     margin: 0 0.5rem;
 }
@@ -156,7 +156,7 @@ body {
     padding: 1rem;
     margin-bottom: 0.75rem;
     border-radius: 8px;
-    border-left: 4px solid #0d6efd;
+    border-left: 4px solid #00BCD4;
 }
 
 /* Submit Button */
@@ -165,15 +165,15 @@ body {
     font-weight: 600;
     border-radius: 8px;
     transition: all 0.2s ease;
-    background-color: #FF4A3C;
-    border-color: #FF4A3C;
+    background-color: #00BCD4;
+    border-color: #00BCD4;
 }
 
 .btn-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 74, 60, 0.2);
-    background-color: #FF6B5D;
-    border-color: #FF6B5D;
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.2);
+    background-color: #00ACC1;
+    border-color: #00ACC1;
 }
 
 /* Responsive Design */
@@ -222,7 +222,7 @@ body {
 }
 
 .progress-step.active:not(:last-child):after {
-    background-color: #FF4A3C;
+    background-color: #00BCD4;
 }
 
 .step-number {
@@ -238,7 +238,7 @@ body {
 }
 
 .progress-step.active .step-number {
-    background-color: #FF4A3C;
+    background-color: #00BCD4;
     color: white;
 }
 
@@ -248,7 +248,7 @@ body {
 }
 
 .progress-step.active .step-label {
-    color: #FF4A3C;
+    color: #00BCD4;
     font-weight: 600;
 }
 
