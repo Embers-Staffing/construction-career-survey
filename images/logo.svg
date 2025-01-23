@@ -1,19 +1,26 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Background Circle -->
-    <circle cx="90" cy="90" r="85" fill="#f8f9fa" stroke="#0d6efd" stroke-width="3"/>
+    <!-- Background -->
+    <rect width="180" height="180" rx="20" fill="#ffffff"/>
     
-    <!-- Building Icon -->
-    <path d="M60 140V60L90 40L120 60V140H60Z" fill="#0d6efd"/>
-    <path d="M75 80H85M75 100H85M75 120H85M95 80H105M95 100H105M95 120H105" stroke="white" stroke-width="2"/>
+    <!-- Construction Icon - Stylized Building/Tools -->
+    <g transform="translate(40, 30)">
+        <!-- Building Silhouette -->
+        <path d="M50 120V40L25 50V120H50Z" fill="#FF4A3C"/>
+        <path d="M50 120V40L75 50V120H50Z" fill="#FF6B5D"/>
+        
+        <!-- Crane Element -->
+        <path d="M85 30L95 25V90H85V30Z" fill="#FF4A3C"/>
+        <path d="M65 25H115" stroke="#FF4A3C" stroke-width="6"/>
+        
+        <!-- Tool Elements -->
+        <path d="M15 70L35 60M65 60L85 70" stroke="#333333" stroke-width="4"/>
+    </g>
     
-    <!-- Gear Icon -->
-    <path d="M90 35C92.7614 35 95 32.7614 95 30C95 27.2386 92.7614 25 90 25C87.2386 25 85 27.2386 85 30C85 32.7614 87.2386 35 90 35Z" fill="#0d6efd"/>
-    <path d="M90 155C92.7614 155 95 152.761 95 150C95 147.239 92.7614 145 90 145C87.2386 145 85 147.239 85 150C85 152.761 87.2386 155 90 155Z" fill="#0d6efd"/>
+    <!-- Text Elements -->
+    <text x="90" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#333333">
+        CAREER EXPLORER
+    </text>
     
-    <!-- Compass Points -->
-    <path d="M30 90C30 92.7614 27.7614 95 25 95C22.2386 95 20 92.7614 20 90C20 87.2386 22.2386 85 25 85C27.7614 85 30 87.2386 30 90Z" fill="#0d6efd"/>
-    <path d="M160 90C160 92.7614 157.761 95 155 95C152.239 95 150 92.7614 150 90C150 87.2386 152.239 85 155 85C157.761 85 160 87.2386 160 90Z" fill="#0d6efd"/>
-    
-    <!-- Connecting Lines -->
-    <path d="M35 90H45M135 90H145M90 35V45M90 135V145" stroke="#0d6efd" stroke-width="2"/>
+    <!-- Decorative Elements -->
+    <circle cx="90" cy="90" r="75" stroke="#FF4A3C" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
 </svg> 

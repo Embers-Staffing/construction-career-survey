@@ -165,11 +165,15 @@ body {
     font-weight: 600;
     border-radius: 8px;
     transition: all 0.2s ease;
+    background-color: #FF4A3C;
+    border-color: #FF4A3C;
 }
 
 .btn-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+    box-shadow: 0 4px 12px rgba(255, 74, 60, 0.2);
+    background-color: #FF6B5D;
+    border-color: #FF6B5D;
 }
 
 /* Responsive Design */
@@ -218,7 +222,7 @@ body {
 }
 
 .progress-step.active:not(:last-child):after {
-    background-color: #0d6efd;
+    background-color: #FF4A3C;
 }
 
 .step-number {
@@ -234,7 +238,7 @@ body {
 }
 
 .progress-step.active .step-number {
-    background-color: #0d6efd;
+    background-color: #FF4A3C;
     color: white;
 }
 
@@ -244,7 +248,7 @@ body {
 }
 
 .progress-step.active .step-label {
-    color: #0d6efd;
+    color: #FF4A3C;
     font-weight: 600;
 }
 
@@ -253,10 +257,15 @@ body {
     margin: 0 auto;
     max-width: 180px;
     transition: transform 0.3s ease;
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
 }
 
 .logo-container:hover {
     transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(255, 74, 60, 0.15);
 }
 
 .logo {
@@ -266,12 +275,15 @@ body {
 
 /* Update the existing h1 styles */
 h1 {
-    color: #2c3e50;
-    font-weight: 700;
+    color: #333333;
+    font-weight: 800;
     letter-spacing: -0.5px;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
 }
 
 .lead {
-    font-size: 1.1rem;
-    color: #6c757d;
+    font-size: 1.2rem;
+    color: #666666;
+    font-weight: 400;
 } 
