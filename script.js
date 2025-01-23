@@ -76,20 +76,33 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         try {
-            // Replace with your Google Apps Script Web App URL
-            const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
-                method: 'POST',
-                body: JSON.stringify(data),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            const result = await response.json();
+            // For testing/demo purposes, we'll just simulate a successful response
+            // Replace this with your actual API endpoint when ready
+            const result = {
+                careers: ['Project Manager', 'Construction Manager', 'Site Supervisor'],
+                training: [
+                    'Project Management Professional (PMP) Certification',
+                    'Construction Management Certificate',
+                    'Leadership Training'
+                ]
+            };
+            
             displayResults(result);
+            
+            // Scroll to results
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            
         } catch (error) {
             console.error('Error:', error);
-            alert('There was an error submitting your form. Please try again.');
+            // Show error message to user
+            const errorAlert = document.createElement('div');
+            errorAlert.className = 'alert alert-danger mt-3';
+            errorAlert.role = 'alert';
+            errorAlert.textContent = 'There was an error processing your form. Please try again.';
+            form.appendChild(errorAlert);
+            
+            // Remove error message after 5 seconds
+            setTimeout(() => errorAlert.remove(), 5000);
         }
     });
 
@@ -100,9 +113,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update progress indicator based on scroll position
     window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY + window.innerHeight / 2;
+        const sections = [
+            document.querySelector('.section:nth-child(1)'), // Interests & Personality
+            document.querySelector('.section:nth-child(2)'), // Career Preferences
+            document.querySelector('.section:nth-child(3)'), // Work Environment
+            document.querySelector('.section:nth-child(4)')  // Development & Goals
+        ];
         
         sections.forEach((section, index) => {
-            if (index < progressSteps.length) {
+            if (section) {
                 const sectionTop = section.offsetTop;
                 const sectionBottom = sectionTop + section.offsetHeight;
                 
