@@ -5,7 +5,11 @@
   "main": "index.html",
   "scripts": {
     "start": "serve",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "echo 'No build step required for static files'",
+    "dev": "serve -l 3000",
+    "deploy": "echo 'Add your deployment script here'",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "audit": "npm audit fix --force"
   },
   "keywords": [
     "construction",
@@ -16,11 +20,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^4.1.3",
-    "jquery": "^3.3.1",
-    "popper.js": "^1.14.3"
+    "bootstrap": "^5.3.3",
+    "jquery": "^3.6.4",
+    "popper.js": "^1.16.1"
   },
   "devDependencies": {
-    "serve": "^14.2.0"
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "resolutions": {
+    "glob-parent": ">=5.1.2",
+    "minimist": ">=1.2.6"
   }
-} 
+}

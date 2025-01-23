@@ -1,30 +1,97 @@
-document.getElementById('careerForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const formData = new FormData(e.target);
-    const data = {
-        motivation: formData.getAll('motivation'),
-        mbtiEnergy: formData.get('mbti-energy'),
-        mbtiInfo: formData.get('mbti-info'),
-        // Add more fields as needed
-    };
-
-    try {
-        // Replace with your Google Apps Script Web App URL
-        const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
+document.addEventListener('DOMContentLoaded', function() {
+    // Limit Holland Code selections to 3
+    const hollandCheckboxes = document.querySelectorAll('.holland-code');
+    hollandCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const checked = document.querySelectorAll('.holland-code:checked');
+            if (checked.length > 3) {
+                this.checked = false;
+                alert('Please select up to 3 categories only.');
             }
         });
+    });
 
-        const result = await response.json();
-        displayResults(result);
-    } catch (error) {
-        console.error('Error:', error);
-        alert('There was an error submitting your form. Please try again.');
-    }
+    // Limit career choices to 3
+    const careerChoices = document.querySelectorAll('.career-choice');
+    careerChoices.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const checked = document.querySelectorAll('.career-choice:checked');
+            if (checked.length > 3) {
+                this.checked = false;
+                alert('Please select up to 3 career choices only.');
+            }
+        });
+    });
+
+    // Limit career goals to 3
+    const careerGoals = document.querySelectorAll('.career-goal');
+    careerGoals.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const checked = document.querySelectorAll('.career-goal:checked');
+            if (checked.length > 3) {
+                this.checked = false;
+                alert('Please select up to 3 career goals only.');
+            }
+        });
+    });
+
+    // Form validation
+    const form = document.getElementById('careerForm');
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!form.checkValidity()) {
+            e.stopPropagation();
+            form.classList.add('was-validated');
+            return;
+        }
+
+        const formData = new FormData(form);
+        const data = {
+            activities: formData.get('activities'),
+            environment: formData.get('environment'),
+            hollandCodes: formData.getAll('holland'),
+            skills: formData.getAll('skills'),
+            experience: formData.get('experience'),
+            trainingWillingness: formData.get('training-willingness'),
+            careerInterests: formData.getAll('career-interests'),
+            stressHandling: formData.get('stress-handling'),
+            learningStyle: formData.get('learning-style'),
+            industryAppeal: formData.getAll('industry-appeal'),
+            certificationAwareness: formData.get('certification-awareness'),
+            environmentComfort: formData.get('environment-comfort'),
+            workingConditions: formData.getAll('working-conditions'),
+            workHours: formData.get('work-hours'),
+            travelWillingness: formData.get('travel-willingness'),
+            workLifeBalance: formData.get('work-life-balance'),
+            careerGoals: formData.getAll('career-goals'),
+            careerTimeline: formData.get('career-timeline'),
+            projectInterest: formData.get('project-interest'),
+            salaryTarget: formData.get('salary-target'),
+            advancementPreference: formData.get('advancement-preference'),
+            desiredSkills: formData.getAll('desired-skills'),
+            internationalInterest: formData.get('international-interest'),
+            mentorshipType: formData.get('mentorship-type'),
+            // Add more fields as needed
+        };
+
+        try {
+            // Replace with your Google Apps Script Web App URL
+            const response = await fetch('YOUR_GOOGLE_APPS_SCRIPT_URL', {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+            displayResults(result);
+        } catch (error) {
+            console.error('Error:', error);
+            alert('There was an error submitting your form. Please try again.');
+        }
+    });
 });
 
 function displayResults(results) {
@@ -74,6 +141,34 @@ function createCareerFlowchart(container, primaryCareer) {
             'Project Manager',
             'Senior Project Manager',
             'Program Director'
+        ],
+        'Safety Professional': [
+            'Safety Coordinator',
+            'Safety Officer',
+            'Safety Supervisor',
+            'Safety Manager',
+            'HSE Director'
+        ],
+        'Crane Operator': [
+            'Apprentice Operator',
+            'Licensed Operator',
+            'Lead Operator',
+            'Crane Supervisor',
+            'Operations Manager'
+        ],
+        'Business Owner': [
+            'Trade Professional',
+            'Lead Tradesperson',
+            'Small Business Owner',
+            'Construction Company Owner',
+            'Industry Leader'
+        ],
+        'Safety Director': [
+            'Safety Coordinator',
+            'Safety Manager',
+            'Regional Safety Director',
+            'Corporate Safety Director',
+            'VP of Safety'
         ]
         // Add more career paths...
     };
@@ -105,6 +200,12 @@ function getStepRequirements(step) {
     const requirements = {
         'Entry Level Operator': '• Valid driver\'s license\n• Basic safety training',
         'Certified Operator': '• Equipment certification\n• 2 years experience',
+        'Safety Coordinator': '• OHS Certificate\n• First Aid Certification',
+        'Licensed Operator': '• Crane Operator Certification\n• 3-5 years experience',
+        'Lead Operator': '• Advanced Certification\n• Supervisory Experience',
+        'Small Business Owner': '• Business License\n• Management Experience\n• Financial Planning',
+        'Construction Company Owner': '• Business Degree or equivalent\n• 10+ years experience\n• Project Management Professional (PMP)',
+        'Corporate Safety Director': '• CRSP Certification\n• 15+ years experience\n• Advanced Safety Certifications'
         // Add more requirements...
     };
     
@@ -117,7 +218,21 @@ function addTrainingResources(container, career) {
             { name: 'Equipment Operation Certification', provider: 'Technical Safety BC' },
             { name: 'Safety Training', provider: 'WorkSafeBC' }
         ],
-        // Add more resources...
+        'Project Manager': [
+            { name: 'Project Management Professional (PMP)', provider: 'Project Management Institute' },
+            { name: 'Construction Management Certificate', provider: 'Local Technical Institute' },
+            { name: 'Leadership Development Program', provider: 'Construction Association' }
+        ],
+        'Business Owner': [
+            { name: 'Business Management Certificate', provider: 'Business Development Bank' },
+            { name: 'Construction Business Management', provider: 'Industry Association' },
+            { name: 'Financial Management for Contractors', provider: 'Construction Association' }
+        ],
+        'International Opportunities': [
+            { name: 'International Construction Management', provider: 'Global Construction Institute' },
+            { name: 'Cross-Cultural Communication', provider: 'International Business School' },
+            { name: 'Global Project Management', provider: 'PMI Global' }
+        ]
     };
 
     const careerResources = resources[career] || [];

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
     
     <title>Construction Career Explorer</title>
@@ -16,144 +16,542 @@
         <h1 class="text-center mb-4">Construction Career Explorer</h1>
         
         <form id="careerForm" class="needs-validation" novalidate>
-            <!-- Section 1: Self-Reflection -->
+            <!-- Section 1: Self-Awareness and Interests -->
             <div class="section mb-5">
-                <h2>Section 1: Self-Reflection</h2>
+                <h2>Section 1: Self-Awareness and Interests</h2>
                 
-                <div class="mb-3">
-                    <label class="form-label">What motivates you to consider a career in construction or oil and gas?</label>
+                <div class="mb-4">
+                    <label class="form-label">1. What activities do you enjoy the most in your free time?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="motivation" value="hands-on">
-                        <label class="form-check-label">Hands-on work</label>
+                        <input class="form-check-input" type="radio" name="activities" value="building" required>
+                        <label class="form-check-label">Building or fixing things</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="motivation" value="leadership">
-                        <label class="form-check-label">Leadership opportunities</label>
+                        <input class="form-check-input" type="radio" name="activities" value="puzzles">
+                        <label class="form-check-label">Solving puzzles or designing something</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="motivation" value="creativity">
-                        <label class="form-check-label">Creativity</label>
+                        <input class="form-check-input" type="radio" name="activities" value="technology">
+                        <label class="form-check-label">Working with technology or heavy equipment</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="motivation" value="financial">
-                        <label class="form-check-label">Financial stability</label>
+                        <input class="form-check-input" type="radio" name="activities" value="leading">
+                        <label class="form-check-label">Leading a team or organizing projects</label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="activities" value="safety">
+                        <label class="form-check-label">Ensuring people follow rules and stay safe</label>
+                    </div>
+                    <div class="invalid-feedback">Please select an option.</div>
                 </div>
 
-                <!-- MBTI Assessment -->
-                <div class="mb-3">
-                    <h3>Myers-Briggs Type Indicator</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="form-label">Energy</label>
-                            <select class="form-select" name="mbti-energy" required>
-                                <option value="">Choose...</option>
-                                <option value="E">Extrovert (E)</option>
-                                <option value="I">Introvert (I)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Information</label>
-                            <select class="form-select" name="mbti-info" required>
-                                <option value="">Choose...</option>
-                                <option value="S">Sensing (S)</option>
-                                <option value="N">Intuition (N)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 2: Industry Knowledge -->
-            <div class="section mb-5">
-                <h2>Section 2: Industry Knowledge</h2>
-                
-                <div class="mb-3">
-                    <label class="form-label">Which areas of construction/oil and gas are you most familiar with?</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="knowledge" value="heavy-machinery">
-                        <label class="form-check-label">Heavy Machinery Operations</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="knowledge" value="trades">
-                        <label class="form-check-label">Trades (Electrical, Plumbing, etc.)</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="knowledge" value="engineering">
-                        <label class="form-check-label">Engineering/Design</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="knowledge" value="safety">
-                        <label class="form-check-label">Safety/Quality Control</label>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 3: Career Preferences -->
-            <div class="section mb-5">
-                <h2>Section 3: Career Preferences</h2>
-                
-                <div class="mb-3">
-                    <label class="form-label">Work Environment Preference</label>
+                <div class="mb-4">
+                    <label class="form-label">2. Which type of work environment appeals to you most?</label>
                     <select class="form-select" name="environment" required>
                         <option value="">Choose...</option>
-                        <option value="outdoor">Primarily Outdoors</option>
-                        <option value="indoor">Primarily Indoors</option>
-                        <option value="mixed">Mix of Both</option>
+                        <option value="outdoor">Hands-on work outdoors</option>
+                        <option value="machinery">Operating complex machinery</option>
+                        <option value="office">Planning and coordinating tasks in an office</option>
+                        <option value="safety">Ensuring safety and compliance at worksites</option>
+                        <option value="design">Designing or engineering structures</option>
                     </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Career Path Interest</label>
-                    <select class="form-select" name="career-path" required>
-                        <option value="">Choose...</option>
-                        <option value="trades">Trades</option>
-                        <option value="heavy-machinery">Heavy Machinery</option>
-                        <option value="engineering">Engineering</option>
-                        <option value="management">Project Management</option>
-                        <option value="safety">Safety/Quality Control</option>
-                        <option value="technology">Construction Technology</option>
-                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
                 </div>
             </div>
 
-            <!-- Section 4: Education & Training -->
+            <!-- Holland Codes (RIASEC) Assessment -->
             <div class="section mb-5">
-                <h2>Section 4: Education & Training</h2>
+                <h2>Holland Codes Assessment</h2>
+                <p class="mb-3">Select up to three categories that best describe you:</p>
+
+                <div class="mb-4">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="realistic">
+                                <label class="form-check-label fw-bold">Realistic (Doer)</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>I enjoy working with my hands, tools, and machinery</li>
+                                <li>I like physical work or building things</li>
+                                <li>I prefer outdoor or practical tasks</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="investigative">
+                                <label class="form-check-label fw-bold">Investigative (Thinker)</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>I enjoy analyzing problems and solving complex issues</li>
+                                <li>I like working with data, science, or technology</li>
+                                <li>I prefer tasks that involve thinking and planning</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="artistic">
+                                <label class="form-check-label fw-bold">Artistic (Creator)</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>I enjoy being creative and designing unique projects</li>
+                                <li>I like expressing ideas through art, design, or writing</li>
+                                <li>I prefer flexible tasks that allow for imagination</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="social">
+                                <label class="form-check-label fw-bold">Social (Helper)</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>I enjoy helping others and improving their safety or well-being</li>
+                                <li>I like working with people and being part of a team</li>
+                                <li>I prefer roles that involve teaching or guiding others</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="enterprising">
+                                <label class="form-check-label fw-bold">Enterprising (Leader)</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>I enjoy leading teams and organizing projects</li>
+                                <li>I like persuading or motivating others to achieve goals</li>
+                                <li>I prefer roles that involve decision-making and responsibility</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="conventional">
+                                <label class="form-check-label fw-bold">Conventional (Organizer)</label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li>I enjoy planning, organizing, and following detailed processes</li>
+                                <li>I like working with systems, schedules, and accuracy</li>
+                                <li>I prefer structured tasks with clear rules</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Skills and Experience -->
+            <div class="section mb-5">
+                <h2>Skills and Experience</h2>
                 
-                <div class="mb-3">
-                    <label class="form-label">Current Education Level</label>
-                    <select class="form-select" name="education" required>
-                        <option value="">Choose...</option>
-                        <option value="high-school">High School</option>
-                        <option value="trade-school">Trade School</option>
-                        <option value="college">College Diploma</option>
-                        <option value="university">University Degree</option>
-                    </select>
+                <div class="mb-4">
+                    <label class="form-label">What type of tasks do you excel at?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="skills" value="hands-on">
+                        <label class="form-check-label">Working with your hands or building things</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="skills" value="critical-thinking">
+                        <label class="form-check-label">Thinking critically and organizing projects</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="skills" value="machinery">
+                        <label class="form-check-label">Learning to operate machinery or technology</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="skills" value="safety">
+                        <label class="form-check-label">Identifying risks and creating safe work practices</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="skills" value="design">
+                        <label class="form-check-label">Mathematical or artistic skills for designing</label>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Willing to Pursue Further Education?</label>
+                <div class="mb-4">
+                    <label class="form-label">Have you had any exposure to construction-related activities?</label>
+                    <select class="form-select" name="experience" required>
+                        <option value="">Choose...</option>
+                        <option value="worked">Yes, I've worked on a project or internship</option>
+                        <option value="observed">Yes, I've observed or shadowed someone</option>
+                        <option value="interested">No, but I'm interested in learning more</option>
+                        <option value="unsure">No, and I'm unsure if it's for me</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Are you willing to pursue further training or education?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="further-education" value="yes" required>
+                        <input class="form-check-input" type="radio" name="training-willingness" value="yes" required>
                         <label class="form-check-label">Yes</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="further-education" value="no">
+                        <input class="form-check-input" type="radio" name="training-willingness" value="no">
                         <label class="form-check-label">No</label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="training-willingness" value="maybe">
+                        <label class="form-check-label">Maybe</label>
+                    </div>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+            </div>
+
+            <!-- Section 4: Career Preferences -->
+            <div class="section mb-5">
+                <h2>Career Preferences</h2>
+                
+                <div class="mb-4">
+                    <label class="form-label">Which construction roles interest you the most? (Choose up to three)</label>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="trades">
+                        <label class="form-check-label">Tradesperson (e.g., electrician, plumber, carpenter)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="heavy-machinery">
+                        <label class="form-check-label">Heavy Machinery Operator</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="crane">
+                        <label class="form-check-label">Crane Operator</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="project-management">
+                        <label class="form-check-label">Project Coordinator or Manager</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="safety">
+                        <label class="form-check-label">Safety Professional (e.g., CRSP)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="engineering">
+                        <label class="form-check-label">Engineer</label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">How do you handle stressful or high-pressure situations?</label>
+                    <select class="form-select" name="stress-handling" required>
+                        <option value="">Choose...</option>
+                        <option value="calm">Stay calm and focus on solutions</option>
+                        <option value="teamwork">Rely on teamwork to find answers</option>
+                        <option value="analytical">Take time to think critically before acting</option>
+                        <option value="procedural">Use rules and procedures to navigate the situation</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">What is your preferred learning style?</label>
+                    <select class="form-select" name="learning-style" required>
+                        <option value="">Choose...</option>
+                        <option value="hands-on">Hands-on and practical experience</option>
+                        <option value="observation">Observing and asking questions</option>
+                        <option value="reading">Reading or studying manuals and blueprints</option>
+                        <option value="mentorship">Working with mentors or coaches</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+            </div>
+
+            <!-- Section 5: Industry Knowledge -->
+            <div class="section mb-5">
+                <h2>Industry Knowledge</h2>
+                
+                <div class="mb-4">
+                    <label class="form-label">What appeals to you about the construction industry?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="industry-appeal" value="opportunities">
+                        <label class="form-check-label">Good job opportunities and career growth</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="industry-appeal" value="hands-on">
+                        <label class="form-check-label">Hands-on and practical work</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="industry-appeal" value="creativity">
+                        <label class="form-check-label">Opportunity to be creative or innovative</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="industry-appeal" value="earnings">
+                        <label class="form-check-label">High earning potential</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="industry-appeal" value="tangible">
+                        <label class="form-check-label">Being part of building something tangible</label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Are you aware of the certifications or training required for your chosen career path?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="certification-awareness" value="yes" required>
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="certification-awareness" value="no">
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="certification-awareness" value="somewhat">
+                        <label class="form-check-label">Somewhat</label>
+                    </div>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+            </div>
+
+            <!-- Section 6: Work Environment and Physical Demands -->
+            <div class="section mb-5">
+                <h2>Work Environment and Physical Demands</h2>
+                
+                <div class="mb-4">
+                    <label class="form-label">How comfortable are you working in challenging environments?</label>
+                    <select class="form-select" name="environment-comfort" required>
+                        <option value="">Choose...</option>
+                        <option value="very">Very comfortable</option>
+                        <option value="somewhat">Somewhat comfortable</option>
+                        <option value="not">Not comfortable</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Which working conditions are you comfortable with? (Select all that apply)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="working-conditions" value="heights">
+                        <label class="form-check-label">Working at heights</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="working-conditions" value="weather">
+                        <label class="form-check-label">Working in various weather conditions</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="working-conditions" value="noise">
+                        <label class="form-check-label">Working in noisy environments</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="working-conditions" value="physical">
+                        <label class="form-check-label">Physical labor and heavy lifting</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="working-conditions" value="confined">
+                        <label class="form-check-label">Working in confined spaces</label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Would you be willing to work non-standard hours or shifts?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="work-hours" value="yes" required>
+                        <label class="form-check-label">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="work-hours" value="no">
+                        <label class="form-check-label">No</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="work-hours" value="maybe">
+                        <label class="form-check-label">Maybe, depending on compensation</label>
+                    </div>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Are you willing to travel or relocate for work?</label>
+                    <select class="form-select" name="travel-willingness" required>
+                        <option value="">Choose...</option>
+                        <option value="travel-yes">Yes, willing to travel regularly</option>
+                        <option value="relocate-yes">Yes, willing to relocate</option>
+                        <option value="both">Yes, willing to both travel and relocate</option>
+                        <option value="limited">Limited travel only</option>
+                        <option value="no">No, prefer to stay in one location</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">How important is work-life balance to you?</label>
+                    <select class="form-select" name="work-life-balance" required>
+                        <option value="">Choose...</option>
+                        <option value="very">Very important - prefer regular hours</option>
+                        <option value="somewhat">Somewhat important - flexible for the right opportunity</option>
+                        <option value="not">Not a primary concern - focused on career growth</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+            </div>
+
+            <!-- Section 7: Goals and Aspirations -->
+            <div class="section mb-5">
+                <h2>Goals and Aspirations</h2>
+                
+                <div class="mb-4">
+                    <label class="form-label">What are your primary career goals? (Select up to three)</label>
+                    <div class="form-check">
+                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="leadership">
+                        <label class="form-check-label">Advance to a leadership position</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="expertise">
+                        <label class="form-check-label">Become an expert in a specific trade or skill</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="business">
+                        <label class="form-check-label">Start my own construction business</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="innovation">
+                        <label class="form-check-label">Work with innovative construction technologies</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="safety">
+                        <label class="form-check-label">Improve industry safety standards</label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">What timeline do you envision for your career progression?</label>
+                    <select class="form-select" name="career-timeline" required>
+                        <option value="">Choose...</option>
+                        <option value="fast">Fast-track (advance quickly through positions)</option>
+                        <option value="steady">Steady progression (gain thorough experience)</option>
+                        <option value="specialized">Focus on specialization before advancement</option>
+                        <option value="flexible">Flexible (explore different roles first)</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">What type of projects interest you most?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="project-interest" value="residential" required>
+                        <label class="form-check-label">Residential construction</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="project-interest" value="commercial">
+                        <label class="form-check-label">Commercial buildings</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="project-interest" value="industrial">
+                        <label class="form-check-label">Industrial facilities</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="project-interest" value="infrastructure">
+                        <label class="form-check-label">Infrastructure (roads, bridges, etc.)</label>
+                    </div>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">What salary range are you targeting in 5 years?</label>
+                    <select class="form-select" name="salary-target" required>
+                        <option value="">Choose...</option>
+                        <option value="50-75k">$50,000 - $75,000</option>
+                        <option value="75-100k">$75,000 - $100,000</option>
+                        <option value="100-125k">$100,000 - $125,000</option>
+                        <option value="125k+">$125,000+</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+            </div>
+
+            <!-- Section 8: Personal Development and Future Planning -->
+            <div class="section mb-5">
+                <h2>Personal Development and Future Planning</h2>
+                
+                <div class="mb-4">
+                    <label class="form-label">How do you prefer to advance your career?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="advancement-preference" value="education" required>
+                        <label class="form-check-label">Through formal education and certifications</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="advancement-preference" value="experience">
+                        <label class="form-check-label">Through hands-on experience and mentorship</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="advancement-preference" value="both">
+                        <label class="form-check-label">A combination of both</label>
+                    </div>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Which additional skills would you like to develop? (Select all that apply)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="desired-skills" value="digital">
+                        <label class="form-check-label">Digital technology and software</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="desired-skills" value="management">
+                        <label class="form-check-label">Project management</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="desired-skills" value="leadership">
+                        <label class="form-check-label">Leadership and team management</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="desired-skills" value="technical">
+                        <label class="form-check-label">Advanced technical skills</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="desired-skills" value="business">
+                        <label class="form-check-label">Business and financial management</label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Are you interested in international work opportunities?</label>
+                    <select class="form-select" name="international-interest" required>
+                        <option value="">Choose...</option>
+                        <option value="yes-long">Yes, interested in long-term international assignments</option>
+                        <option value="yes-short">Yes, but only for short-term projects</option>
+                        <option value="maybe">Maybe in the future</option>
+                        <option value="no">No, prefer to work locally</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">What type of mentorship would you prefer?</label>
+                    <select class="form-select" name="mentorship-type" required>
+                        <option value="">Choose...</option>
+                        <option value="formal">Formal mentorship program</option>
+                        <option value="informal">Informal on-the-job mentoring</option>
+                        <option value="peer">Peer mentoring and collaboration</option>
+                        <option value="industry">Industry expert mentoring</option>
+                    </select>
+                    <div class="invalid-feedback">Please select an option.</div>
                 </div>
             </div>
 
             <button type="submit" class="btn btn-primary">Get Career Recommendations</button>
-
-            <!-- Add validation feedback messages -->
-            <div class="invalid-feedback">
-                Please make a selection.
-            </div>
         </form>
 
-        <!-- Enhanced Results Section -->
         <div id="results" class="mt-5" style="display: none;">
             <h2>Your Career Recommendations</h2>
             <div id="resultsContent"></div>
@@ -168,10 +566,8 @@
         </div>
     </div>
 
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 
