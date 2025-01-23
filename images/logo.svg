@@ -1,26 +1,25 @@
-<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Background -->
-    <rect width="180" height="180" rx="20" fill="#ffffff"/>
+<svg width="180" height="180" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Flame Icon -->
+    <path d="M200 50C200 50 240 100 240 140C240 180 200 190 200 190C200 190 160 180 160 140C160 100 200 50 200 50Z" 
+          fill="#00BCD4"/>
     
-    <!-- Construction Icon - Stylized Building/Tools -->
-    <g transform="translate(40, 30)">
-        <!-- Building Silhouette -->
-        <path d="M50 120V40L25 50V120H50Z" fill="#FF4A3C"/>
-        <path d="M50 120V40L75 50V120H50Z" fill="#FF6B5D"/>
-        
-        <!-- Crane Element -->
-        <path d="M85 30L95 25V90H85V30Z" fill="#FF4A3C"/>
-        <path d="M65 25H115" stroke="#FF4A3C" stroke-width="6"/>
-        
-        <!-- Tool Elements -->
-        <path d="M15 70L35 60M65 60L85 70" stroke="#333333" stroke-width="4"/>
-    </g>
-    
-    <!-- Text Elements -->
-    <text x="90" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#333333">
-        CAREER EXPLORER
+    <!-- Text "embers" -->
+    <text x="200" y="280" 
+          text-anchor="middle" 
+          font-family="Arial, sans-serif" 
+          font-size="72" 
+          font-weight="400" 
+          fill="#333333">
+        embers
     </text>
     
-    <!-- Decorative Elements -->
-    <circle cx="90" cy="90" r="75" stroke="#FF4A3C" stroke-width="2" stroke-dasharray="4 4" fill="none"/>
+    <!-- Text "staffing solutions" -->
+    <text x="200" y="320" 
+          text-anchor="middle" 
+          font-family="Arial, sans-serif" 
+          font-size="24" 
+          font-weight="400" 
+          fill="#666666">
+        staffing solutions
+    </text>
 </svg> 

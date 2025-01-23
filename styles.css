@@ -257,15 +257,6 @@ body {
     margin: 0 auto;
     max-width: 180px;
     transition: transform 0.3s ease;
-    background: white;
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-}
-
-.logo-container:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 20px rgba(255, 74, 60, 0.15);
 }
 
 .logo {
