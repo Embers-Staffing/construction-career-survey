@@ -59,15 +59,26 @@
 
             <div class="row">
                 <div class="col-md-6 mb-4">
-                    <label class="form-label">Age</label>
-                    <input type="number" class="form-control" name="age" min="16" max="100" required>
-                    <div class="invalid-feedback">Please enter a valid age (16-100).</div>
+                    <label class="form-label">Birth Date</label>
+                    <input type="date" class="form-control" name="birthDate" required 
+                           max="2008-01-01" min="1954-01-01">
+                    <div class="invalid-feedback">Please enter a valid birth date (must be 16-70 years old).</div>
                 </div>
                 
                 <div class="col-md-6 mb-4">
                     <label class="form-label">Years in Construction</label>
-                    <input type="number" class="form-control" name="constructionExperience" min="0" max="50" required>
-                    <div class="invalid-feedback">Please enter your years of experience (0-50).</div>
+                    <select class="form-select" name="constructionExperience" required>
+                        <option value="0" selected>New to Construction</option>
+                        <option value="1">1 year</option>
+                        <option value="2">2 years</option>
+                        <option value="3">3 years</option>
+                        <option value="4">4 years</option>
+                        <option value="5">5-10 years</option>
+                        <option value="10">10-15 years</option>
+                        <option value="15">15-20 years</option>
+                        <option value="20">20+ years</option>
+                    </select>
+                    <div class="invalid-feedback">Please select your experience level.</div>
                 </div>
             </div>
         </div>

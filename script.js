@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = {
             firstName: formData.get('firstName'),
             lastName: formData.get('lastName'),
-            age: formData.get('age'),
+            birthDate: formData.get('birthDate'),
+            age: calculateAge(formData.get('birthDate')),
             constructionExperience: formData.get('constructionExperience'),
             activities: formData.get('activities'),
             environment: formData.get('environment'),
@@ -147,8 +148,10 @@ function displayResults(results) {
         <div class="career-path mb-4">
             <h3>Personal Profile</h3>
             <p><strong>Name:</strong> ${results.firstName} ${results.lastName}</p>
-            <p><strong>Age:</strong> ${results.age}</p>
-            <p><strong>Construction Experience:</strong> ${results.constructionExperience} years</p>
+            <p><strong>Age:</strong> ${results.age} years old</p>
+            <p><strong>Construction Experience:</strong> ${results.constructionExperience === '0' ? 
+                'New to Construction' : 
+                `${results.constructionExperience} years`}</p>
         </div>
         
         <div class="career-path">
@@ -414,4 +417,18 @@ function addTrainingResources(container, career) {
         
         container.appendChild(resourcesList);
     }
+}
+
+// Add this function to calculate age from birthdate
+function calculateAge(birthDate) {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+        age--;
+    }
+    
+    return age;
 } 
