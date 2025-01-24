@@ -119,21 +119,29 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY + window.innerHeight / 2;
         const sections = [
-            document.querySelector('.section:nth-child(1)'), // Interests & Personality
-            document.querySelector('.section:nth-child(2)'), // Career Preferences
-            document.querySelector('.section:nth-child(3)'), // Work Environment
-            document.querySelector('.section:nth-child(4)')  // Development & Goals
+            document.querySelector('#interests'),      // Section 1
+            document.querySelector('#preferences'),    // Section 2
+            document.querySelector('#environment'),    // Section 3
+            document.querySelector('#development')     // Section 4
         ];
         
-        sections.forEach((section, index) => {
-            if (section) {
-                const sectionTop = section.offsetTop;
-                const sectionBottom = sectionTop + section.offsetHeight;
-                
-                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-                    progressSteps.forEach(step => step.classList.remove('active'));
-                    progressSteps[index].classList.add('active');
-                }
+        // Find the first visible section
+        let activeIndex = sections.findIndex(section => {
+            if (!section) return false;
+            const sectionTop = section.offsetTop;
+            const sectionBottom = sectionTop + section.offsetHeight;
+            return scrollPosition >= sectionTop && scrollPosition < sectionBottom;
+        });
+
+        // If no section is found, default to first section
+        if (activeIndex === -1) activeIndex = 0;
+
+        // Update active state
+        progressSteps.forEach((step, index) => {
+            if (index === activeIndex) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
             }
         });
     });
@@ -148,6 +156,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 section.scrollIntoView({ behavior: 'smooth' });
             }
         });
+    });
+
+    // Set first step as active initially
+    progressSteps.forEach((step, index) => {
+        if (index === 0) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
     });
 });
 
