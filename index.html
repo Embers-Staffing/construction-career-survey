@@ -24,38 +24,26 @@
         <div class="progress-indicator mb-4">
             <div class="progress-step active" data-section="personal">
                 <div class="step-number">1</div>
-                <div class="step-label">Personal Info</div>
+                <div class="step-label">Personal Profile</div>
             </div>
-            <div class="progress-step" data-section="interests">
+            <div class="progress-step" data-section="personality">
                 <div class="step-number">2</div>
-                <div class="step-label">Interests</div>
-            </div>
-            <div class="progress-step" data-section="skills">
-                <div class="step-number">3</div>
-                <div class="step-label">Skills</div>
+                <div class="step-label">Personality & Skills</div>
             </div>
             <div class="progress-step" data-section="preferences">
-                <div class="step-number">4</div>
-                <div class="step-label">Career Preferences</div>
-            </div>
-            <div class="progress-step" data-section="environment">
-                <div class="step-number">5</div>
-                <div class="step-label">Work Environment</div>
+                <div class="step-number">3</div>
+                <div class="step-label">Work Preferences</div>
             </div>
             <div class="progress-step" data-section="goals">
-                <div class="step-number">6</div>
-                <div class="step-label">Goals</div>
-            </div>
-            <div class="progress-step" data-section="development">
-                <div class="step-number">7</div>
-                <div class="step-label">Development</div>
+                <div class="step-number">4</div>
+                <div class="step-label">Goals & Development</div>
             </div>
         </div>
         
         <form id="careerForm" class="needs-validation" novalidate>
-            <!-- Section 1: Personal Information -->
+            <!-- Section 1: Personal Profile -->
             <div id="personal" class="section mb-5">
-                <h2>Personal Information</h2>
+                <h2>Personal Profile</h2>
                 <div class="row">
                     <div class="col-md-6 mb-4">
                         <label class="form-label">First Name</label>
@@ -96,9 +84,9 @@
                 </div>
             </div>
 
-            <!-- Section 2: Interests -->
-            <div id="interests" class="section mb-5">
-                <h2>Interests & Personality</h2>
+            <!-- Section 2: Personality & Skills (Combines personality tests and skills) -->
+            <div id="personality" class="section mb-5">
+                <h2>Personality & Skills</h2>
                 
                 <!-- Myers-Briggs Assessment -->
                 <div class="mb-4">
@@ -284,9 +272,9 @@
                 </div>
             </div>
 
-            <!-- Section 4: Career Preferences -->
+            <!-- Section 4: Work Preferences (Combines career interests and environment) -->
             <div id="preferences" class="section mb-5">
-                <h2>Career Preferences</h2>
+                <h2>Work Preferences</h2>
                 
                 <div class="mb-4">
                     <label class="form-label">Which construction roles interest you the most? (Choose up to three)</label>
@@ -331,12 +319,7 @@
                         <label class="form-check-label">AI and automation</label>
                     </div>
                 </div>
-            </div>
 
-            <!-- Section 5: Work Environment -->
-            <div id="environment" class="section mb-5">
-                <h2>Work Environment</h2>
-                
                 <div class="mb-4">
                     <label class="form-label">What type of work environment do you prefer?</label>
                     <div class="form-check">
@@ -368,9 +351,9 @@
                 </div>
             </div>
 
-            <!-- Section 6: Career Goals -->
+            <!-- Section 4: Goals & Development (Combines goals and professional development) -->
             <div id="goals" class="section mb-5">
-                <h2>Career Goals</h2>
+                <h2>Goals & Development</h2>
                 
                 <div class="mb-4">
                     <label class="form-label">What are your career goals? (Select up to 3)</label>
@@ -403,12 +386,7 @@
                     </select>
                     <div class="invalid-feedback">Please select an option.</div>
                 </div>
-            </div>
 
-            <!-- Section 7: Professional Development -->
-            <div id="development" class="section mb-5">
-                <h2>Professional Development</h2>
-                
                 <div class="mb-4">
                     <label class="form-label">How do you prefer to advance your career?</label>
                     <div class="form-check">

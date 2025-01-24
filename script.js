@@ -35,6 +35,64 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Update section tracking
+    const sections = [
+        document.querySelector('#personal'),      // Personal Profile
+        document.querySelector('#personality'),   // Personality & Skills
+        document.querySelector('#preferences'),   // Work Preferences
+        document.querySelector('#goals')          // Goals & Development
+    ];
+    
+    const progressSteps = document.querySelectorAll('.progress-step');
+
+    // Update progress indicator based on scroll position
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        
+        // Find the first visible section
+        let activeIndex = sections.findIndex(section => {
+            if (!section) return false;
+            const sectionTop = section.offsetTop;
+            const sectionBottom = sectionTop + section.offsetHeight;
+            return scrollPosition >= sectionTop && scrollPosition < sectionBottom;
+        });
+
+        // If no section is found, default to first section
+        if (activeIndex === -1) activeIndex = 0;
+
+        // Update active state
+        progressSteps.forEach((step, index) => {
+            if (index === activeIndex) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+    });
+
+    // Make progress steps clickable
+    progressSteps.forEach((step) => {
+        step.addEventListener('click', () => {
+            const sectionId = step.getAttribute('data-section');
+            const section = document.querySelector(`#${sectionId}`);
+            if (section) {
+                // Smooth scroll to section
+                section.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Update active state
+                progressSteps.forEach(s => s.classList.remove('active'));
+                step.classList.add('active');
+            }
+        });
+    });
+
+    // Set first step as active initially
+    progressSteps[0].classList.add('active');
+    progressSteps.slice(1).forEach(step => step.classList.remove('active'));
+
     // Form validation
     const form = document.getElementById('careerForm');
     form.addEventListener('submit', async function(e) {
@@ -108,62 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Remove error message after 5 seconds
             setTimeout(() => errorAlert.remove(), 5000);
-        }
-    });
-
-    // Add to the DOMContentLoaded event listener:
-    const sections = document.querySelectorAll('.section');
-    const progressSteps = document.querySelectorAll('.progress-step');
-
-    // Update progress indicator based on scroll position
-    window.addEventListener('scroll', () => {
-        const scrollPosition = window.scrollY + window.innerHeight / 2;
-        const sections = [
-            document.querySelector('#interests'),      // Section 1
-            document.querySelector('#preferences'),    // Section 2
-            document.querySelector('#environment'),    // Section 3
-            document.querySelector('#development')     // Section 4
-        ];
-        
-        // Find the first visible section
-        let activeIndex = sections.findIndex(section => {
-            if (!section) return false;
-            const sectionTop = section.offsetTop;
-            const sectionBottom = sectionTop + section.offsetHeight;
-            return scrollPosition >= sectionTop && scrollPosition < sectionBottom;
-        });
-
-        // If no section is found, default to first section
-        if (activeIndex === -1) activeIndex = 0;
-
-        // Update active state
-        progressSteps.forEach((step, index) => {
-            if (index === activeIndex) {
-                step.classList.add('active');
-            } else {
-                step.classList.remove('active');
-            }
-        });
-    });
-
-    // Make progress steps clickable
-    progressSteps.forEach((step, index) => {
-        step.style.cursor = 'pointer';
-        step.addEventListener('click', () => {
-            const sectionId = step.getAttribute('data-section');
-            const section = document.querySelector(`#${sectionId}`);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
-
-    // Set first step as active initially
-    progressSteps.forEach((step, index) => {
-        if (index === 0) {
-            step.classList.add('active');
-        } else {
-            step.classList.remove('active');
         }
     });
 });
