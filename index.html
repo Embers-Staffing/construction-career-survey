@@ -100,57 +100,140 @@
             <div id="interests" class="section mb-5">
                 <h2>Interests & Personality</h2>
                 
+                <!-- Myers-Briggs Assessment -->
                 <div class="mb-4">
-                    <label class="form-label">What activities do you enjoy the most in your free time?</label>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="activities" value="building" required>
-                        <label class="form-check-label">Building or fixing things</label>
+                    <h3 class="h5 mb-3">Myers-Briggs Personality Assessment</h3>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">How do you prefer to focus your attention?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-ei" value="E" required>
+                            <label class="form-check-label">Externally - energized by social interaction (Extroversion)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-ei" value="I">
+                            <label class="form-check-label">Internally - energized by quiet reflection (Introversion)</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="activities" value="puzzles">
-                        <label class="form-check-label">Solving puzzles or designing something</label>
+
+                    <div class="mb-3">
+                        <label class="form-label">How do you prefer to take in information?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-sn" value="S" required>
+                            <label class="form-check-label">Through concrete facts and details (Sensing)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-sn" value="N">
+                            <label class="form-check-label">Through patterns and possibilities (Intuition)</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="activities" value="technology">
-                        <label class="form-check-label">Working with technology or heavy equipment</label>
+
+                    <div class="mb-3">
+                        <label class="form-label">How do you prefer to make decisions?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-tf" value="T" required>
+                            <label class="form-check-label">Based on logic and objective analysis (Thinking)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-tf" value="F">
+                            <label class="form-check-label">Based on values and people impact (Feeling)</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="activities" value="leading">
-                        <label class="form-check-label">Leading a team or organizing projects</label>
+
+                    <div class="mb-3">
+                        <label class="form-label">How do you prefer to organize your life?</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-jp" value="J" required>
+                            <label class="form-check-label">Structured and planned (Judging)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="mbti-jp" value="P">
+                            <label class="form-check-label">Flexible and adaptable (Perceiving)</label>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="activities" value="safety">
-                        <label class="form-check-label">Ensuring people follow rules and stay safe</label>
-                    </div>
-                    <div class="invalid-feedback">Please select an option.</div>
                 </div>
 
                 <!-- Holland Code Assessment -->
                 <div class="mb-4">
-                    <label class="form-label">Select up to 3 personality traits that best describe you:</label>
-                    <div class="form-check">
-                        <input class="form-check-input holland-code" type="checkbox" name="holland" value="realistic">
-                        <label class="form-check-label">Practical and hands-on (Realistic)</label>
+                    <h3 class="h5 mb-3">Holland Code Career Assessment</h3>
+                    <p class="text-muted mb-3">Select up to 3 personality types that best describe you:</p>
+                    
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="realistic">
+                                <label class="form-check-label">
+                                    <strong>Realistic (R)</strong>
+                                    <p class="text-muted mb-0">You enjoy working with your hands, tools, machines, or animals. You value practical things you can see and touch.</p>
+                                    <small class="text-muted">Good for: Trades, Equipment Operation, Technical Work</small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input holland-code" type="checkbox" name="holland" value="investigative">
-                        <label class="form-check-label">Analytical and observant (Investigative)</label>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="investigative">
+                                <label class="form-check-label">
+                                    <strong>Investigative (I)</strong>
+                                    <p class="text-muted mb-0">You like to solve complex problems, analyze data, and understand how things work.</p>
+                                    <small class="text-muted">Good for: Engineering, Estimation, Technical Planning</small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input holland-code" type="checkbox" name="holland" value="artistic">
-                        <label class="form-check-label">Creative and innovative (Artistic)</label>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="artistic">
+                                <label class="form-check-label">
+                                    <strong>Artistic (A)</strong>
+                                    <p class="text-muted mb-0">You value creativity, innovation, and unique solutions to problems.</p>
+                                    <small class="text-muted">Good for: Design, BIM Modeling, Virtual Construction</small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input holland-code" type="checkbox" name="holland" value="social">
-                        <label class="form-check-label">Helpful and cooperative (Social)</label>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="social">
+                                <label class="form-check-label">
+                                    <strong>Social (S)</strong>
+                                    <p class="text-muted mb-0">You enjoy working with and helping others, teaching, or providing guidance.</p>
+                                    <small class="text-muted">Good for: Safety Training, Team Leadership, Project Coordination</small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input holland-code" type="checkbox" name="holland" value="enterprising">
-                        <label class="form-check-label">Persuasive and leadership-oriented (Enterprising)</label>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="enterprising">
+                                <label class="form-check-label">
+                                    <strong>Enterprising (E)</strong>
+                                    <p class="text-muted mb-0">You like to lead, persuade others, and make business decisions.</p>
+                                    <small class="text-muted">Good for: Project Management, Business Development, Company Leadership</small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input holland-code" type="checkbox" name="holland" value="conventional">
-                        <label class="form-check-label">Organized and detail-oriented (Conventional)</label>
+
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-check">
+                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="conventional">
+                                <label class="form-check-label">
+                                    <strong>Conventional (C)</strong>
+                                    <p class="text-muted mb-0">You are detail-oriented, organized, and good with numbers and processes.</p>
+                                    <small class="text-muted">Good for: Cost Estimation, Quality Control, Documentation</small>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
