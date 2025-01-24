@@ -276,6 +276,14 @@
                         <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="engineering">
                         <label class="form-check-label">Engineer</label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="tech-specialist">
+                        <label class="form-check-label">Construction Technology Specialist (drones, VR, AI)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="estimator">
+                        <label class="form-check-label">Cost Estimator/Quantity Surveyor</label>
+                    </div>
                 </div>
 
                 <div class="mb-4">
@@ -299,6 +307,43 @@
                         <option value="reading">Reading or studying manuals and blueprints</option>
                         <option value="mentorship">Working with mentors or coaches</option>
                     </select>
+                    <div class="invalid-feedback">Please select an option.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Which construction technologies interest you? (Select all that apply)</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tech-interests" value="drones">
+                        <label class="form-check-label">Drone mapping and surveying</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tech-interests" value="vr-ar">
+                        <label class="form-check-label">Virtual/Augmented Reality for construction</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tech-interests" value="bim">
+                        <label class="form-check-label">Building Information Modeling (BIM)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="tech-interests" value="ai">
+                        <label class="form-check-label">AI and automation in construction</label>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Are you interested in construction cost estimation?</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="estimation-interest" value="yes-detailed" required>
+                        <label class="form-check-label">Yes, interested in detailed cost analysis and quantity surveying</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="estimation-interest" value="yes-basic">
+                        <label class="form-check-label">Yes, but prefer basic budgeting and cost control</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="estimation-interest" value="no">
+                        <label class="form-check-label">No, prefer other aspects of construction</label>
+                    </div>
                     <div class="invalid-feedback">Please select an option.</div>
                 </div>
             </div>

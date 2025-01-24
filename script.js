@@ -251,6 +251,27 @@ function createCareerFlowchart(container, primaryCareer) {
             'VR Construction Designer',
             'Construction AI Specialist',
             'Digital Innovation Director'
+        ],
+        'Estimator': [
+            'Junior Estimator',
+            'Cost Estimator',
+            'Senior Estimator',
+            'Chief Estimator',
+            'Preconstruction Director'
+        ],
+        'Drone Specialist': [
+            'Drone Pilot',
+            'Survey Technician',
+            'Mapping Specialist',
+            'UAV Operations Manager',
+            'Digital Survey Director'
+        ],
+        'BIM Specialist': [
+            'BIM Technician',
+            'BIM Coordinator',
+            'BIM Manager',
+            'VDC Manager',
+            'Digital Construction Director'
         ]
     };
 
@@ -300,7 +321,15 @@ function getStepRequirements(step) {
         'Drone Operations Specialist': '• FAA certification\n• Construction mapping experience',
         'VR Construction Designer': '• 3D modeling expertise\n• VR/AR development skills',
         'Construction AI Specialist': '• Computer Science degree\n• AI/ML expertise\n• Construction knowledge',
-        'Digital Innovation Director': '• 10+ years experience\n• Technology strategy\n• Innovation management'
+        'Digital Innovation Director': '• 10+ years experience\n• Technology strategy\n• Innovation management',
+        'Junior Estimator': '• Construction-related degree\n• Basic math skills\n• Attention to detail',
+        'Cost Estimator': '• 3+ years experience\n• Estimation software proficiency\n• Industry knowledge',
+        'Senior Estimator': '• 7+ years experience\n• Advanced cost modeling\n• Team leadership',
+        'Chief Estimator': '• 10+ years experience\n• Strategic planning\n• Department management',
+        'Drone Pilot': '• FAA Part 107 certification\n• Basic surveying knowledge\n• Technical aptitude',
+        'Survey Technician': '• Survey technology training\n• Data processing skills\n• Field experience',
+        'BIM Technician': '• BIM software proficiency\n• Technical drawing skills\n• Basic construction knowledge',
+        'BIM Coordinator': '• 3+ years BIM experience\n• Multiple software platforms\n• Team coordination'
     };
     
     return requirements[step] || 'Requirements vary by location and employer';
@@ -342,6 +371,21 @@ function addTrainingResources(container, career) {
             { name: 'VR Development for Construction', provider: 'Autodesk' },
             { name: 'AI in Construction Management', provider: 'Construction Tech Institute' },
             { name: 'BIM Management Certificate', provider: 'Autodesk' }
+        ],
+        'Estimator': [
+            { name: 'Construction Estimation Certificate', provider: 'ASPE' },
+            { name: 'Quantity Surveying Fundamentals', provider: 'RICS' },
+            { name: 'Cost Engineering Certification', provider: 'AACE International' }
+        ],
+        'Drone Specialist': [
+            { name: 'FAA Part 107 Commercial Drone License', provider: 'FAA' },
+            { name: 'Construction Mapping Certificate', provider: 'Drone Training School' },
+            { name: 'Photogrammetry and GIS Training', provider: 'Industry Association' }
+        ],
+        'BIM Specialist': [
+            { name: 'BIM Management Certificate', provider: 'Autodesk' },
+            { name: 'VDC Training Program', provider: 'Construction Institute' },
+            { name: 'Digital Construction Workshop', provider: 'Technology Center' }
         ]
     };
 
