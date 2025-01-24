@@ -22,26 +22,26 @@
         </div>
         
         <div class="progress-indicator mb-4">
-            <div class="progress-step active">
+            <div class="progress-step active" data-section="interests">
                 <div class="step-number">1</div>
                 <div class="step-label">Interests & Personality</div>
             </div>
-            <div class="progress-step">
+            <div class="progress-step" data-section="preferences">
                 <div class="step-number">2</div>
                 <div class="step-label">Career Preferences</div>
             </div>
-            <div class="progress-step">
+            <div class="progress-step" data-section="environment">
                 <div class="step-number">3</div>
                 <div class="step-label">Work Environment</div>
             </div>
-            <div class="progress-step">
+            <div class="progress-step" data-section="development">
                 <div class="step-number">4</div>
                 <div class="step-label">Development & Goals</div>
             </div>
         </div>
         
-        <div class="section mb-5">
-            <h2>Personal Information</h2>
+        <div id="interests" class="section mb-5">
+            <h2>Interests & Personality</h2>
             
             <div class="row">
                 <div class="col-md-6 mb-4">
@@ -85,7 +85,7 @@
         
         <form id="careerForm" class="needs-validation" novalidate>
             <!-- Section 1: Self-Awareness and Interests -->
-            <div class="section mb-5">
+            <div id="preferences" class="section mb-5">
                 <h2>Section 1: Self-Awareness and Interests</h2>
                 
                 <div class="mb-4">
@@ -232,7 +232,7 @@
             </div>
 
             <!-- Section 3: Skills and Experience -->
-            <div class="section mb-5">
+            <div id="environment" class="section mb-5">
                 <h2>Skills and Experience</h2>
                 
                 <div class="mb-4">
@@ -290,7 +290,7 @@
             </div>
 
             <!-- Section 4: Career Preferences -->
-            <div class="section mb-5">
+            <div id="preferences" class="section mb-5">
                 <h2>Career Preferences</h2>
                 
                 <div class="mb-4">
@@ -438,8 +438,8 @@
             </div>
 
             <!-- Section 6: Work Environment and Physical Demands -->
-            <div class="section mb-5">
-                <h2>Work Environment and Physical Demands</h2>
+            <div id="environment" class="section mb-5">
+                <h2>Work Environment</h2>
                 
                 <div class="mb-4">
                     <label class="form-label">How comfortable are you working in challenging environments?</label>
@@ -519,7 +519,7 @@
             </div>
 
             <!-- Section 7: Goals and Aspirations -->
-            <div class="section mb-5">
+            <div id="development" class="section mb-5">
                 <h2>Goals and Aspirations</h2>
                 
                 <div class="mb-4">

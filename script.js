@@ -137,6 +137,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Make progress steps clickable
+    progressSteps.forEach((step, index) => {
+        step.style.cursor = 'pointer';
+        step.addEventListener('click', () => {
+            const sectionId = step.getAttribute('data-section');
+            const section = document.querySelector(`#${sectionId}`);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
 });
 
 function displayResults(results) {
