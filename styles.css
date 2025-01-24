@@ -169,6 +169,8 @@ body {
     transition: all 0.2s ease;
     background-color: #00BCD4;
     border-color: #00BCD4;
+    margin-bottom: 3rem;
+    margin-top: 1rem;
 }
 
 .btn-primary:hover {
@@ -302,4 +304,16 @@ h1 {
 
 .mb-3 {
     margin-bottom: 1.5rem !important;
+}
+
+/* Footer Styling */
+footer {
+    background-color: white;
+    box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
+    margin-top: 4rem !important;
+}
+
+footer p {
+    font-size: 0.9rem;
+    color: #666666;
 } 
