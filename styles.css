@@ -99,6 +99,12 @@ body {
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+#results:not([style*="display: none"]) {
+    display: block !important;
 }
 
 .career-path {

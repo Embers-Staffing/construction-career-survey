@@ -105,91 +105,66 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         const formData = new FormData(form);
-        const data = {
-            firstName: formData.get('firstName'),
-            lastName: formData.get('lastName'),
-            birthDate: formData.get('birthDate'),
-            age: calculateAge(formData.get('birthDate')),
-            constructionExperience: formData.get('constructionExperience'),
-            activities: formData.get('activities'),
-            environment: formData.get('environment'),
-            hollandCodes: formData.getAll('holland'),
-            skills: formData.getAll('skills'),
-            experience: formData.get('experience'),
-            trainingWillingness: formData.get('training-willingness'),
-            careerInterests: formData.getAll('career-interests'),
-            stressHandling: formData.get('stress-handling'),
-            learningStyle: formData.get('learning-style'),
-            industryAppeal: formData.getAll('industry-appeal'),
-            certificationAwareness: formData.get('certification-awareness'),
-            environmentComfort: formData.get('environment-comfort'),
-            workingConditions: formData.getAll('working-conditions'),
-            workHours: formData.get('work-hours'),
-            travelWillingness: formData.get('travel-willingness'),
-            workLifeBalance: formData.get('work-life-balance'),
-            careerGoals: formData.getAll('career-goals'),
-            careerTimeline: formData.get('career-timeline'),
-            projectInterest: formData.get('project-interest'),
-            salaryTarget: formData.get('salary-target'),
-            advancementPreference: formData.get('advancement-preference'),
-            desiredSkills: formData.getAll('desired-skills'),
-            internationalInterest: formData.get('international-interest'),
-            mentorshipType: formData.get('mentorship-type'),
-            // Add more fields as needed
-        };
+        
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+        submitButton.disabled = true;
 
         try {
-            // For testing/demo purposes, we'll just simulate a successful response
+            // Simulate API call with sample data
             const result = {
                 firstName: formData.get('firstName'),
                 lastName: formData.get('lastName'),
                 age: calculateAge(formData.get('birthDate')),
                 constructionExperience: formData.get('constructionExperience'),
-                careers: ['Project Manager', 'Construction Manager', 'Site Supervisor'],
+                mbtiType: getMBTIType(formData),
+                hollandCode: getHollandCode(formData),
+                careers: determineCareerPaths(formData),
                 training: [
                     'Project Management Professional (PMP) Certification',
                     'Construction Management Certificate',
                     'Leadership Training'
                 ]
             };
-            
-            // Show the results section
+
+            // Get the results container
             const resultsDiv = document.getElementById('results');
-            resultsDiv.style.display = 'block';
             
-            // Display results
+            // Update results content
             displayResults(result);
             
-            // Smooth scroll to results
-            resultsDiv.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
+            // Show results section
+            resultsDiv.style.display = 'block';
+            
+            // Scroll to results with offset
+            const offset = 30; // Adjust this value as needed
+            const resultPosition = resultsDiv.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({
+                top: resultPosition,
+                behavior: 'smooth'
             });
-            
-            // Keep the form data (don't reset)
-            form.classList.remove('was-validated');
-            
+
         } catch (error) {
             console.error('Error:', error);
-            // Show error message to user
-            const errorAlert = document.createElement('div');
-            errorAlert.className = 'alert alert-danger mt-3';
-            errorAlert.role = 'alert';
-            errorAlert.textContent = 'There was an error processing your form. Please try again.';
-            form.appendChild(errorAlert);
-            
-            // Remove error message after 5 seconds
-            setTimeout(() => errorAlert.remove(), 5000);
+            alert('There was an error processing your results. Please try again.');
+        } finally {
+            // Restore button state
+            submitButton.innerHTML = originalButtonText;
+            submitButton.disabled = false;
         }
     });
 });
 
 function displayResults(results) {
-    const resultsDiv = document.getElementById('results');
     const resultsContent = document.getElementById('resultsContent');
     
-    // Create personal info section
-    resultsContent.innerHTML = `
+    // Clear previous results
+    resultsContent.innerHTML = '';
+    
+    // Create results HTML
+    const resultsHTML = `
         <div class="career-path mb-4">
             <h3>Personal Profile</h3>
             <p><strong>Name:</strong> ${results.firstName} ${results.lastName}</p>
@@ -197,32 +172,53 @@ function displayResults(results) {
             <p><strong>Construction Experience:</strong> ${results.constructionExperience === '0' ? 
                 'New to Construction' : 
                 `${results.constructionExperience} years`}</p>
+            ${results.mbtiType ? `<p><strong>MBTI Type:</strong> ${results.mbtiType}</p>` : ''}
+            ${results.hollandCode ? `<p><strong>Holland Code:</strong> ${results.hollandCode}</p>` : ''}
         </div>
         
-        <div class="career-path">
+        <div class="career-path mb-4">
             <h3>Recommended Career Paths</h3>
-            <ul>
-                ${results.careers.map(career => `<li>${career}</li>`).join('')}
+            <ul class="list-unstyled">
+                ${results.careers.map(career => `
+                    <li class="mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-arrow-right-circle me-2"></i>
+                            <span>${career}</span>
+                        </div>
+                    </li>
+                `).join('')}
             </ul>
         </div>
         
-        <div class="career-path">
-            <h3>Required Training</h3>
-            <ul>
-                ${results.training.map(item => `<li>${item}</li>`).join('')}
+        <div class="career-path mb-4">
+            <h3>Recommended Training</h3>
+            <ul class="list-unstyled">
+                ${results.training.map(item => `
+                    <li class="mb-2">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-check-circle me-2"></i>
+                            <span>${item}</span>
+                        </div>
+                    </li>
+                `).join('')}
             </ul>
         </div>
     `;
-
-    // Create career progression flowchart
+    
+    // Insert results
+    resultsContent.innerHTML = resultsHTML;
+    
+    // Create career flowchart
     const flowchartContainer = document.querySelector('.flowchart-container');
-    createCareerFlowchart(flowchartContainer, results.careers[0]);
+    if (flowchartContainer) {
+        createCareerFlowchart(flowchartContainer, results.careers[0]);
+    }
 
     // Add training resources
     const resourcesContainer = document.querySelector('.resources-container');
-    addTrainingResources(resourcesContainer, results.careers[0]);
-    
-    resultsDiv.style.display = 'block';
+    if (resourcesContainer) {
+        addTrainingResources(resourcesContainer, results.careers[0]);
+    }
 }
 
 function createCareerFlowchart(container, primaryCareer) {
@@ -476,4 +472,22 @@ function calculateAge(birthDate) {
     }
     
     return age;
+}
+
+function getMBTIType(formData) {
+    // Implement the logic to determine MBTI type based on form data
+    // This is a placeholder and should be replaced with actual implementation
+    return 'INTJ'; // Placeholder return, actual implementation needed
+}
+
+function getHollandCode(formData) {
+    // Implement the logic to determine Holland Code based on form data
+    // This is a placeholder and should be replaced with actual implementation
+    return 'R'; // Placeholder return, actual implementation needed
+}
+
+function determineCareerPaths(formData) {
+    // Implement the logic to determine career paths based on form data
+    // This is a placeholder and should be replaced with actual implementation
+    return ['Project Manager', 'Construction Manager', 'Site Supervisor']; // Placeholder return, actual implementation needed
 } 
