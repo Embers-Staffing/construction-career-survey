@@ -48,6 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const formData = new FormData(form);
         const data = {
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            age: formData.get('age'),
+            constructionExperience: formData.get('constructionExperience'),
             activities: formData.get('activities'),
             environment: formData.get('environment'),
             hollandCodes: formData.getAll('holland'),
@@ -138,8 +142,15 @@ function displayResults(results) {
     const resultsDiv = document.getElementById('results');
     const resultsContent = document.getElementById('resultsContent');
     
-    // Create primary recommendations section
+    // Create personal info section
     resultsContent.innerHTML = `
+        <div class="career-path mb-4">
+            <h3>Personal Profile</h3>
+            <p><strong>Name:</strong> ${results.firstName} ${results.lastName}</p>
+            <p><strong>Age:</strong> ${results.age}</p>
+            <p><strong>Construction Experience:</strong> ${results.constructionExperience} years</p>
+        </div>
+        
         <div class="career-path">
             <h3>Recommended Career Paths</h3>
             <ul>

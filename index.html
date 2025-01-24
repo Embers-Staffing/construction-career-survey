@@ -40,6 +40,38 @@
             </div>
         </div>
         
+        <div class="section mb-5">
+            <h2>Personal Information</h2>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">First Name</label>
+                    <input type="text" class="form-control" name="firstName" required>
+                    <div class="invalid-feedback">Please enter your first name.</div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" required>
+                    <div class="invalid-feedback">Please enter your last name.</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Age</label>
+                    <input type="number" class="form-control" name="age" min="16" max="100" required>
+                    <div class="invalid-feedback">Please enter a valid age (16-100).</div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Years in Construction</label>
+                    <input type="number" class="form-control" name="constructionExperience" min="0" max="50" required>
+                    <div class="invalid-feedback">Please enter your years of experience (0-50).</div>
+                </div>
+            </div>
+        </div>
+        
         <form id="careerForm" class="needs-validation" novalidate>
             <!-- Section 1: Self-Awareness and Interests -->
             <div class="section mb-5">
