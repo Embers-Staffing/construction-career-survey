@@ -140,8 +140,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // For testing/demo purposes, we'll just simulate a successful response
-            // Replace this with your actual API endpoint when ready
             const result = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                age: calculateAge(formData.get('birthDate')),
+                constructionExperience: formData.get('constructionExperience'),
                 careers: ['Project Manager', 'Construction Manager', 'Site Supervisor'],
                 training: [
                     'Project Management Professional (PMP) Certification',
@@ -150,10 +153,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 ]
             };
             
+            // Show the results section
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            
+            // Display results
             displayResults(result);
             
-            // Scroll to results
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            // Smooth scroll to results
+            resultsDiv.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Keep the form data (don't reset)
+            form.classList.remove('was-validated');
             
         } catch (error) {
             console.error('Error:', error);
