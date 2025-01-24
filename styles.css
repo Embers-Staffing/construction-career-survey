@@ -11,29 +11,30 @@ body {
 /* Section Styling */
 .section {
     background-color: white;
-    padding: 2rem;
+    padding: 2.5rem;
     border-radius: 15px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 }
 
 .section h2 {
     color: #333333;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
     border-bottom: 2px solid #e9ecef;
+    font-size: 1.75rem;
+    font-weight: 700;
 }
 
 /* Form Elements */
 .form-label {
+    margin-bottom: 1rem;
     font-weight: 600;
     color: #495057;
-    margin-bottom: 0.75rem;
 }
 
 .form-check {
-    margin-bottom: 0.5rem;
-    padding-left: 2rem;
+    margin-bottom: 0.75rem;
 }
 
 .form-check-input:checked {
@@ -55,7 +56,8 @@ body {
 .card {
     border: none;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: all 0.2s ease;
+    margin-bottom: 1.5rem;
 }
 
 .card:hover {
@@ -70,7 +72,7 @@ body {
 }
 
 .card-body {
-    padding: 1.25rem;
+    padding: 1.5rem;
 }
 
 .card-body ul {
@@ -199,68 +201,71 @@ body {
 .progress-indicator {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 2rem;
-    padding: 0;
-    list-style: none;
+    margin: 3rem 0;
+    padding: 1rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .progress-step {
     flex: 1;
+    min-width: 140px;
     text-align: center;
     position: relative;
+    padding: 1rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
     cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.progress-step:not(:last-child):after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: calc(50% + 20px);
-    width: calc(100% - 40px);
-    height: 2px;
-    background-color: #dee2e6;
-    z-index: 1;
-}
-
-.progress-step.active:not(:last-child):after {
-    background-color: #00BCD4;
-}
-
-.step-number {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 50%;
-    background-color: #dee2e6;
-    color: #6c757d;
-    margin: 0 auto 0.5rem;
-    position: relative;
-    z-index: 2;
-}
-
-.progress-step.active .step-number {
-    background-color: #00BCD4;
-    color: white;
-}
-
-.step-label {
-    font-size: 0.875rem;
-    color: #6c757d;
-}
-
-.progress-step.active .step-label {
-    color: #00BCD4;
-    font-weight: 600;
 }
 
 .progress-step:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    background-color: #f8f9fa;
+}
+
+.step-number {
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    color: #666666;
+    margin: 0 auto 0.75rem;
+    position: relative;
+    z-index: 2;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 .progress-step:hover .step-number {
     background-color: #00BCD4;
     color: white;
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.2);
+}
+
+.step-label {
+    font-size: 0.9rem;
+    color: #495057;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.progress-step.active {
+    background-color: #f8f9fa;
+}
+
+.progress-step.active .step-number {
+    background-color: #00BCD4;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 188, 212, 0.2);
+}
+
+.progress-step.active .step-label {
+    color: #00BCD4;
+    font-weight: 600;
 }
 
 /* Logo and Header */
@@ -288,4 +293,13 @@ h1 {
     font-size: 1.2rem;
     color: #666666;
     font-weight: 400;
+}
+
+/* Sub-section spacing */
+.mb-4 {
+    margin-bottom: 2rem !important;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem !important;
 } 
