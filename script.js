@@ -1,5 +1,113 @@
 'use strict';
 
+// Add debugging utilities at the start of the file
+const DEBUG = {
+    enabled: true,
+    level: 'info', // 'error', 'warn', 'info', 'debug'
+    
+    log(message, level = 'info', data = null) {
+        if (!this.enabled) return;
+        
+        const levels = {
+            error: 0,
+            warn: 1,
+            info: 2,
+            debug: 3
+        };
+        
+        if (levels[level] <= levels[this.level]) {
+            const timestamp = new Date().toISOString();
+            const prefix = `[${timestamp}] [${level.toUpperCase()}]`;
+            
+            if (data) {
+                console.groupCollapsed(`${prefix} ${message}`);
+                console.log('Details:', data);
+                console.trace('Stack trace:');
+                console.groupEnd();
+            } else {
+                console.log(`${prefix} ${message}`);
+            }
+        }
+    },
+    
+    error(message, error = null) {
+        this.log(message, 'error', error);
+    },
+    
+    warn(message, data = null) {
+        this.log(message, 'warn', data);
+    },
+    
+    info(message, data = null) {
+        this.log(message, 'info', data);
+    },
+    
+    debug(message, data = null) {
+        this.log(message, 'debug', data);
+    },
+    
+    startTimer(label) {
+        if (!this.enabled) return;
+        console.time(label);
+    },
+    
+    endTimer(label) {
+        if (!this.enabled) return;
+        console.timeEnd(label);
+    },
+    
+    group(label) {
+        if (!this.enabled) return;
+        console.group(label);
+    },
+    
+    groupEnd() {
+        if (!this.enabled) return;
+        console.groupEnd();
+    }
+};
+
+// Add performance monitoring
+const Performance = {
+    timers: {},
+    
+    start(label) {
+        this.timers[label] = performance.now();
+        DEBUG.debug(`Starting timer: ${label}`);
+    },
+    
+    end(label) {
+        if (!this.timers[label]) {
+            DEBUG.warn(`Timer "${label}" not found`);
+            return;
+        }
+        
+        const duration = performance.now() - this.timers[label];
+        DEBUG.info(`${label} took ${duration.toFixed(2)}ms`);
+        delete this.timers[label];
+        return duration;
+    }
+};
+
+// Add state tracking
+const StateTracker = {
+    formState: {},
+    
+    updateState(key, value) {
+        this.formState[key] = value;
+        DEBUG.debug('State updated', { key, value, currentState: this.formState });
+    },
+    
+    getState() {
+        return { ...this.formState };
+    },
+    
+    clearState() {
+        this.formState = {};
+        DEBUG.info('State cleared');
+    }
+};
+
 // Validate that all required functions exist
 if (typeof validateForm === 'undefined') {
     console.error('validateForm function is missing');
@@ -25,106 +133,175 @@ const CONFIG = {
     PROGRESS_INCREMENT: 10
 };
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeApp);
+// Add error handling utilities
+const ErrorTypes = {
+    VALIDATION: 'VALIDATION_ERROR',
+    DATA_PROCESSING: 'DATA_PROCESSING_ERROR',
+    RENDERING: 'RENDERING_ERROR',
+    INITIALIZATION: 'INITIALIZATION_ERROR'
+};
 
-function initializeApp() {
-    try {
-        console.log('Initializing application...');
+class CareerPathError extends Error {
+    constructor(message, type, field = null) {
+        super(message);
+        this.name = 'CareerPathError';
+        this.type = type;
+        this.field = field;
+        this.timestamp = new Date();
+    }
+}
+
+// Add error logging utility
+const ErrorLogger = {
+    log(error) {
+        console.error(`[${new Date().toISOString()}] ${error.name}: ${error.message}`, {
+            type: error.type,
+            field: error.field,
+            stack: error.stack
+        });
+    },
+    
+    showUserError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'alert alert-danger alert-dismissible fade show';
+        errorDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        document.querySelector('.container').insertBefore(errorDiv, document.querySelector('form'));
         
-        // Get main elements
-        const form = document.getElementById('careerForm');
-        const resultsDiv = document.getElementById('results');
-        const resultsContent = document.getElementById('resultsContent');
+        // Auto-dismiss after 5 seconds
+        setTimeout(() => {
+            errorDiv.remove();
+        }, 5000);
+    }
+};
 
-        if (!form || !resultsDiv || !resultsContent) {
-            throw new Error('Required elements not found');
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing application...');
+    
+    // Get main elements
+    const form = document.getElementById('careerForm');
+    const resultsDiv = document.getElementById('results');
+    const resultsContent = document.getElementById('resultsContent');
+
+    if (!form || !resultsDiv || !resultsContent) {
+        console.error('Required elements not found');
+        return;
+    }
+
+    // Initialize year selector
+    const yearSelect = document.querySelector('select[name="birth-year"]');
+    if (yearSelect) {
+        console.log('Initializing year selector');
+        const currentYear = new Date().getFullYear();
+        
+        // Clear and add default option
+        yearSelect.innerHTML = '<option value="">Select Year</option>';
+        
+        // Add years in reverse order
+        for (let i = currentYear - CONFIG.MIN_AGE; i >= currentYear - CONFIG.MAX_AGE; i--) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            yearSelect.appendChild(option);
+        }
+    }
+
+    // Initialize age display
+    const ageSelector = document.querySelector('.age-selector');
+    if (ageSelector) {
+        const yearSelect = document.querySelector('select[name="birth-year"]');
+        const monthSelect = document.querySelector('select[name="birth-month"]');
+
+        if (yearSelect && monthSelect) {
+            const ageDisplay = document.createElement('div');
+            ageDisplay.className = 'age-display text-muted mt-2';
+            ageSelector.appendChild(ageDisplay);
+
+            function updateAgeDisplay() {
+                const yearValue = yearSelect.value;
+                const monthValue = monthSelect.value;
+                
+                if (yearValue && monthValue) {
+                    const age = calculateAge(yearValue, monthValue);
+                    ageDisplay.textContent = `Age: ${age} years old`;
+                    ageDisplay.style.display = 'block';
+                } else {
+                    ageDisplay.style.display = 'none';
+                }
+            }
+
+            yearSelect.addEventListener('change', updateAgeDisplay);
+            monthSelect.addEventListener('change', updateAgeDisplay);
+        }
+    }
+
+    // Add form submission handler
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleFormSubmission(form, resultsDiv, resultsContent);
+    });
+});
+
+function handleFormSubmission(form, resultsDiv, resultsContent) {
+    try {
+        const formData = new FormData(form);
+        
+        // Validate form data
+        validateForm(formData);
+        
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (!submitButton) {
+            throw new CareerPathError(
+                'Submit button not found',
+                ErrorTypes.INITIALIZATION
+            );
         }
 
-        // Initialize year selector
-        initializeYearSelector();
-        
-        // Initialize age display
-        initializeAgeDisplay();
-        
-        // Add form submission handler
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            handleFormSubmission(form, resultsDiv, resultsContent);
-        });
+        const { progressBar, progressInterval } = showLoadingState(submitButton);
+
+        try {
+            // Process form data and generate results
+            const result = processFormData(formData);
+            
+            // Generate and display HTML
+            const html = generateResultsHTML(result);
+            
+            // Update UI
+            updateUI(html, resultsContent, resultsDiv, progressBar, submitButton, progressInterval);
+            
+        } catch (error) {
+            clearInterval(progressInterval);
+            throw error;
+        }
 
     } catch (error) {
-        console.error('Initialization error:', error);
-        alert('There was an error initializing the application. Please refresh the page.');
+        handleError(error);
     }
 }
 
-function initializeYearSelector() {
-    const yearSelect = document.querySelector('select[name="birth-year"]');
-    if (!yearSelect) {
-        console.error('Year select element not found');
-        return;
-    }
-
-    console.log('Initializing year selector');
-    const currentYear = new Date().getFullYear();
-    
-    // Clear and add default option
-    yearSelect.innerHTML = '<option value="">Select Year</option>';
-    
-    // Add years in reverse order
-    for (let i = currentYear - CONFIG.MIN_AGE; i >= currentYear - CONFIG.MAX_AGE; i--) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.textContent = i;
-        yearSelect.appendChild(option);
-    }
-}
-
-function initializeAgeDisplay() {
-    const ageSelector = document.querySelector('.age-selector');
-    const yearSelect = document.querySelector('select[name="birth-year"]');
-    const monthSelect = document.querySelector('select[name="birth-month"]');
-
-    if (!ageSelector || !yearSelect || !monthSelect) {
-        console.error('Age display elements not found');
-        return;
-    }
-
-    const ageDisplay = document.createElement('div');
-    ageDisplay.className = 'age-display text-muted mt-2';
-    ageSelector.appendChild(ageDisplay);
-
-    function updateAgeDisplay() {
-        const yearValue = yearSelect.value;
-        const monthValue = monthSelect.value;
-        
-        if (yearValue && monthValue) {
-            const age = calculateAge(yearValue, monthValue);
-            ageDisplay.textContent = `Age: ${age} years old`;
-            ageDisplay.style.display = 'block';
-        } else {
-            ageDisplay.style.display = 'none';
-        }
-    }
-
-    yearSelect.addEventListener('change', updateAgeDisplay);
-    monthSelect.addEventListener('change', updateAgeDisplay);
-}
-
-// Helper function to handle form submission
-function handleFormSubmission(form, resultsDiv, resultsContent) {
-    const formData = new FormData(form);
-    
-    // Show loading state
-    const submitButton = form.querySelector('button[type="submit"]');
+// Helper functions for form submission
+function showLoadingState(submitButton) {
     submitButton.innerHTML = `
         <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
         Generating Recommendations...
     `;
     submitButton.disabled = true;
 
-    // Add progress bar
+    const progressBar = createProgressBar();
+    submitButton.parentNode.insertBefore(progressBar, submitButton);
+
+    const progressInterval = setInterval(() => {
+        updateProgress(progressBar);
+    }, CONFIG.PROGRESS_INTERVAL);
+
+    return { progressBar, progressInterval };
+}
+
+function createProgressBar() {
     const progressBar = document.createElement('div');
     progressBar.className = 'progress mb-3';
     progressBar.innerHTML = `
@@ -136,65 +313,92 @@ function handleFormSubmission(form, resultsDiv, resultsContent) {
              aria-valuemax="100">
         </div>
     `;
-    submitButton.parentNode.insertBefore(progressBar, submitButton);
+    return progressBar;
+}
 
+function updateProgress(progressBar) {
+    const progressBarInner = progressBar.querySelector('.progress-bar');
+    const currentWidth = parseInt(progressBarInner.style.width) || 0;
+    const newWidth = Math.min(currentWidth + CONFIG.PROGRESS_INCREMENT, 100);
+    
+    progressBarInner.style.width = `${newWidth}%`;
+    progressBarInner.setAttribute('aria-valuenow', newWidth);
+    
+    return newWidth >= 100;
+}
+
+function processFormData(formData) {
     try {
-        // Validate required fields
-        if (!validateForm(formData)) {
-            throw new Error('Please fill in all required fields');
-        }
-
-        // Process form data and show results
-        let progress = 0;
-        const progressInterval = setInterval(() => {
-            progress += CONFIG.PROGRESS_INCREMENT;
-            const progressBarInner = progressBar.querySelector('.progress-bar');
-            progressBarInner.style.width = `${progress}%`;
-            progressBarInner.setAttribute('aria-valuenow', progress);
-
-            if (progress >= 100) {
-                clearInterval(progressInterval);
-                
-                // Generate and display results
-                const result = {
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
-                    constructionExperience: formData.get('constructionExperience'),
-                    mbtiType: getMBTIType(formData),
-                    hollandCode: getHollandCode(formData),
-                    careerInterests: formData.getAll('career-interests'),
-                    techInterests: formData.getAll('tech-interests'),
-                    environment: formData.get('environment-comfort'),
-                    travelWillingness: formData.get('travel-willingness'),
-                    salaryTarget: formData.get('salary-target'),
-                    advancementPreference: formData.get('advancement-preference'),
-                    mentorshipType: formData.get('mentorship-type')
-                };
-
-                const html = generateResultsHTML(result);
-                resultsContent.innerHTML = html;
-                resultsDiv.style.display = 'block';
-                
-                // Remove progress bar and restore button
-                progressBar.remove();
-                submitButton.innerHTML = 'Get Career Recommendations';
-                submitButton.disabled = false;
-
-                // Scroll to results
-                resultsDiv.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, CONFIG.PROGRESS_INTERVAL);
-
+        return {
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
+            constructionExperience: formData.get('constructionExperience'),
+            mbtiType: getMBTIType(formData),
+            hollandCode: getHollandCode(formData),
+            careerInterests: formData.getAll('career-interests'),
+            techInterests: formData.getAll('tech-interests'),
+            environment: formData.get('environment-comfort'),
+            travelWillingness: formData.get('travel-willingness'),
+            salaryTarget: formData.get('salary-target'),
+            advancementPreference: formData.get('advancement-preference'),
+            mentorshipType: formData.get('mentorship-type')
+        };
     } catch (error) {
-        console.error('Error:', error);
-        alert(error.message || 'There was an error processing your results. Please try again.');
+        throw new CareerPathError(
+            'Error processing form data: ' + error.message,
+            ErrorTypes.DATA_PROCESSING
+        );
+    }
+}
+
+function updateUI(html, resultsContent, resultsDiv, progressBar, submitButton, progressInterval) {
+    try {
+        resultsContent.innerHTML = html;
+        resultsDiv.style.display = 'block';
         
-        // Restore button state
+        // Clean up
         progressBar.remove();
         submitButton.innerHTML = 'Get Career Recommendations';
         submitButton.disabled = false;
+        clearInterval(progressInterval);
+
+        // Scroll to results
+        resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        
+    } catch (error) {
+        throw new CareerPathError(
+            'Error updating UI: ' + error.message,
+            ErrorTypes.RENDERING
+        );
     }
+}
+
+function handleError(error) {
+    // Log the error
+    ErrorLogger.log(error);
+
+    // Show user-friendly message based on error type
+    let userMessage = 'There was an error processing your request. Please try again.';
+    
+    if (error instanceof CareerPathError) {
+        switch (error.type) {
+            case ErrorTypes.VALIDATION:
+                userMessage = 'Please check the following:\n' + error.message;
+                break;
+            case ErrorTypes.DATA_PROCESSING:
+                userMessage = 'There was an error processing your information. Please try again.';
+                break;
+            case ErrorTypes.RENDERING:
+                userMessage = 'There was an error displaying your results. Please refresh the page and try again.';
+                break;
+            case ErrorTypes.INITIALIZATION:
+                userMessage = 'There was an error initializing the form. Please refresh the page.';
+                break;
+        }
+    }
+
+    ErrorLogger.showUserError(userMessage);
 }
 
 // Age calculation function
@@ -1550,25 +1754,146 @@ function getHollandCode(formData) {
     return `${hollandCode} - ${description}`;
 }
 
-// Add form validation function
+// Update form validation
 function validateForm(formData) {
+    const validationErrors = [];
+    
+    // Required fields validation
     const requiredFields = [
-        'firstName',
-        'lastName',
-        'birth-year',
-        'birth-month',
-        'constructionExperience',
-        'mbti-ei',
-        'mbti-sn',
-        'mbti-tf',
-        'mbti-jp'
+        { name: 'firstName', label: 'First Name' },
+        { name: 'lastName', label: 'Last Name' },
+        { name: 'birth-year', label: 'Birth Year' },
+        { name: 'birth-month', label: 'Birth Month' },
+        { name: 'constructionExperience', label: 'Construction Experience' }
     ];
 
-    for (const field of requiredFields) {
-        if (!formData.get(field)) {
-            return false;
+    requiredFields.forEach(field => {
+        if (!formData.get(field.name)) {
+            validationErrors.push(`${field.label} is required`);
         }
+    });
+
+    // MBTI validation
+    const mbtiParts = ['ei', 'sn', 'tf', 'jp'];
+    mbtiParts.forEach(part => {
+        if (!formData.get(`mbti-${part}`)) {
+            validationErrors.push(`Personality type section ${part.toUpperCase()} is required`);
+        }
+    });
+
+    // Career interests validation
+    if (formData.getAll('career-interests').length === 0) {
+        validationErrors.push('Please select at least one career interest');
+    }
+
+    if (validationErrors.length > 0) {
+        throw new CareerPathError(
+            validationErrors.join('\n'),
+            ErrorTypes.VALIDATION
+        );
     }
 
     return true;
-} 
+}
+
+// Update initialization with debugging
+function initializeApp() {
+    DEBUG.group('App Initialization');
+    Performance.start('initialization');
+    
+    try {
+        DEBUG.info('Starting application initialization');
+        
+        // Get main elements
+        const form = document.getElementById('careerForm');
+        const resultsDiv = document.getElementById('results');
+        const resultsContent = document.getElementById('resultsContent');
+
+        if (!form || !resultsDiv || !resultsContent) {
+            throw new Error('Required elements not found');
+        }
+
+        // Initialize year selector
+        DEBUG.startTimer('yearSelector');
+        initializeYearSelector();
+        DEBUG.endTimer('yearSelector');
+        
+        // Initialize age display
+        DEBUG.startTimer('ageDisplay');
+        initializeAgeDisplay();
+        DEBUG.endTimer('ageDisplay');
+        
+        // Add form submission handler
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            DEBUG.group('Form Submission');
+            Performance.start('formSubmission');
+            handleFormSubmission(form, resultsDiv, resultsContent);
+        });
+
+        Performance.end('initialization');
+        DEBUG.info('Application initialized successfully');
+        
+    } catch (error) {
+        DEBUG.error('Initialization failed', error);
+        alert('There was an error initializing the application. Please refresh the page.');
+    }
+    
+    DEBUG.groupEnd();
+}
+
+// Update form submission with debugging
+function handleFormSubmission(form, resultsDiv, resultsContent) {
+    try {
+        const formData = new FormData(form);
+        DEBUG.info('Form data collected', Object.fromEntries(formData));
+        
+        // Track form state
+        StateTracker.updateState('formData', Object.fromEntries(formData));
+        
+        // Validate form data
+        Performance.start('validation');
+        validateForm(formData);
+        Performance.end('validation');
+        
+        // Process and display results
+        Performance.start('processing');
+        const result = processFormData(formData);
+        Performance.end('processing');
+        
+        DEBUG.info('Form data processed', result);
+        
+        // Update UI
+        Performance.start('rendering');
+        updateUI(generateResultsHTML(result), resultsContent, resultsDiv);
+        Performance.end('rendering');
+        
+        DEBUG.info('Results displayed successfully');
+        
+    } catch (error) {
+        DEBUG.error('Form submission failed', error);
+        handleError(error);
+    } finally {
+        Performance.end('formSubmission');
+        DEBUG.groupEnd();
+    }
+}
+
+// Add debugging keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    // Ctrl + Alt + D to toggle debug mode
+    if (e.ctrlKey && e.altKey && e.key === 'd') {
+        DEBUG.enabled = !DEBUG.enabled;
+        console.log(`Debug mode ${DEBUG.enabled ? 'enabled' : 'disabled'}`);
+    }
+    
+    // Ctrl + Alt + C to clear console
+    if (e.ctrlKey && e.altKey && e.key === 'c') {
+        console.clear();
+    }
+    
+    // Ctrl + Alt + S to show current state
+    if (e.ctrlKey && e.altKey && e.key === 's') {
+        console.log('Current State:', StateTracker.getState());
+    }
+}); 
