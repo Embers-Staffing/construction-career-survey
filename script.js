@@ -1,4 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded');
+    
+    const yearSelect = document.querySelector('select[name="birth-year"]');
+    console.log('Year select element:', yearSelect);
+    
+    if (yearSelect) {
+        console.log('Populating years...');
+        yearSelect.innerHTML = '<option value="">Select Year</option>';
+        
+        const currentYear = new Date().getFullYear();
+        const minAge = 16;
+        const maxAge = 70;
+        
+        for (let i = currentYear - minAge; i >= currentYear - maxAge; i--) {
+            console.log('Adding year:', i);
+            const option = document.createElement('option');
+            option.value = i;
+            option.textContent = i;
+            yearSelect.appendChild(option);
+        }
+    } else {
+        console.error('Year select element not found');
+    }
+
     // Get form and results elements
     const form = document.getElementById('careerForm');
     const resultsDiv = document.getElementById('results');
