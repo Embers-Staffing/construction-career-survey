@@ -352,38 +352,112 @@ function getTechDescription(tech) {
 
 // Training recommendation function
 function getTrainingRecommendations(result) {
+    const trainingResources = {
+        safety: {
+            basic: [
+                {
+                    name: 'OSHA 30-Hour Construction',
+                    description: 'Comprehensive safety training for construction industry',
+                    provider: 'OSHA',
+                    link: '#', // We'll add actual link
+                    duration: '30 hours',
+                    type: 'Certification'
+                },
+                {
+                    name: 'First Aid and CPR',
+                    description: 'Essential emergency response training',
+                    provider: 'Red Cross',
+                    link: '#',
+                    duration: '8 hours',
+                    type: 'Certification'
+                }
+            ],
+            advanced: [
+                {
+                    name: 'Construction Health and Safety Technician (CHST)',
+                    description: 'Advanced safety certification for construction professionals',
+                    provider: 'BCSP',
+                    link: '#',
+                    duration: 'Self-paced',
+                    type: 'Professional Certification'
+                }
+            ]
+        },
+        technical: {
+            bim: [
+                {
+                    name: 'Autodesk BIM 360',
+                    description: 'Construction management software training',
+                    provider: 'Autodesk',
+                    link: '#',
+                    duration: '40 hours',
+                    type: 'Software Certification'
+                }
+            ],
+            drones: [
+                {
+                    name: 'FAA Part 107 Commercial Drone License',
+                    description: 'Required certification for commercial drone operation',
+                    provider: 'FAA',
+                    link: '#',
+                    duration: 'Self-paced',
+                    type: 'License'
+                }
+            ]
+        },
+        management: {
+            project: [
+                {
+                    name: 'Project Management Professional (PMP)',
+                    description: 'Global standard in project management',
+                    provider: 'PMI',
+                    link: '#',
+                    duration: '35 hours training required',
+                    type: 'Professional Certification'
+                }
+            ],
+            construction: [
+                {
+                    name: 'Construction Management Certificate',
+                    description: 'Comprehensive construction management training',
+                    provider: 'Local Technical Institute',
+                    link: '#',
+                    duration: '6 months',
+                    type: 'Certificate Program'
+                }
+            ]
+        }
+    };
+
+    // We'll continue building this out with your links and additional resources
+    return selectRelevantTraining(result, trainingResources);
+}
+
+function selectRelevantTraining(result, resources) {
     let recommendations = [];
-    
-    // Add certifications based on experience level
+
+    // Base recommendations on experience level
     if (result.constructionExperience === '0') {
-        recommendations.push({
-            name: 'OSHA 30-Hour Construction Safety',
-            description: 'Comprehensive safety training for construction industry.'
-        });
+        recommendations.push(...resources.safety.basic);
     }
 
-    // Add tech certifications
-    if (result.techInterests.includes('data-analytics')) {
-        recommendations.push({
-            name: 'Construction Data Analytics Certificate',
-            description: 'Advanced data analysis for construction projects.'
-        });
-    }
-
-    if (result.techInterests.includes('iot')) {
-        recommendations.push({
-            name: 'Smart Construction Systems',
-            description: 'IoT implementation in construction projects.'
-        });
-    }
-
-    // Add sustainability certifications
-    if (result.careerInterests.includes('sustainability')) {
-        recommendations.push({
-            name: 'LEED Green Associate',
-            description: 'Foundation for sustainable construction practices.'
-        });
-    }
+    // Add recommendations based on career interests
+    result.careerInterests.forEach(interest => {
+        switch(interest) {
+            case 'project-management':
+                recommendations.push(...resources.management.project);
+                break;
+            case 'tech-specialist':
+                if (result.techInterests.includes('bim')) {
+                    recommendations.push(...resources.technical.bim);
+                }
+                if (result.techInterests.includes('drones')) {
+                    recommendations.push(...resources.technical.drones);
+                }
+                break;
+            // We'll add more cases as we get more resources
+        }
+    });
 
     return recommendations;
 }
@@ -605,7 +679,326 @@ function generateResultsHTML(result) {
                 ${generateNextSteps(result)}
             </div>
         </div>
+
+        <div class="career-path mb-4">
+            <h3>Career Progression Path</h3>
+            <div class="career-progression mb-4">
+                <div class="career-flowchart">
+                    ${generateCareerFlowchart(result)}
+                </div>
+            </div>
+        </div>
     `;
+}
+
+function generateCareerFlowchart(result) {
+    // Get primary career path based on interests and personality
+    const careerPath = determineCareerPath(result);
+    
+    return `
+        <div class="career-progression mb-4">
+            <h3>Career Progression Path</h3>
+            <div class="career-flowchart">
+                ${careerPath.map((step, index) => `
+                    <div class="career-step">
+                        <div class="step-content">
+                            <h4>${step.title}</h4>
+                            <div class="salary">${step.salary}</div>
+                            <div class="requirements">
+                                <strong>Requirements:</strong>
+                                <ul>
+                                    ${step.requirements.map(req => `<li>${req}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="timeframe">Typical timeframe: ${step.timeframe}</div>
+                        </div>
+                        ${index < careerPath.length - 1 ? '<div class="step-arrow">→</div>' : ''}
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function determineCareerPath(result) {
+    const careerPaths = {
+        'project-management': [
+            {
+                title: 'Project Coordinator',
+                salary: '$45,000 - $65,000',
+                requirements: [
+                    'Bachelor\'s degree or equivalent experience',
+                    'Basic project management knowledge',
+                    'Strong organizational skills'
+                ],
+                timeframe: '1-2 years'
+            },
+            {
+                title: 'Assistant Project Manager',
+                salary: '$65,000 - $85,000',
+                requirements: [
+                    '2-3 years experience',
+                    'Project management software proficiency',
+                    'Team coordination experience'
+                ],
+                timeframe: '2-3 years'
+            },
+            {
+                title: 'Project Manager',
+                salary: '$85,000 - $120,000',
+                requirements: [
+                    'PMP Certification',
+                    '5+ years experience',
+                    'Budget management experience'
+                ],
+                timeframe: '3-5 years'
+            },
+            {
+                title: 'Senior Project Manager',
+                salary: '$120,000 - $150,000',
+                requirements: [
+                    '8+ years experience',
+                    'Multiple project oversight',
+                    'Strategic planning skills'
+                ],
+                timeframe: '5+ years'
+            }
+        ],
+        'tech-specialist': [
+            {
+                title: 'Technology Assistant',
+                salary: '$50,000 - $70,000',
+                requirements: [
+                    'Technical degree or certification',
+                    'Basic construction knowledge',
+                    'Software proficiency'
+                ],
+                timeframe: '1-2 years'
+            },
+            {
+                title: 'Construction Technologist',
+                salary: '$70,000 - $90,000',
+                requirements: [
+                    'Advanced technical certifications',
+                    '2-3 years experience',
+                    'Project implementation experience'
+                ],
+                timeframe: '2-3 years'
+            },
+            {
+                title: 'Senior Technology Specialist',
+                salary: '$90,000 - $120,000',
+                requirements: [
+                    'Advanced certifications',
+                    '5+ years experience',
+                    'Team leadership experience'
+                ],
+                timeframe: '3-5 years'
+            },
+            {
+                title: 'Technology Director',
+                salary: '$120,000 - $180,000',
+                requirements: [
+                    '8+ years experience',
+                    'Strategic technology planning',
+                    'Innovation leadership'
+                ],
+                timeframe: '5+ years'
+            }
+        ],
+        'trades': [
+            {
+                title: 'Apprentice',
+                salary: '$35,000 - $45,000',
+                requirements: [
+                    'High school diploma or equivalent',
+                    'Basic math and communication skills',
+                    'Physical capability'
+                ],
+                timeframe: '1-2 years'
+            },
+            {
+                title: 'Journeyman',
+                salary: '$45,000 - $65,000',
+                requirements: [
+                    'Completed apprenticeship',
+                    'Trade certification',
+                    'Safety training'
+                ],
+                timeframe: '2-4 years'
+            },
+            {
+                title: 'Master Tradesperson',
+                salary: '$65,000 - $95,000',
+                requirements: [
+                    'Advanced certifications',
+                    '5+ years experience',
+                    'Leadership skills'
+                ],
+                timeframe: '4-6 years'
+            },
+            {
+                title: 'Trade Business Owner',
+                salary: '$95,000+',
+                requirements: [
+                    'Business management skills',
+                    'Contractor license',
+                    'Team management experience'
+                ],
+                timeframe: '6+ years'
+            }
+        ],
+        'estimator': [
+            {
+                title: 'Junior Estimator',
+                salary: '$45,000 - $60,000',
+                requirements: [
+                    'Construction-related degree',
+                    'Basic estimating software skills',
+                    'Attention to detail'
+                ],
+                timeframe: '0-2 years'
+            },
+            {
+                title: 'Estimator',
+                salary: '$60,000 - $85,000',
+                requirements: [
+                    'Advanced software proficiency',
+                    '2-4 years experience',
+                    'Industry knowledge'
+                ],
+                timeframe: '2-4 years'
+            },
+            {
+                title: 'Senior Estimator',
+                salary: '$85,000 - $110,000',
+                requirements: [
+                    'Professional certification',
+                    '5+ years experience',
+                    'Team leadership'
+                ],
+                timeframe: '4-6 years'
+            },
+            {
+                title: 'Chief Estimator',
+                salary: '$110,000+',
+                requirements: [
+                    'Advanced certifications',
+                    '8+ years experience',
+                    'Department management'
+                ],
+                timeframe: '6+ years'
+            }
+        ],
+        'safety': [
+            {
+                title: 'Safety Coordinator',
+                salary: '$45,000 - $60,000',
+                requirements: [
+                    'OSHA certification',
+                    'Basic safety training',
+                    'Communication skills'
+                ],
+                timeframe: '0-2 years'
+            },
+            {
+                title: 'Safety Officer',
+                salary: '$60,000 - $85,000',
+                requirements: [
+                    'Advanced safety certifications',
+                    '2-4 years experience',
+                    'Training capabilities'
+                ],
+                timeframe: '2-4 years'
+            },
+            {
+                title: 'Safety Manager',
+                salary: '$85,000 - $120,000',
+                requirements: [
+                    'CSP certification',
+                    '5+ years experience',
+                    'Program management'
+                ],
+                timeframe: '4-6 years'
+            },
+            {
+                title: 'Safety Director',
+                salary: '$120,000+',
+                requirements: [
+                    'Advanced certifications',
+                    '8+ years experience',
+                    'Strategic planning'
+                ],
+                timeframe: '6+ years'
+            }
+        ],
+        'property-development': [
+            {
+                title: 'Development Coordinator',
+                salary: '$50,000 - $70,000',
+                requirements: [
+                    'Real estate degree',
+                    'Basic market knowledge',
+                    'Project coordination'
+                ],
+                timeframe: '0-2 years'
+            },
+            {
+                title: 'Property Developer',
+                salary: '$70,000 - $100,000',
+                requirements: [
+                    'Financial analysis skills',
+                    '3-5 years experience',
+                    'Project management'
+                ],
+                timeframe: '2-4 years'
+            },
+            {
+                title: 'Senior Developer',
+                salary: '$100,000 - $150,000',
+                requirements: [
+                    'Advanced financial modeling',
+                    '5+ years experience',
+                    'Portfolio management'
+                ],
+                timeframe: '4-6 years'
+            },
+            {
+                title: 'Development Director',
+                salary: '$150,000+',
+                requirements: [
+                    'MBA preferred',
+                    '8+ years experience',
+                    'Strategic development'
+                ],
+                timeframe: '6+ years'
+            }
+        ]
+    };
+
+    // Get primary interest and personality type
+    const primaryInterest = result.careerInterests[0];
+    const mbtiType = result.mbtiType.split(' ')[0]; // Get just the MBTI code
+
+    // Match career path based on interests and personality
+    let selectedPath = careerPaths[primaryInterest];
+    
+    // If no direct match, use personality type to suggest alternative
+    if (!selectedPath) {
+        if (mbtiType.includes('ST')) {
+            selectedPath = careerPaths['estimator'];
+        } else if (mbtiType.includes('SF')) {
+            selectedPath = careerPaths['safety'];
+        } else if (mbtiType.includes('NT')) {
+            selectedPath = careerPaths['tech-specialist'];
+        } else if (mbtiType.includes('NF')) {
+            selectedPath = careerPaths['property-development'];
+        } else {
+            selectedPath = careerPaths['project-management']; // Default path
+        }
+    }
+
+    return selectedPath;
 }
 
 // Add other helper functions as needed...
