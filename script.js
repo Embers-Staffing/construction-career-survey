@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle form submission
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log('Form submission started');
+        console.log('Form submitted');
 
         // Show loading state
         const submitButton = form.querySelector('button[type="submit"]');
@@ -83,8 +83,19 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.parentNode.insertBefore(progressBar, submitButton);
 
         try {
-            // Get form data
             const formData = new FormData(form);
+            console.log('Form data collected');
+            
+            // Log form values
+            console.log('MBTI:', getMBTIType(formData));
+            console.log('Holland:', getHollandCode(formData));
+            console.log('Career Interests:', formData.getAll('career-interests'));
+            console.log('Tech Interests:', formData.getAll('tech-interests'));
+            
+            // Validate required fields
+            if (!validateForm(formData)) {
+                throw new Error('Please fill in all required fields');
+            }
             
             // Create result object
             const result = {
@@ -136,10 +147,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 200);
 
         } catch (error) {
-            console.error('Error processing form:', error);
+            console.error('Error:', error);
             
             // Show error message
-            alert('There was an error processing your results. Please try again.');
+            alert(error.message || 'There was an error processing your results. Please try again.');
             
             // Restore button state
             progressBar.remove();
@@ -244,7 +255,12 @@ function getCareerTitle(interest) {
         'heavy-machinery': 'Heavy Equipment Operator',
         'tech-specialist': 'Construction Technology Specialist',
         'estimator': 'Cost Estimator/Quantity Surveyor',
-        'project-management': 'Project Manager'
+        'project-management': 'Project Manager',
+        'safety': 'Safety Professional',
+        'property-development': 'Property Developer',
+        'facilities': 'Facilities Manager',
+        'sustainability': 'Sustainability Specialist',
+        'quality-control': 'Quality Control Manager'
     };
     return titles[interest] || interest;
 }
@@ -275,6 +291,31 @@ function getCareerDescription(interest) {
             description: 'Overall project coordination and team leadership.',
             salary: 'Entry: $60,000 - $80,000 | Mid-Level: $80,000 - $120,000 | Senior: $120,000+',
             advancement: 'Project Coordinator → Project Manager → Senior PM → Program Director'
+        },
+        'safety': {
+            description: 'Ensure workplace safety and regulatory compliance.',
+            salary: 'Entry: $50,000 - $70,000 | Mid-Level: $70,000 - $100,000 | Director: $100,000+',
+            advancement: 'Safety Coordinator → Safety Officer → Safety Manager → Safety Director'
+        },
+        'property-development': {
+            description: 'Manage real estate development projects from concept to completion.',
+            salary: 'Entry: $60,000 - $80,000 | Mid-Level: $80,000 - $120,000 | Director: $120,000+',
+            advancement: 'Development Coordinator → Property Developer → Senior Developer → Development Director'
+        },
+        'facilities': {
+            description: 'Oversee building operations and maintenance.',
+            salary: 'Entry: $45,000 - $65,000 | Mid-Level: $65,000 - $95,000 | Director: $95,000+',
+            advancement: 'Maintenance Tech → Facilities Coordinator → Facilities Manager → Operations Director'
+        },
+        'sustainability': {
+            description: 'Implement sustainable construction practices and green building initiatives.',
+            salary: 'Entry: $55,000 - $75,000 | Mid-Level: $75,000 - $105,000 | Director: $105,000+',
+            advancement: 'Sustainability Coordinator → Specialist → Manager → Sustainability Director'
+        },
+        'quality-control': {
+            description: 'Ensure construction quality standards and compliance.',
+            salary: 'Entry: $50,000 - $70,000 | Mid-Level: $70,000 - $100,000 | Director: $100,000+',
+            advancement: 'QC Inspector → QC Specialist → QC Manager → Quality Director'
         }
     };
     return descriptions[interest] || '';
@@ -286,7 +327,11 @@ function getTechSpecialization(tech) {
         'drones': 'Drone Operations Specialist',
         'vr-ar': 'Virtual/Augmented Reality Designer',
         'bim': 'BIM Specialist',
-        'ai': 'Construction AI/Automation Specialist'
+        'ai': 'Construction AI/Automation Specialist',
+        'robotics': 'Construction Robotics Engineer',
+        'iot': 'IoT Systems Specialist',
+        'data-analytics': 'Construction Data Analyst',
+        'cyber-security': 'Construction Cybersecurity Specialist'
     };
     return specializations[tech] || tech;
 }
@@ -296,82 +341,49 @@ function getTechDescription(tech) {
         'drones': 'Aerial mapping, surveying, and site inspection using drone technology.',
         'vr-ar': 'Creating virtual walkthroughs and augmented reality solutions for construction projects.',
         'bim': 'Managing Building Information Modeling for project planning and coordination.',
-        'ai': 'Implementing artificial intelligence and automation solutions in construction processes.'
+        'ai': 'Implementing artificial intelligence and automation solutions in construction processes.',
+        'robotics': 'Developing and implementing robotics solutions for construction tasks.',
+        'iot': 'Implementing Internet of Things sensors and systems for smart construction.',
+        'data-analytics': 'Analyzing construction data for insights and optimization.',
+        'cyber-security': 'Protecting construction technology systems and data.'
     };
-    return descriptions[tech] || '';
+    return descriptions[tech] || 'Emerging technology in construction';
 }
 
 // Training recommendation function
 function getTrainingRecommendations(result) {
     let recommendations = [];
     
-    // Basic recommendations based on experience
+    // Add certifications based on experience level
     if (result.constructionExperience === '0') {
         recommendations.push({
-            name: 'Construction Safety Fundamentals',
-            description: 'Essential safety training for construction site work.'
+            name: 'OSHA 30-Hour Construction Safety',
+            description: 'Comprehensive safety training for construction industry.'
         });
     }
 
-    // Career-specific training
-    result.careerInterests.forEach(interest => {
-        switch(interest) {
-            case 'trades':
-                recommendations.push({
-                    name: 'Trade Apprenticeship Program',
-                    description: 'Structured training combining classroom learning with hands-on experience.'
-                });
-                break;
-            case 'heavy-machinery':
-                recommendations.push({
-                    name: 'Heavy Equipment Certification',
-                    description: 'Official certification for operating construction machinery.'
-                });
-                break;
-            case 'tech-specialist':
-                recommendations.push({
-                    name: 'Construction Technology Certificate',
-                    description: 'Comprehensive training in modern construction technologies.'
-                });
-                break;
-            case 'estimator':
-                recommendations.push({
-                    name: 'Cost Estimation Certification',
-                    description: 'Professional certification in construction cost estimation.'
-                });
-                break;
-            case 'project-management':
-                recommendations.push({
-                    name: 'Project Management Professional (PMP)',
-                    description: 'Internationally recognized project management certification.'
-                });
-                break;
-        }
-    });
+    // Add tech certifications
+    if (result.techInterests.includes('data-analytics')) {
+        recommendations.push({
+            name: 'Construction Data Analytics Certificate',
+            description: 'Advanced data analysis for construction projects.'
+        });
+    }
 
-    // Tech-specific training
-    result.techInterests.forEach(tech => {
-        switch(tech) {
-            case 'drones':
-                recommendations.push({
-                    name: 'FAA Part 107 Commercial Drone License',
-                    description: 'Required certification for commercial drone operation.'
-                });
-                break;
-            case 'vr-ar':
-                recommendations.push({
-                    name: 'VR/AR Development for Construction',
-                    description: 'Specialized training in virtual and augmented reality applications.'
-                });
-                break;
-            case 'bim':
-                recommendations.push({
-                    name: 'BIM Management Certificate',
-                    description: 'Advanced training in Building Information Modeling systems.'
-                });
-                break;
-        }
-    });
+    if (result.techInterests.includes('iot')) {
+        recommendations.push({
+            name: 'Smart Construction Systems',
+            description: 'IoT implementation in construction projects.'
+        });
+    }
+
+    // Add sustainability certifications
+    if (result.careerInterests.includes('sustainability')) {
+        recommendations.push({
+            name: 'LEED Green Associate',
+            description: 'Foundation for sustainable construction practices.'
+        });
+    }
 
     return recommendations;
 }
@@ -490,13 +502,76 @@ function getMBTIDescription(type) {
             title: 'Values-driven creator',
             strengths: 'Creative problem-solving, values alignment, development',
             careers: 'Sustainability Specialist, Training Developer, Planning Coordinator'
+        },
+        'ESFJ': {
+            title: 'Supportive Team Leader',
+            strengths: 'Team coordination, communication, organization',
+            careers: 'Project Coordinator, Safety Manager, Client Relations Manager'
+        },
+        'ISFJ': {
+            title: 'Detail-Oriented Specialist',
+            strengths: 'Precision, reliability, methodical approach',
+            careers: 'Quality Control Inspector, Safety Specialist, Documentation Manager'
+        },
+        'ENFJ': {
+            title: 'Inspiring Leader',
+            strengths: 'People development, team building, communication',
+            careers: 'Training Director, Project Manager, HR Development Manager'
+        },
+        'INFJ': {
+            title: 'Strategic Planner',
+            strengths: 'Long-term vision, people insight, complex problem-solving',
+            careers: 'Sustainability Manager, Planning Director, Development Coordinator'
+        },
+        'ENFP': {
+            title: 'Creative Innovator',
+            strengths: 'Innovation, relationship building, adaptability',
+            careers: 'Business Development, Innovation Manager, Client Relations Director'
+        },
+        'INFP': {
+            title: 'Values-Driven Developer',
+            strengths: 'Creative solutions, ethical approach, people development',
+            careers: 'Training Developer, Sustainability Specialist, Planning Manager'
+        },
+        'ENTP': {
+            title: 'Innovative Strategist',
+            strengths: 'Strategic thinking, problem-solving, innovation',
+            careers: 'Technology Integration Manager, Innovation Director, Business Strategist'
+        },
+        'INTP': {
+            title: 'Technical Expert',
+            strengths: 'Systems analysis, problem-solving, technical innovation',
+            careers: 'BIM Manager, Systems Architect, Technical Director'
+        },
+        'ESTP': {
+            title: 'Dynamic Implementer',
+            strengths: 'Practical problem-solving, risk management, action-oriented',
+            careers: 'Site Supervisor, Operations Manager, Project Manager'
+        },
+        'ISTP': {
+            title: 'Skilled Technician',
+            strengths: 'Technical expertise, troubleshooting, practical efficiency',
+            careers: 'Equipment Specialist, Technical Lead, Operations Specialist'
+        },
+        'ESFP': {
+            title: 'Practical Team Player',
+            strengths: 'People skills, practical work, adaptability',
+            careers: 'Team Supervisor, Safety Trainer, Field Operations Manager'
+        },
+        'ISFP': {
+            title: 'Skilled Craftsperson',
+            strengths: 'Attention to detail, hands-on skills, aesthetic awareness',
+            careers: 'Skilled Tradesperson, Quality Specialist, Finishing Expert'
         }
     };
-    return descriptions[type] || { 
-        title: 'Unique combination of traits',
-        strengths: 'Varied skill set with multiple applications',
-        careers: 'Multiple career paths available'
+
+    const typeInfo = descriptions[type] || {
+        title: 'Unique Profile',
+        strengths: 'Versatile skill set with multiple applications',
+        careers: 'Multiple career paths available based on interests and experience'
     };
+
+    return `${typeInfo.title} - ${typeInfo.strengths} - Best suited for: ${typeInfo.careers}`;
 }
 
 // Helper function to generate results HTML
@@ -533,4 +608,51 @@ function generateResultsHTML(result) {
     `;
 }
 
-// Add other helper functions as needed... 
+// Add other helper functions as needed...
+
+// Add this function to handle Holland Code data
+function getHollandCode(formData) {
+    const selectedCodes = formData.getAll('holland') || [];
+    if (selectedCodes.length === 0) return 'Not specified';
+    
+    // Convert codes to uppercase and join them
+    const hollandCode = selectedCodes.map(code => code.toUpperCase()).join('');
+    
+    // Get description based on primary code (first selected)
+    const descriptions = {
+        'REALISTIC': 'Hands-on problem solver',
+        'INVESTIGATIVE': 'Analytical thinker',
+        'ARTISTIC': 'Creative innovator',
+        'SOCIAL': 'People-oriented collaborator',
+        'ENTERPRISING': 'Leadership-focused achiever',
+        'CONVENTIONAL': 'Detail-oriented organizer'
+    };
+    
+    const primaryCode = selectedCodes[0].toUpperCase();
+    const description = descriptions[primaryCode] || '';
+    
+    return `${hollandCode} - ${description}`;
+}
+
+// Add form validation function
+function validateForm(formData) {
+    const requiredFields = [
+        'firstName',
+        'lastName',
+        'birth-year',
+        'birth-month',
+        'constructionExperience',
+        'mbti-ei',
+        'mbti-sn',
+        'mbti-tf',
+        'mbti-jp'
+    ];
+
+    for (const field of requiredFields) {
+        if (!formData.get(field)) {
+            return false;
+        }
+    }
+
+    return true;
+} 
