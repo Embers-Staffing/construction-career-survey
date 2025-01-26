@@ -12,12 +12,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (yearSelect) {
         console.log('Populating years...');
-        yearSelect.innerHTML = '<option value="">Select Year</option>';
-        
         const currentYear = new Date().getFullYear();
         const minAge = 16;
         const maxAge = 70;
         
+        // Clear existing options and add default
+        yearSelect.innerHTML = '<option value="">Select Year</option>';
+        
+        // Add years in reverse order
         for (let i = currentYear - minAge; i >= currentYear - maxAge; i--) {
             console.log('Adding year:', i);
             const option = document.createElement('option');
@@ -25,8 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
             option.textContent = i;
             yearSelect.appendChild(option);
         }
-    } else {
-        console.error('Year select element not found');
     }
 
     // Add age display element after the age selector
@@ -34,15 +34,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (ageSelector) {
         const ageDisplay = document.createElement('div');
         ageDisplay.className = 'age-display text-muted mt-2';
-        ageSelector.after(ageDisplay);
+        ageSelector.appendChild(ageDisplay);
 
         // Function to update age display
         function updateAgeDisplay() {
-            const yearSelect = document.querySelector('select[name="birth-year"]');
+            const yearValue = yearSelect.value;
             const monthSelect = document.querySelector('select[name="birth-month"]');
+            const monthValue = monthSelect.value;
             
-            if (yearSelect.value && monthSelect.value) {
-                const age = calculateAge(yearSelect.value, monthSelect.value);
+            if (yearValue && monthValue) {
+                const age = calculateAge(yearValue, monthValue);
                 ageDisplay.textContent = `Age: ${age} years old`;
                 ageDisplay.style.display = 'block';
             } else {
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Add event listeners for year and month selects
-        document.querySelector('select[name="birth-year"]')?.addEventListener('change', updateAgeDisplay);
+        yearSelect.addEventListener('change', updateAgeDisplay);
         document.querySelector('select[name="birth-month"]')?.addEventListener('change', updateAgeDisplay);
     }
 
@@ -59,98 +60,94 @@ document.addEventListener('DOMContentLoaded', function() {
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            console.log('Form submitted');
-
-            // Store form data before processing
-            const formData = new FormData(form);
-            
-            // Show loading state
-            const submitButton = form.querySelector('button[type="submit"]');
-            if (submitButton) {
-                submitButton.innerHTML = `
-                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                    Generating Recommendations...
-                `;
-                submitButton.disabled = true;
-
-                // Add progress bar
-                const progressBar = document.createElement('div');
-                progressBar.className = 'progress mb-3';
-                progressBar.innerHTML = `
-                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
-                         role="progressbar" 
-                         style="width: 0%" 
-                         aria-valuenow="0" 
-                         aria-valuemin="0" 
-                         aria-valuemax="100">
-                    </div>
-                `;
-                submitButton.parentNode.insertBefore(progressBar, submitButton);
-
-                try {
-                    handleFormSubmission(formData, progressBar, submitButton, resultsContent, resultsDiv);
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert(error.message || 'There was an error processing your results. Please try again.');
-                    
-                    // Restore button state
-                    progressBar.remove();
-                    submitButton.innerHTML = 'Get Career Recommendations';
-                    submitButton.disabled = false;
-                }
-            }
+            handleFormSubmission(form, resultsDiv, resultsContent);
         });
     }
 });
 
 // Helper function to handle form submission
-function handleFormSubmission(formData, progressBar, submitButton, resultsContent, resultsDiv) {
-    // Validate required fields
-    if (!validateForm(formData)) {
-        throw new Error('Please fill in all required fields');
-    }
+function handleFormSubmission(form, resultsDiv, resultsContent) {
+    const formData = new FormData(form);
+    
+    // Show loading state
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton.innerHTML = `
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Generating Recommendations...
+    `;
+    submitButton.disabled = true;
 
-    // Process form data and show results
-    let progress = 0;
-    const progressInterval = setInterval(() => {
-        progress += 10;
-        const progressBarInner = progressBar.querySelector('.progress-bar');
-        progressBarInner.style.width = `${progress}%`;
-        progressBarInner.setAttribute('aria-valuenow', progress);
+    // Add progress bar
+    const progressBar = document.createElement('div');
+    progressBar.className = 'progress mb-3';
+    progressBar.innerHTML = `
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+             role="progressbar" 
+             style="width: 0%" 
+             aria-valuenow="0" 
+             aria-valuemin="0" 
+             aria-valuemax="100">
+        </div>
+    `;
+    submitButton.parentNode.insertBefore(progressBar, submitButton);
 
-        if (progress >= 100) {
-            clearInterval(progressInterval);
-            
-            // Generate and display results
-            const result = {
-                firstName: formData.get('firstName'),
-                lastName: formData.get('lastName'),
-                age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
-                constructionExperience: formData.get('constructionExperience'),
-                mbtiType: getMBTIType(formData),
-                hollandCode: getHollandCode(formData),
-                careerInterests: formData.getAll('career-interests'),
-                techInterests: formData.getAll('tech-interests'),
-                environment: formData.get('environment-comfort'),
-                travelWillingness: formData.get('travel-willingness'),
-                salaryTarget: formData.get('salary-target'),
-                advancementPreference: formData.get('advancement-preference'),
-                mentorshipType: formData.get('mentorship-type')
-            };
-
-            const html = generateResultsHTML(result);
-            resultsContent.innerHTML = html;
-            resultsDiv.style.display = 'block';
-            
-            // Remove progress bar and restore button
-            progressBar.remove();
-            submitButton.innerHTML = 'Get Career Recommendations';
-            submitButton.disabled = false;
-
-            // Scroll to results
-            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+    try {
+        // Validate required fields
+        if (!validateForm(formData)) {
+            throw new Error('Please fill in all required fields');
         }
-    }, 200);
+
+        // Process form data and show results
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 10;
+            const progressBarInner = progressBar.querySelector('.progress-bar');
+            progressBarInner.style.width = `${progress}%`;
+            progressBarInner.setAttribute('aria-valuenow', progress);
+
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+                
+                // Generate and display results
+                const result = {
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
+                    constructionExperience: formData.get('constructionExperience'),
+                    mbtiType: getMBTIType(formData),
+                    hollandCode: getHollandCode(formData),
+                    careerInterests: formData.getAll('career-interests'),
+                    techInterests: formData.getAll('tech-interests'),
+                    environment: formData.get('environment-comfort'),
+                    travelWillingness: formData.get('travel-willingness'),
+                    salaryTarget: formData.get('salary-target'),
+                    advancementPreference: formData.get('advancement-preference'),
+                    mentorshipType: formData.get('mentorship-type')
+                };
+
+                const html = generateResultsHTML(result);
+                resultsContent.innerHTML = html;
+                resultsDiv.style.display = 'block';
+                
+                // Remove progress bar and restore button
+                progressBar.remove();
+                submitButton.innerHTML = 'Get Career Recommendations';
+                submitButton.disabled = false;
+
+                // Scroll to results
+                resultsDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 200);
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error.message || 'There was an error processing your results. Please try again.');
+        
+        // Restore button state
+        progressBar.remove();
+        submitButton.innerHTML = 'Get Career Recommendations';
+        submitButton.disabled = false;
+    }
 }
 
 // Age calculation function
