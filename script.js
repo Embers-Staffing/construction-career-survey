@@ -1,69 +1,116 @@
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded');
-    
-    // Get form and results elements
-    const form = document.getElementById('careerForm');
-    const resultsDiv = document.getElementById('results');
-    const resultsContent = document.getElementById('resultsContent');
+'use strict';
 
-    // Populate year dropdown in reverse order (newest to oldest)
-    const yearSelect = document.querySelector('select[name="birth-year"]');
-    console.log('Year select element:', yearSelect);
-    
-    if (yearSelect) {
-        console.log('Populating years...');
-        const currentYear = new Date().getFullYear();
-        const minAge = 16;
-        const maxAge = 70;
+// Validate that all required functions exist
+if (typeof validateForm === 'undefined') {
+    console.error('validateForm function is missing');
+}
+
+if (typeof calculateAge === 'undefined') {
+    console.error('calculateAge function is missing');
+}
+
+if (typeof getMBTIType === 'undefined') {
+    console.error('getMBTIType function is missing');
+}
+
+if (typeof getHollandCode === 'undefined') {
+    console.error('getHollandCode function is missing');
+}
+
+// Constants for configuration
+const CONFIG = {
+    MIN_AGE: 16,
+    MAX_AGE: 70,
+    PROGRESS_INTERVAL: 200,
+    PROGRESS_INCREMENT: 10
+};
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+function initializeApp() {
+    try {
+        console.log('Initializing application...');
         
-        // Clear existing options and add default
-        yearSelect.innerHTML = '<option value="">Select Year</option>';
-        
-        // Add years in reverse order
-        for (let i = currentYear - minAge; i >= currentYear - maxAge; i--) {
-            console.log('Adding year:', i);
-            const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i;
-            yearSelect.appendChild(option);
-        }
-    }
+        // Get main elements
+        const form = document.getElementById('careerForm');
+        const resultsDiv = document.getElementById('results');
+        const resultsContent = document.getElementById('resultsContent');
 
-    // Add age display element after the age selector
-    const ageSelector = document.querySelector('.age-selector');
-    if (ageSelector) {
-        const ageDisplay = document.createElement('div');
-        ageDisplay.className = 'age-display text-muted mt-2';
-        ageSelector.appendChild(ageDisplay);
-
-        // Function to update age display
-        function updateAgeDisplay() {
-            const yearValue = yearSelect.value;
-            const monthSelect = document.querySelector('select[name="birth-month"]');
-            const monthValue = monthSelect.value;
-            
-            if (yearValue && monthValue) {
-                const age = calculateAge(yearValue, monthValue);
-                ageDisplay.textContent = `Age: ${age} years old`;
-                ageDisplay.style.display = 'block';
-            } else {
-                ageDisplay.style.display = 'none';
-            }
+        if (!form || !resultsDiv || !resultsContent) {
+            throw new Error('Required elements not found');
         }
 
-        // Add event listeners for year and month selects
-        yearSelect.addEventListener('change', updateAgeDisplay);
-        document.querySelector('select[name="birth-month"]')?.addEventListener('change', updateAgeDisplay);
-    }
-
-    // Form submission handler
-    if (form) {
-        form.addEventListener('submit', function(e) {
+        // Initialize year selector
+        initializeYearSelector();
+        
+        // Initialize age display
+        initializeAgeDisplay();
+        
+        // Add form submission handler
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
             handleFormSubmission(form, resultsDiv, resultsContent);
         });
+
+    } catch (error) {
+        console.error('Initialization error:', error);
+        alert('There was an error initializing the application. Please refresh the page.');
     }
-});
+}
+
+function initializeYearSelector() {
+    const yearSelect = document.querySelector('select[name="birth-year"]');
+    if (!yearSelect) {
+        console.error('Year select element not found');
+        return;
+    }
+
+    console.log('Initializing year selector');
+    const currentYear = new Date().getFullYear();
+    
+    // Clear and add default option
+    yearSelect.innerHTML = '<option value="">Select Year</option>';
+    
+    // Add years in reverse order
+    for (let i = currentYear - CONFIG.MIN_AGE; i >= currentYear - CONFIG.MAX_AGE; i--) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+        yearSelect.appendChild(option);
+    }
+}
+
+function initializeAgeDisplay() {
+    const ageSelector = document.querySelector('.age-selector');
+    const yearSelect = document.querySelector('select[name="birth-year"]');
+    const monthSelect = document.querySelector('select[name="birth-month"]');
+
+    if (!ageSelector || !yearSelect || !monthSelect) {
+        console.error('Age display elements not found');
+        return;
+    }
+
+    const ageDisplay = document.createElement('div');
+    ageDisplay.className = 'age-display text-muted mt-2';
+    ageSelector.appendChild(ageDisplay);
+
+    function updateAgeDisplay() {
+        const yearValue = yearSelect.value;
+        const monthValue = monthSelect.value;
+        
+        if (yearValue && monthValue) {
+            const age = calculateAge(yearValue, monthValue);
+            ageDisplay.textContent = `Age: ${age} years old`;
+            ageDisplay.style.display = 'block';
+        } else {
+            ageDisplay.style.display = 'none';
+        }
+    }
+
+    yearSelect.addEventListener('change', updateAgeDisplay);
+    monthSelect.addEventListener('change', updateAgeDisplay);
+}
 
 // Helper function to handle form submission
 function handleFormSubmission(form, resultsDiv, resultsContent) {
@@ -100,7 +147,7 @@ function handleFormSubmission(form, resultsDiv, resultsContent) {
         // Process form data and show results
         let progress = 0;
         const progressInterval = setInterval(() => {
-            progress += 10;
+            progress += CONFIG.PROGRESS_INCREMENT;
             const progressBarInner = progressBar.querySelector('.progress-bar');
             progressBarInner.style.width = `${progress}%`;
             progressBarInner.setAttribute('aria-valuenow', progress);
@@ -137,7 +184,7 @@ function handleFormSubmission(form, resultsDiv, resultsContent) {
                 // Scroll to results
                 resultsDiv.scrollIntoView({ behavior: 'smooth' });
             }
-        }, 200);
+        }, CONFIG.PROGRESS_INTERVAL);
 
     } catch (error) {
         console.error('Error:', error);
