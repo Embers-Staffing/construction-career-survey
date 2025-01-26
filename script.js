@@ -58,77 +58,86 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle form submission
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log('Form submitted'); // Debug log
+        console.log('Form submitted');
 
-        // Get form data
-        const formData = new FormData(form);
-        const birthYear = formData.get('birth-year');
-        const birthMonth = formData.get('birth-month');
-        
-        // Calculate age from year and month
-        const age = calculateAge(birthYear, birthMonth);
-        formData.set('age', age);
+        // Show loading state
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.innerHTML = `
+            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Generating Recommendations...
+        `;
+        submitButton.disabled = true;
 
-        // Gather all form data
-        const result = {
-            firstName: formData.get('firstName'),
-            lastName: formData.get('lastName'),
-            constructionExperience: formData.get('constructionExperience'),
-            mbtiType: getMBTIType(formData),
-            hollandCode: getHollandCode(formData),
-            careerInterests: formData.getAll('career-interests'),
-            techInterests: formData.getAll('tech-interests'),
-            environment: formData.get('environment-comfort'),
-            travelWillingness: formData.get('travel-willingness'),
-            salaryTarget: formData.get('salary-target'),
-            advancementPreference: formData.get('advancement-preference'),
-            mentorshipType: formData.get('mentorship-type')
-        };
-
-        console.log('Result:', result); // Debug log
-
-        // Create detailed results HTML
-        const html = `
-            <div class="career-path mb-4">
-                <h3>Personal Profile</h3>
-                <p><strong>Name:</strong> ${result.firstName} ${result.lastName}</p>
-                <p><strong>Experience:</strong> ${result.constructionExperience === '0' ? 'New to Construction' : `${result.constructionExperience} years`}</p>
-                <p><strong>Personality Type:</strong> ${result.mbtiType}</p>
-                <p><strong>Work Style:</strong> ${result.hollandCode}</p>
-            </div>
-
-            <div class="career-path mb-4">
-                <h3>Recommended Career Paths</h3>
-                <div class="recommendations">
-                    ${generateCareerRecommendations(result)}
-                </div>
-            </div>
-
-            <div class="career-path mb-4">
-                <h3>Development Plan</h3>
-                <div class="development-plan">
-                    ${generateDevelopmentPlan(result)}
-                </div>
-            </div>
-
-            <div class="career-path mb-4">
-                <h3>Next Steps</h3>
-                <div class="next-steps">
-                    ${generateNextSteps(result)}
-                </div>
+        // Add progress bar
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress mb-3';
+        progressBar.innerHTML = `
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+                 role="progressbar" 
+                 style="width: 0%" 
+                 aria-valuenow="0" 
+                 aria-valuemin="0" 
+                 aria-valuemax="100">
             </div>
         `;
+        submitButton.parentNode.insertBefore(progressBar, submitButton);
 
-        // Update results
-        resultsContent.innerHTML = html;
-        
-        // Show results section
-        resultsDiv.style.display = 'block';
-        
-        // Scroll to results
-        resultsDiv.scrollIntoView();
+        // Simulate progress
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            progress += 5;
+            const progressBarInner = progressBar.querySelector('.progress-bar');
+            progressBarInner.style.width = `${progress}%`;
+            progressBarInner.setAttribute('aria-valuenow', progress);
 
-        console.log('Results displayed'); // Debug log
+            if (progress >= 100) {
+                clearInterval(progressInterval);
+                // Process form data and show results
+                processFormData();
+            }
+        }, 100);
+
+        function processFormData() {
+            // Get form data
+            const formData = new FormData(form);
+            const birthYear = formData.get('birth-year');
+            const birthMonth = formData.get('birth-month');
+            
+            // Calculate age from year and month
+            const age = calculateAge(birthYear, birthMonth);
+            formData.set('age', age);
+
+            // Create result object and generate recommendations
+            const result = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                constructionExperience: formData.get('constructionExperience'),
+                mbtiType: getMBTIType(formData),
+                hollandCode: getHollandCode(formData),
+                careerInterests: formData.getAll('career-interests'),
+                techInterests: formData.getAll('tech-interests'),
+                environment: formData.get('environment-comfort'),
+                travelWillingness: formData.get('travel-willingness'),
+                salaryTarget: formData.get('salary-target'),
+                advancementPreference: formData.get('advancement-preference'),
+                mentorshipType: formData.get('mentorship-type')
+            };
+
+            // Generate and display results
+            const html = generateResultsHTML(result);
+            resultsContent.innerHTML = html;
+            
+            // Show results section
+            resultsDiv.style.display = 'block';
+            
+            // Remove progress bar and restore button
+            progressBar.remove();
+            submitButton.innerHTML = 'Get Career Recommendations';
+            submitButton.disabled = false;
+
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
     });
 });
 
@@ -480,6 +489,40 @@ function getMBTIDescription(type) {
         strengths: 'Varied skill set with multiple applications',
         careers: 'Multiple career paths available'
     };
+}
+
+// Helper function to generate results HTML
+function generateResultsHTML(result) {
+    return `
+        <div class="career-path mb-4">
+            <h3>Personal Profile</h3>
+            <p><strong>Name:</strong> ${result.firstName} ${result.lastName}</p>
+            <p><strong>Experience:</strong> ${result.constructionExperience === '0' ? 'New to Construction' : `${result.constructionExperience} years`}</p>
+            <p><strong>Personality Type:</strong> ${result.mbtiType}</p>
+            <p><strong>Work Style:</strong> ${result.hollandCode}</p>
+        </div>
+
+        <div class="career-path mb-4">
+            <h3>Recommended Career Paths</h3>
+            <div class="recommendations">
+                ${generateCareerRecommendations(result)}
+            </div>
+        </div>
+
+        <div class="career-path mb-4">
+            <h3>Development Plan</h3>
+            <div class="development-plan">
+                ${generateDevelopmentPlan(result)}
+            </div>
+        </div>
+
+        <div class="career-path mb-4">
+            <h3>Next Steps</h3>
+            <div class="next-steps">
+                ${generateNextSteps(result)}
+            </div>
+        </div>
+    `;
 }
 
 // Add other helper functions as needed... 
