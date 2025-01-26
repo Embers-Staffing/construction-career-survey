@@ -99,8 +99,9 @@ body {
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-    margin-top: 3rem;
-    margin-bottom: 3rem;
+    margin: 3rem 0;
+    position: relative;
+    z-index: 2;
 }
 
 #results:not([style*="display: none"]) {
@@ -317,6 +318,8 @@ footer {
     background-color: white;
     box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
     margin-top: 4rem !important;
+    position: relative;
+    z-index: 1;
 }
 
 footer p {
