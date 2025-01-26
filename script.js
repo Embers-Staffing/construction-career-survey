@@ -4,13 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const resultsDiv = document.getElementById('results');
     const resultsContent = document.getElementById('resultsContent');
 
-    // Populate year dropdown
+    // Populate year dropdown in reverse order (newest to oldest)
     const yearSelect = document.querySelector('select[name="birth-year"]');
     const currentYear = new Date().getFullYear();
     const minAge = 16;
     const maxAge = 70;
     
-    for (let i = currentYear - maxAge; i <= currentYear - minAge; i++) {
+    yearSelect.innerHTML = '<option value="">Select Year</option>'; // Clear and add default option
+    
+    for (let i = currentYear - minAge; i >= currentYear - maxAge; i--) {
         const option = document.createElement('option');
         option.value = i;
         option.textContent = i;
@@ -55,11 +57,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return age;
     }
 
-    // Handle form submission
+    // Update form submission handler to prevent clearing
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         console.log('Form submitted');
 
+        // Store form data before processing
+        const formData = new FormData(form);
+        
         // Show loading state
         const submitButton = form.querySelector('button[type="submit"]');
         submitButton.innerHTML = `
@@ -83,40 +88,12 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.parentNode.insertBefore(progressBar, submitButton);
 
         try {
-            const formData = new FormData(form);
-            console.log('Form data collected');
-            
-            // Log form values
-            console.log('MBTI:', getMBTIType(formData));
-            console.log('Holland:', getHollandCode(formData));
-            console.log('Career Interests:', formData.getAll('career-interests'));
-            console.log('Tech Interests:', formData.getAll('tech-interests'));
-            
             // Validate required fields
             if (!validateForm(formData)) {
                 throw new Error('Please fill in all required fields');
             }
-            
-            // Create result object
-            const result = {
-                firstName: formData.get('firstName'),
-                lastName: formData.get('lastName'),
-                age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
-                constructionExperience: formData.get('constructionExperience'),
-                mbtiType: getMBTIType(formData),
-                hollandCode: getHollandCode(formData),
-                careerInterests: formData.getAll('career-interests'),
-                techInterests: formData.getAll('tech-interests'),
-                environment: formData.get('environment-comfort'),
-                travelWillingness: formData.get('travel-willingness'),
-                salaryTarget: formData.get('salary-target'),
-                advancementPreference: formData.get('advancement-preference'),
-                mentorshipType: formData.get('mentorship-type')
-            };
 
-            console.log('Result object created:', result);
-
-            // Simulate progress
+            // Process form data and show results
             let progress = 0;
             const progressInterval = setInterval(() => {
                 progress += 10;
@@ -128,10 +105,24 @@ document.addEventListener('DOMContentLoaded', function() {
                     clearInterval(progressInterval);
                     
                     // Generate and display results
+                    const result = {
+                        firstName: formData.get('firstName'),
+                        lastName: formData.get('lastName'),
+                        age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
+                        constructionExperience: formData.get('constructionExperience'),
+                        mbtiType: getMBTIType(formData),
+                        hollandCode: getHollandCode(formData),
+                        careerInterests: formData.getAll('career-interests'),
+                        techInterests: formData.getAll('tech-interests'),
+                        environment: formData.get('environment-comfort'),
+                        travelWillingness: formData.get('travel-willingness'),
+                        salaryTarget: formData.get('salary-target'),
+                        advancementPreference: formData.get('advancement-preference'),
+                        mentorshipType: formData.get('mentorship-type')
+                    };
+
                     const html = generateResultsHTML(result);
                     resultsContent.innerHTML = html;
-                    
-                    // Show results section
                     resultsDiv.style.display = 'block';
                     
                     // Remove progress bar and restore button
@@ -141,15 +132,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     // Scroll to results
                     resultsDiv.scrollIntoView({ behavior: 'smooth' });
-                    
-                    console.log('Results displayed');
                 }
             }, 200);
 
         } catch (error) {
             console.error('Error:', error);
-            
-            // Show error message
             alert(error.message || 'There was an error processing your results. Please try again.');
             
             // Restore button state
@@ -1050,66 +1037,6 @@ function getMBTIDescription(type) {
             title: 'Innovative, analytical planner',
             strengths: 'Strategic thinking, innovation, complex problem-solving',
             careers: 'Construction Technology Specialist, Design Manager, Engineering Lead'
-        },
-        'ESFJ': {
-            title: 'Supportive, organized coordinator',
-            strengths: 'Team coordination, client relations, organization',
-            careers: 'Project Coordinator, Client Relations Manager, Safety Coordinator'
-        },
-        'ISFJ': {
-            title: 'Detail-focused, supportive specialist',
-            strengths: 'Attention to detail, reliability, support-oriented',
-            careers: 'Quality Assurance, Documentation Specialist, Safety Inspector'
-        },
-        'ENTP': {
-            title: 'Innovative problem-solver',
-            strengths: 'Innovation, adaptability, strategic thinking',
-            careers: 'Technology Integration Specialist, Innovation Lead, Startup Founder'
-        },
-        'INTP': {
-            title: 'Analytical innovator',
-            strengths: 'Complex problem-solving, systems thinking, innovation',
-            careers: 'BIM Specialist, Systems Analyst, Technical Lead'
-        },
-        'ESTP': {
-            title: 'Action-oriented implementer',
-            strengths: 'Practical problem-solving, adaptability, hands-on work',
-            careers: 'Site Supervisor, Equipment Operator, Field Operations'
-        },
-        'ISTP': {
-            title: 'Practical problem-solver',
-            strengths: 'Technical skills, troubleshooting, practical solutions',
-            careers: 'Skilled Tradesperson, Technical Specialist, Equipment Technician'
-        },
-        'ESFP': {
-            title: 'People-oriented doer',
-            strengths: 'Team collaboration, practical work, people skills',
-            careers: 'Team Lead, Safety Trainer, Client Relations'
-        },
-        'ISFP': {
-            title: 'Skilled craftsperson',
-            strengths: 'Attention to detail, practical skills, artistic sense',
-            careers: 'Skilled Tradesperson, Finishing Specialist, Detail Work'
-        },
-        'ENFJ': {
-            title: 'People-focused leader',
-            strengths: 'Team leadership, communication, development of others',
-            careers: 'Training Manager, Team Leader, HR Development'
-        },
-        'INFJ': {
-            title: 'Insightful planner',
-            strengths: 'Long-term planning, people insight, complex problem-solving',
-            careers: 'Planning Specialist, Development Manager, Sustainability Lead'
-        },
-        'ENFP': {
-            title: 'Enthusiastic innovator',
-            strengths: 'Innovation, people skills, adaptability',
-            careers: 'Business Development, Sales Manager, Innovation Specialist'
-        },
-        'INFP': {
-            title: 'Values-driven creator',
-            strengths: 'Creative problem-solving, values alignment, development',
-            careers: 'Sustainability Specialist, Training Developer, Planning Coordinator'
         },
         'ESFJ': {
             title: 'Supportive Team Leader',
