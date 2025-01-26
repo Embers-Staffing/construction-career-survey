@@ -31,131 +31,141 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Add age display element after the age selector
     const ageSelector = document.querySelector('.age-selector');
-    const ageDisplay = document.createElement('div');
-    ageDisplay.className = 'age-display text-muted mt-2';
-    ageSelector.after(ageDisplay);
+    if (ageSelector) {
+        const ageDisplay = document.createElement('div');
+        ageDisplay.className = 'age-display text-muted mt-2';
+        ageSelector.after(ageDisplay);
 
-    // Function to update age display
-    function updateAgeDisplay() {
-        const yearSelect = document.querySelector('select[name="birth-year"]');
-        const monthSelect = document.querySelector('select[name="birth-month"]');
-        
-        if (yearSelect.value && monthSelect.value) {
-            const age = calculateAge(yearSelect.value, monthSelect.value);
-            ageDisplay.textContent = `Age: ${age} years old`;
-            ageDisplay.style.display = 'block';
-        } else {
-            ageDisplay.style.display = 'none';
-        }
-    }
-
-    // Add event listeners for year and month selects
-    document.querySelector('select[name="birth-year"]').addEventListener('change', updateAgeDisplay);
-    document.querySelector('select[name="birth-month"]').addEventListener('change', updateAgeDisplay);
-
-    // Update the age calculation function
-    function calculateAge(year, month) {
-        const today = new Date();
-        const birthDate = new Date(year, month - 1);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        
-        return age;
-    }
-
-    // Update form submission handler to prevent clearing
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        console.log('Form submitted');
-
-        // Store form data before processing
-        const formData = new FormData(form);
-        
-        // Show loading state
-        const submitButton = form.querySelector('button[type="submit"]');
-        submitButton.innerHTML = `
-            <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            Generating Recommendations...
-        `;
-        submitButton.disabled = true;
-
-        // Add progress bar
-        const progressBar = document.createElement('div');
-        progressBar.className = 'progress mb-3';
-        progressBar.innerHTML = `
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
-                 role="progressbar" 
-                 style="width: 0%" 
-                 aria-valuenow="0" 
-                 aria-valuemin="0" 
-                 aria-valuemax="100">
-            </div>
-        `;
-        submitButton.parentNode.insertBefore(progressBar, submitButton);
-
-        try {
-            // Validate required fields
-            if (!validateForm(formData)) {
-                throw new Error('Please fill in all required fields');
+        // Function to update age display
+        function updateAgeDisplay() {
+            const yearSelect = document.querySelector('select[name="birth-year"]');
+            const monthSelect = document.querySelector('select[name="birth-month"]');
+            
+            if (yearSelect.value && monthSelect.value) {
+                const age = calculateAge(yearSelect.value, monthSelect.value);
+                ageDisplay.textContent = `Age: ${age} years old`;
+                ageDisplay.style.display = 'block';
+            } else {
+                ageDisplay.style.display = 'none';
             }
+        }
 
-            // Process form data and show results
-            let progress = 0;
-            const progressInterval = setInterval(() => {
-                progress += 10;
-                const progressBarInner = progressBar.querySelector('.progress-bar');
-                progressBarInner.style.width = `${progress}%`;
-                progressBarInner.setAttribute('aria-valuenow', progress);
+        // Add event listeners for year and month selects
+        document.querySelector('select[name="birth-year"]')?.addEventListener('change', updateAgeDisplay);
+        document.querySelector('select[name="birth-month"]')?.addEventListener('change', updateAgeDisplay);
+    }
 
-                if (progress >= 100) {
-                    clearInterval(progressInterval);
+    // Form submission handler
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Form submitted');
+
+            // Store form data before processing
+            const formData = new FormData(form);
+            
+            // Show loading state
+            const submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.innerHTML = `
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    Generating Recommendations...
+                `;
+                submitButton.disabled = true;
+
+                // Add progress bar
+                const progressBar = document.createElement('div');
+                progressBar.className = 'progress mb-3';
+                progressBar.innerHTML = `
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" 
+                         role="progressbar" 
+                         style="width: 0%" 
+                         aria-valuenow="0" 
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                    </div>
+                `;
+                submitButton.parentNode.insertBefore(progressBar, submitButton);
+
+                try {
+                    handleFormSubmission(formData, progressBar, submitButton, resultsContent, resultsDiv);
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(error.message || 'There was an error processing your results. Please try again.');
                     
-                    // Generate and display results
-                    const result = {
-                        firstName: formData.get('firstName'),
-                        lastName: formData.get('lastName'),
-                        age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
-                        constructionExperience: formData.get('constructionExperience'),
-                        mbtiType: getMBTIType(formData),
-                        hollandCode: getHollandCode(formData),
-                        careerInterests: formData.getAll('career-interests'),
-                        techInterests: formData.getAll('tech-interests'),
-                        environment: formData.get('environment-comfort'),
-                        travelWillingness: formData.get('travel-willingness'),
-                        salaryTarget: formData.get('salary-target'),
-                        advancementPreference: formData.get('advancement-preference'),
-                        mentorshipType: formData.get('mentorship-type')
-                    };
-
-                    const html = generateResultsHTML(result);
-                    resultsContent.innerHTML = html;
-                    resultsDiv.style.display = 'block';
-                    
-                    // Remove progress bar and restore button
+                    // Restore button state
                     progressBar.remove();
                     submitButton.innerHTML = 'Get Career Recommendations';
                     submitButton.disabled = false;
-
-                    // Scroll to results
-                    resultsDiv.scrollIntoView({ behavior: 'smooth' });
                 }
-            }, 200);
+            }
+        });
+    }
+});
 
-        } catch (error) {
-            console.error('Error:', error);
-            alert(error.message || 'There was an error processing your results. Please try again.');
+// Helper function to handle form submission
+function handleFormSubmission(formData, progressBar, submitButton, resultsContent, resultsDiv) {
+    // Validate required fields
+    if (!validateForm(formData)) {
+        throw new Error('Please fill in all required fields');
+    }
+
+    // Process form data and show results
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += 10;
+        const progressBarInner = progressBar.querySelector('.progress-bar');
+        progressBarInner.style.width = `${progress}%`;
+        progressBarInner.setAttribute('aria-valuenow', progress);
+
+        if (progress >= 100) {
+            clearInterval(progressInterval);
             
-            // Restore button state
+            // Generate and display results
+            const result = {
+                firstName: formData.get('firstName'),
+                lastName: formData.get('lastName'),
+                age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
+                constructionExperience: formData.get('constructionExperience'),
+                mbtiType: getMBTIType(formData),
+                hollandCode: getHollandCode(formData),
+                careerInterests: formData.getAll('career-interests'),
+                techInterests: formData.getAll('tech-interests'),
+                environment: formData.get('environment-comfort'),
+                travelWillingness: formData.get('travel-willingness'),
+                salaryTarget: formData.get('salary-target'),
+                advancementPreference: formData.get('advancement-preference'),
+                mentorshipType: formData.get('mentorship-type')
+            };
+
+            const html = generateResultsHTML(result);
+            resultsContent.innerHTML = html;
+            resultsDiv.style.display = 'block';
+            
+            // Remove progress bar and restore button
             progressBar.remove();
             submitButton.innerHTML = 'Get Career Recommendations';
             submitButton.disabled = false;
+
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
-    });
-});
+    }, 200);
+}
+
+// Age calculation function
+function calculateAge(year, month) {
+    const today = new Date();
+    const birthDate = new Date(year, month - 1);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    
+    return age;
+}
 
 function generateCareerRecommendations(result) {
     let recommendations = '';
