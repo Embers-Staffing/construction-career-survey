@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
 
         try {
-            // Simulate API call with sample data
+            // Process form data
             const result = {
                 firstName: formData.get('firstName'),
                 lastName: formData.get('lastName'),
@@ -131,19 +131,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Get the results container
             const resultsDiv = document.getElementById('results');
-            
-            // Update results content
-            displayResults(result);
-            
-            // Show results section
             resultsDiv.style.display = 'block';
             
-            // Scroll to results with offset
-            const offset = 30; // Adjust this value as needed
-            const resultPosition = resultsDiv.getBoundingClientRect().top + window.pageYOffset - offset;
-            window.scrollTo({
-                top: resultPosition,
-                behavior: 'smooth'
+            // Display results
+            displayResults(result);
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
             });
 
         } catch (error) {
@@ -475,19 +471,65 @@ function calculateAge(birthDate) {
 }
 
 function getMBTIType(formData) {
-    // Implement the logic to determine MBTI type based on form data
-    // This is a placeholder and should be replaced with actual implementation
-    return 'INTJ'; // Placeholder return, actual implementation needed
+    const ei = formData.get('mbti-ei') || '';
+    const sn = formData.get('mbti-sn') || '';
+    const tf = formData.get('mbti-tf') || '';
+    const jp = formData.get('mbti-jp') || '';
+    
+    return ei + sn + tf + jp;
 }
 
 function getHollandCode(formData) {
-    // Implement the logic to determine Holland Code based on form data
-    // This is a placeholder and should be replaced with actual implementation
-    return 'R'; // Placeholder return, actual implementation needed
+    const hollandCodes = formData.getAll('holland');
+    return hollandCodes.join('');
 }
 
 function determineCareerPaths(formData) {
-    // Implement the logic to determine career paths based on form data
-    // This is a placeholder and should be replaced with actual implementation
-    return ['Project Manager', 'Construction Manager', 'Site Supervisor']; // Placeholder return, actual implementation needed
+    const careerInterests = formData.getAll('career-interests');
+    const mbtiType = getMBTIType(formData);
+    const hollandCode = getHollandCode(formData);
+    const techInterests = formData.getAll('tech-interests');
+    
+    let recommendedCareers = [];
+    
+    // Add careers based on direct interests
+    if (careerInterests.length > 0) {
+        careerInterests.forEach(interest => {
+            switch(interest) {
+                case 'trades':
+                    recommendedCareers.push('Skilled Tradesperson');
+                    break;
+                case 'heavy-machinery':
+                    recommendedCareers.push('Heavy Equipment Operator');
+                    break;
+                case 'tech-specialist':
+                    recommendedCareers.push('Technology Specialist');
+                    break;
+                case 'estimator':
+                    recommendedCareers.push('Estimator');
+                    break;
+                case 'project-management':
+                    recommendedCareers.push('Project Manager');
+                    break;
+            }
+        });
+    }
+    
+    // Add tech-specific careers
+    if (techInterests.includes('drones')) {
+        recommendedCareers.push('Drone Specialist');
+    }
+    if (techInterests.includes('vr-ar')) {
+        recommendedCareers.push('VR Construction Designer');
+    }
+    if (techInterests.includes('bim')) {
+        recommendedCareers.push('BIM Specialist');
+    }
+    
+    // If no specific careers were selected, provide default recommendations
+    if (recommendedCareers.length === 0) {
+        recommendedCareers = ['Project Manager', 'Construction Manager', 'Site Supervisor'];
+    }
+    
+    return recommendedCareers;
 } 
