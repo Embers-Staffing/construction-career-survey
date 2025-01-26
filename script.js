@@ -95,61 +95,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Form validation
     const form = document.getElementById('careerForm');
-    form.addEventListener('submit', async function(e) {
+    const resultsDiv = document.getElementById('results');
+
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        if (!form.checkValidity()) {
-            e.stopPropagation();
-            form.classList.add('was-validated');
-            return;
-        }
-
+        // Get form data
         const formData = new FormData(form);
         
-        // Show loading state
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.innerHTML;
-        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
-        submitButton.disabled = true;
+        // Create result object
+        const result = {
+            firstName: formData.get('firstName'),
+            lastName: formData.get('lastName'),
+            age: calculateAge(formData.get('birthDate')),
+            constructionExperience: formData.get('constructionExperience'),
+            mbtiType: getMBTIType(formData),
+            hollandCode: getHollandCode(formData),
+            careers: determineCareerPaths(formData)
+        };
 
-        try {
-            // Process form data
-            const result = {
-                firstName: formData.get('firstName'),
-                lastName: formData.get('lastName'),
-                age: calculateAge(formData.get('birthDate')),
-                constructionExperience: formData.get('constructionExperience'),
-                mbtiType: getMBTIType(formData),
-                hollandCode: getHollandCode(formData),
-                careers: determineCareerPaths(formData),
-                training: [
-                    'Project Management Professional (PMP) Certification',
-                    'Construction Management Certificate',
-                    'Leadership Training'
-                ]
-            };
-
-            // Get the results container
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.style.display = 'block';
+        // Create results HTML
+        const resultsContent = document.getElementById('resultsContent');
+        resultsContent.innerHTML = `
+            <div class="career-path mb-4">
+                <h3>Personal Profile</h3>
+                <p><strong>Name:</strong> ${result.firstName} ${result.lastName}</p>
+                <p><strong>Age:</strong> ${result.age} years old</p>
+                <p><strong>Construction Experience:</strong> ${result.constructionExperience === '0' ? 
+                    'New to Construction' : 
+                    `${result.constructionExperience} years`}</p>
+                <p><strong>MBTI Type:</strong> ${result.mbtiType}</p>
+                <p><strong>Holland Code:</strong> ${result.hollandCode}</p>
+            </div>
             
-            // Display results
-            displayResults(result);
-            
-            // Scroll to results
-            resultsDiv.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
+            <div class="career-path mb-4">
+                <h3>Recommended Career Paths</h3>
+                <ul class="list-unstyled">
+                    ${result.careers.map(career => `
+                        <li class="mb-2">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-arrow-right-circle me-2"></i>
+                                <span>${career}</span>
+                            </div>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
 
-        } catch (error) {
-            console.error('Error:', error);
-            alert('There was an error processing your results. Please try again.');
-        } finally {
-            // Restore button state
-            submitButton.innerHTML = originalButtonText;
-            submitButton.disabled = false;
-        }
+        // Show results
+        resultsDiv.style.display = 'block';
+        
+        // Scroll to results
+        resultsDiv.scrollIntoView({ behavior: 'smooth' });
     });
 });
 
