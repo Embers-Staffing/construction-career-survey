@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle form submission
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        console.log('Form submitted');
+        console.log('Form submission started');
 
         // Show loading state
         const submitButton = form.querySelector('button[type="submit"]');
@@ -82,35 +82,15 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         submitButton.parentNode.insertBefore(progressBar, submitButton);
 
-        // Simulate progress
-        let progress = 0;
-        const progressInterval = setInterval(() => {
-            progress += 5;
-            const progressBarInner = progressBar.querySelector('.progress-bar');
-            progressBarInner.style.width = `${progress}%`;
-            progressBarInner.setAttribute('aria-valuenow', progress);
-
-            if (progress >= 100) {
-                clearInterval(progressInterval);
-                // Process form data and show results
-                processFormData();
-            }
-        }, 100);
-
-        function processFormData() {
+        try {
             // Get form data
             const formData = new FormData(form);
-            const birthYear = formData.get('birth-year');
-            const birthMonth = formData.get('birth-month');
             
-            // Calculate age from year and month
-            const age = calculateAge(birthYear, birthMonth);
-            formData.set('age', age);
-
-            // Create result object and generate recommendations
+            // Create result object
             const result = {
                 firstName: formData.get('firstName'),
                 lastName: formData.get('lastName'),
+                age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
                 constructionExperience: formData.get('constructionExperience'),
                 mbtiType: getMBTIType(formData),
                 hollandCode: getHollandCode(formData),
@@ -123,20 +103,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 mentorshipType: formData.get('mentorship-type')
             };
 
-            // Generate and display results
-            const html = generateResultsHTML(result);
-            resultsContent.innerHTML = html;
+            console.log('Result object created:', result);
+
+            // Simulate progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += 10;
+                const progressBarInner = progressBar.querySelector('.progress-bar');
+                progressBarInner.style.width = `${progress}%`;
+                progressBarInner.setAttribute('aria-valuenow', progress);
+
+                if (progress >= 100) {
+                    clearInterval(progressInterval);
+                    
+                    // Generate and display results
+                    const html = generateResultsHTML(result);
+                    resultsContent.innerHTML = html;
+                    
+                    // Show results section
+                    resultsDiv.style.display = 'block';
+                    
+                    // Remove progress bar and restore button
+                    progressBar.remove();
+                    submitButton.innerHTML = 'Get Career Recommendations';
+                    submitButton.disabled = false;
+
+                    // Scroll to results
+                    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+                    
+                    console.log('Results displayed');
+                }
+            }, 200);
+
+        } catch (error) {
+            console.error('Error processing form:', error);
             
-            // Show results section
-            resultsDiv.style.display = 'block';
+            // Show error message
+            alert('There was an error processing your results. Please try again.');
             
-            // Remove progress bar and restore button
+            // Restore button state
             progressBar.remove();
             submitButton.innerHTML = 'Get Career Recommendations';
             submitButton.disabled = false;
-
-            // Scroll to results
-            resultsDiv.scrollIntoView({ behavior: 'smooth' });
         }
     });
 });
