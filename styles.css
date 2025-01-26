@@ -434,4 +434,120 @@ footer p {
 
 @keyframes progress-bar-stripes {
     0% { background-position-x: 1rem; }
+}
+
+/* Training Item Styling */
+.training-item {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    border-left: 4px solid #00BCD4;
+    transition: all 0.3s ease;
+}
+
+.training-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.training-details {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.training-details p {
+    margin-bottom: 0.5rem;
+}
+
+.training-item .btn-outline-primary {
+    color: #00BCD4;
+    border-color: #00BCD4;
+}
+
+.training-item .btn-outline-primary:hover {
+    background-color: #00BCD4;
+    color: white;
+}
+
+/* Training Cost and Financial Aid Sections */
+.cost-section, .financial-aid-section {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.cost-section ul, .financial-aid-section ul {
+    list-style-type: none;
+    padding-left: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.cost-section ul li, .financial-aid-section ul li {
+    position: relative;
+    padding-left: 1rem;
+}
+
+.cost-section ul li:before, .financial-aid-section ul li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #00BCD4;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+    margin-right: 0.5rem;
+}
+
+.btn-outline-secondary:hover {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Tax Credits Section */
+.tax-credits-section {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #17a2b8;
+}
+
+.tax-credits-section ul li {
+    margin-bottom: 1rem;
+}
+
+.btn-outline-info {
+    color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-outline-info:hover {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+/* Provincial Programs Section */
+.provincial-programs-section {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e8f5e9;
+    color: #28a745;
+}
+
+.accordion-button:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+.accordion-item {
+    border-color: #e8f5e9;
 } 

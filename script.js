@@ -356,74 +356,141 @@ function getTrainingRecommendations(result) {
         safety: {
             basic: [
                 {
-                    name: 'OSHA 30-Hour Construction',
-                    description: 'Comprehensive safety training for construction industry',
-                    provider: 'OSHA',
-                    link: '#', // We'll add actual link
-                    duration: '30 hours',
-                    type: 'Certification'
+                    name: 'BCSA Construction Safety Training',
+                    description: 'Essential safety training required for construction in BC',
+                    provider: 'BC Safety Authority',
+                    link: 'https://www.technicalsafetybc.ca/certification',
+                    duration: '16-30 hours',
+                    type: 'Certification',
+                    location: 'BC'
                 },
                 {
-                    name: 'First Aid and CPR',
-                    description: 'Essential emergency response training',
-                    provider: 'Red Cross',
-                    link: '#',
-                    duration: '8 hours',
-                    type: 'Certification'
+                    name: 'WorkSafeBC OHS Guidelines',
+                    description: 'Occupational Health and Safety training for construction',
+                    provider: 'WorkSafeBC',
+                    link: 'https://www.worksafebc.com/en/health-safety/education-training-certification',
+                    duration: 'Self-paced',
+                    type: 'Certification',
+                    location: 'BC'
+                },
+                {
+                    name: 'First Aid Level 1-3',
+                    description: 'WorkSafeBC approved occupational first aid',
+                    provider: 'St. John Ambulance',
+                    link: 'https://www.stjohn.ab.ca/occupational-first-aid-level-1/',
+                    duration: '8-70 hours',
+                    type: 'Certification',
+                    location: 'BC'
                 }
             ],
             advanced: [
                 {
-                    name: 'Construction Health and Safety Technician (CHST)',
-                    description: 'Advanced safety certification for construction professionals',
-                    provider: 'BCSP',
-                    link: '#',
-                    duration: 'Self-paced',
-                    type: 'Professional Certification'
+                    name: 'NCSO™ (National Construction Safety Officer)',
+                    description: 'Comprehensive construction safety certification',
+                    provider: 'BCCSA',
+                    link: 'https://www.bccsa.ca/NCSO.html',
+                    duration: 'Variable',
+                    type: 'Professional Certification',
+                    location: 'BC'
                 }
             ]
         },
         technical: {
             bim: [
                 {
-                    name: 'Autodesk BIM 360',
-                    description: 'Construction management software training',
-                    provider: 'Autodesk',
-                    link: '#',
-                    duration: '40 hours',
-                    type: 'Software Certification'
+                    name: 'BIM Technology Diploma',
+                    description: 'Comprehensive BIM training program',
+                    provider: 'BCIT',
+                    link: 'https://www.bcit.ca/programs/building-information-modeling-bim-architectural-diploma-full-time-7720dipma/',
+                    duration: '2 years',
+                    type: 'Diploma',
+                    location: 'BC'
+                },
+                {
+                    name: 'Revit Architecture Certificate',
+                    description: 'Essential BIM software training',
+                    provider: 'VCC',
+                    link: 'https://www.vcc.ca/programs/building-information-modeling--revit-architecture/',
+                    duration: '78 hours',
+                    type: 'Certificate',
+                    location: 'BC'
                 }
             ],
             drones: [
                 {
-                    name: 'FAA Part 107 Commercial Drone License',
-                    description: 'Required certification for commercial drone operation',
-                    provider: 'FAA',
-                    link: '#',
-                    duration: 'Self-paced',
-                    type: 'License'
+                    name: 'Advanced Operations Drone Certificate',
+                    description: 'Transport Canada compliant drone certification',
+                    provider: 'Canadian Centre for Unmanned Vehicle Systems',
+                    link: 'https://www.ccuvs.com/',
+                    duration: '5 days',
+                    type: 'License',
+                    location: 'Canada'
+                }
+            ]
+        },
+        trades: {
+            apprenticeship: [
+                {
+                    name: 'Carpentry Foundation Program',
+                    description: 'Entry-level carpentry training',
+                    provider: 'BCIT',
+                    link: 'https://www.bcit.ca/programs/carpentry-foundation-certificate-full-time-1830certts/',
+                    duration: '23 weeks',
+                    type: 'Certificate',
+                    location: 'BC'
+                },
+                {
+                    name: 'Electrical Foundation',
+                    description: 'Entry-level electrical training',
+                    provider: 'Camosun College',
+                    link: 'https://camosun.ca/programs-courses/find-program/electrical-foundation',
+                    duration: '24 weeks',
+                    type: 'Certificate',
+                    location: 'BC'
+                }
+            ],
+            certification: [
+                {
+                    name: 'Red Seal Certification',
+                    description: 'Interprovincial certification for skilled trades',
+                    provider: 'ITA BC',
+                    link: 'https://www.itabc.ca/red-seal-program',
+                    duration: 'Variable',
+                    type: 'Professional Certification',
+                    location: 'Canada'
                 }
             ]
         },
         management: {
             project: [
                 {
-                    name: 'Project Management Professional (PMP)',
-                    description: 'Global standard in project management',
-                    provider: 'PMI',
-                    link: '#',
-                    duration: '35 hours training required',
-                    type: 'Professional Certification'
+                    name: 'Construction Management Degree',
+                    description: 'Bachelor's degree in Construction Management',
+                    provider: 'BCIT',
+                    link: 'https://www.bcit.ca/programs/bachelor-of-technology-in-construction-management-full-time-8650btech/',
+                    duration: '4 years',
+                    type: 'Degree',
+                    location: 'BC'
+                },
+                {
+                    name: 'Gold Seal Certification',
+                    description: 'National construction management certification',
+                    provider: 'Canadian Construction Association',
+                    link: 'https://www.goldsealcertification.com/',
+                    duration: 'Variable',
+                    type: 'Professional Certification',
+                    location: 'Canada'
                 }
             ],
-            construction: [
+            estimating: [
                 {
-                    name: 'Construction Management Certificate',
-                    description: 'Comprehensive construction management training',
-                    provider: 'Local Technical Institute',
-                    link: '#',
-                    duration: '6 months',
-                    type: 'Certificate Program'
+                    name: 'Construction Estimating Certificate',
+                    description: 'Specialized training in construction cost estimation',
+                    provider: 'BCIT',
+                    link: 'https://www.bcit.ca/programs/construction-estimating-certificate-part-time-5085cert/',
+                    duration: 'Part-time',
+                    type: 'Certificate',
+                    location: 'BC'
                 }
             ]
         }
@@ -433,10 +500,85 @@ function getTrainingRecommendations(result) {
     return selectRelevantTraining(result, trainingResources);
 }
 
+// Add these specialized tech training paths
+const techTraining = {
+    ai_automation: [
+        {
+            name: 'AI in Construction Management',
+            description: 'Advanced AI applications for construction automation',
+            provider: 'UBC Extended Learning',
+            link: 'https://extendedlearning.ubc.ca/',
+            duration: '6 months',
+            type: 'Certificate',
+            location: 'BC',
+            cost: '$5,800',
+            prerequisites: 'Basic programming knowledge',
+            certification: 'UBC Certificate in Construction Technology'
+        }
+    ],
+    data_analytics: [
+        {
+            name: 'Construction Data Analytics',
+            description: 'Big data analysis for construction projects',
+            provider: 'BCIT',
+            link: 'https://www.bcit.ca/programs/',
+            duration: '4 months',
+            type: 'Certificate',
+            location: 'BC',
+            cost: '$3,200',
+            prerequisites: 'Basic statistics knowledge',
+            certification: 'BCIT Data Analytics Certificate'
+        }
+    ],
+    smart_buildings: [
+        {
+            name: 'Smart Building Systems',
+            description: 'IoT and building automation systems',
+            provider: 'BCIT',
+            link: 'https://www.bcit.ca/programs/',
+            duration: '8 months',
+            type: 'Advanced Certificate',
+            location: 'BC',
+            cost: '$6,500',
+            prerequisites: 'Basic electrical knowledge',
+            certification: 'Smart Building Systems Specialist'
+        }
+    ],
+    sustainable_tech: [
+        {
+            name: 'Green Building Technology',
+            description: 'Sustainable construction technologies',
+            provider: 'UBC',
+            link: 'https://sustain.ubc.ca/courses-degrees',
+            duration: '1 year',
+            type: 'Advanced Certificate',
+            location: 'BC',
+            cost: '$8,200',
+            prerequisites: 'Construction background',
+            certification: 'Green Building Technology Specialist'
+        }
+    ],
+    cybersecurity: [
+        {
+            name: 'Construction Cybersecurity',
+            description: 'Digital security for construction systems',
+            provider: 'BCIT',
+            link: 'https://www.bcit.ca/programs/',
+            duration: '6 months',
+            type: 'Certificate',
+            location: 'BC',
+            cost: '$4,800',
+            prerequisites: 'IT background',
+            certification: 'Construction Cybersecurity Specialist'
+        }
+    ]
+};
+
+// Update the selectRelevantTraining function to include new tech paths
 function selectRelevantTraining(result, resources) {
     let recommendations = [];
 
-    // Base recommendations on experience level
+    // Base recommendations based on experience level
     if (result.constructionExperience === '0') {
         recommendations.push(...resources.safety.basic);
     }
@@ -455,11 +597,403 @@ function selectRelevantTraining(result, resources) {
                     recommendations.push(...resources.technical.drones);
                 }
                 break;
-            // We'll add more cases as we get more resources
+            case 'trades':
+                recommendations.push(...resources.trades.apprenticeship);
+                recommendations.push(...resources.trades.certification);
+                break;
+            case 'estimator':
+                recommendations.push(...resources.management.estimating);
+                break;
+            case 'safety':
+                recommendations.push(...resources.safety.basic);
+                recommendations.push(...resources.safety.advanced);
+                break;
+            case 'property-development':
+                recommendations.push(...resources.management.development);
+                break;
         }
     });
 
+    // Add tech-specific training
+    result.techInterests.forEach(tech => {
+        switch(tech) {
+            case 'bim':
+                recommendations.push(...resources.technical.bim);
+                break;
+            case 'drones':
+                recommendations.push(...resources.technical.drones);
+                break;
+            case 'vr-ar':
+                recommendations.push(...resources.technical.vr);
+                break;
+            case 'robotics':
+                recommendations.push(...resources.technical.robotics);
+                break;
+        }
+    });
+
+    // Add specialized tech training based on interests
+    result.techInterests.forEach(tech => {
+        switch(tech) {
+            case 'ai':
+                recommendations.push(...techTraining.ai_automation);
+                break;
+            case 'data-analytics':
+                recommendations.push(...techTraining.data_analytics);
+                break;
+            case 'iot':
+                recommendations.push(...techTraining.smart_buildings);
+                break;
+            case 'sustainability':
+                recommendations.push(...techTraining.sustainable_tech);
+                break;
+            case 'cyber-security':
+                recommendations.push(...techTraining.cybersecurity);
+                break;
+        }
+    });
+
+    // Add emerging tech if user shows interest in technology
+    if (result.careerInterests.includes('tech-specialist')) {
+        recommendations.push({
+            name: 'Emerging Construction Technologies',
+            description: 'Overview of cutting-edge construction tech',
+            provider: 'Construction Technology Institute',
+            link: 'https://www.constructech.com/',
+            duration: '3 months',
+            type: 'Certificate',
+            location: 'Online/BC',
+            cost: '$2,800',
+            prerequisites: 'None',
+            certification: 'Construction Technology Specialist'
+        });
+    }
+
+    // Filter out duplicates
+    recommendations = [...new Set(recommendations)];
+
+    // Sort by priority (basic certs first, then advanced)
+    recommendations.sort((a, b) => {
+        if (a.type === 'Certification' && b.type !== 'Certification') return -1;
+        if (a.type !== 'Certification' && b.type === 'Certification') return 1;
+        return 0;
+    });
+
     return recommendations;
+}
+
+// Add financial aid information to training resources
+const financialAidInfo = {
+    bcit: {
+        name: 'BCIT Financial Aid',
+        options: [
+            'BCIT Entrance Awards ($2,000-$4,000)',
+            'Student Aid BC Loans and Grants',
+            'Part-time Studies Assistance',
+            'Emergency Assistance Fund'
+        ],
+        link: 'https://www.bcit.ca/financial-aid/'
+    },
+    ubc: {
+        name: 'UBC Financial Support',
+        options: [
+            'UBC Bursaries',
+            'Work Learn Program',
+            'Student Loans',
+            'Merit-based Scholarships'
+        ],
+        link: 'https://students.ubc.ca/enrolment/finances/funding-studies'
+    },
+    itabc: {
+        name: 'ITA BC Funding',
+        options: [
+            'Apprenticeship grants',
+            'Tax credits',
+            'Employment Insurance during training',
+            'Travel allowance'
+        ],
+        link: 'https://www.itabc.ca/grants-tax-credits/grants'
+    },
+    worksafebc: {
+        name: 'WorkSafeBC Training Support',
+        options: [
+            'Employer-sponsored training',
+            'Safety training grants',
+            'Return to work programs'
+        ],
+        link: 'https://www.worksafebc.com/en/health-safety/education-training-certification'
+    }
+};
+
+// Add tax credit information
+const taxCredits = {
+    apprenticeship: {
+        name: 'Apprenticeship Tax Credits',
+        credits: [
+            {
+                name: 'BC Training Tax Credit',
+                description: 'Tax credit for employers and apprentices in BC',
+                amount: 'Up to $2,500 per year',
+                link: 'https://www2.gov.bc.ca/gov/content/taxes/income-taxes/corporate/credits/training'
+            },
+            {
+                name: 'Canada Apprentice Loan',
+                description: 'Interest-free loan for apprentices',
+                amount: 'Up to $4,000 per period',
+                link: 'https://www.canada.ca/en/employment-social-development/services/apprentices/loan.html'
+            }
+        ]
+    },
+    tuition: {
+        name: 'Education Tax Credits',
+        credits: [
+            {
+                name: 'Tuition Tax Credit',
+                description: 'Federal tax credit for tuition fees',
+                amount: '15% of eligible fees',
+                link: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-32300-your-tuition-education-textbook-amounts.html'
+            },
+            {
+                name: 'BC Tuition Tax Credit',
+                description: 'Provincial tax credit for tuition',
+                amount: '5.06% of eligible fees',
+                link: 'https://www2.gov.bc.ca/gov/content/taxes/income-taxes/personal/credits/tuition'
+            }
+        ]
+    },
+    tools: {
+        name: 'Tools Deduction',
+        credits: [
+            {
+                name: 'Tradesperson's Tools Deduction',
+                description: 'Deduction for new tools over $1,200',
+                amount: 'Up to $500 per year',
+                link: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-22900-other-employment-expenses/employed-tradespersons-including-apprentice-mechanics.html'
+            }
+        ]
+    }
+};
+
+// Add provincial tax credits and programs
+const provincialPrograms = {
+    bc: {
+        grants: [
+            {
+                name: 'BC Access Grant',
+                description: 'Grant for students with financial need',
+                amount: 'Up to $4,000 per year',
+                link: 'https://studentaidbc.ca/grants-loans/grants'
+            },
+            {
+                name: 'BC Completion Grant',
+                description: 'Grant for final year students',
+                amount: 'Up to $3,000',
+                link: 'https://studentaidbc.ca/grants-loans/grants'
+            }
+        ],
+        taxCredits: [
+            {
+                name: 'BC Training and Education Savings Grant',
+                description: 'One-time grant for education savings',
+                amount: '$1,200',
+                link: 'https://www2.gov.bc.ca/gov/content/education-training/k-12/support/bc-training-and-education-savings-grant'
+            }
+        ],
+        industryGrants: [
+            {
+                name: 'BC Employer Training Grant',
+                description: 'Funding for employer-sponsored training',
+                amount: 'Up to $10,000 per employee',
+                link: 'https://www.workbc.ca/employer-resources/bc-employer-training-grant.aspx'
+            },
+            {
+                name: 'BC Construction Industry Training Investment',
+                description: 'Industry-specific training funding',
+                amount: 'Variable based on program',
+                link: 'https://www.bccassn.com/training/funding-grants/'
+            }
+        ]
+    },
+    federal: {
+        grants: [
+            {
+                name: 'Canada Training Credit',
+                description: 'Refundable tax credit for training fees',
+                amount: 'Up to $250 per year',
+                link: 'https://www.canada.ca/en/revenue-agency/services/child-family-benefits/canada-training-credit.html'
+            },
+            {
+                name: 'Skills Boost Grant',
+                description: 'Top-up grant for adult learners',
+                amount: 'Up to $1,600 per year',
+                link: 'https://www.canada.ca/en/employment-social-development/news/2018/01/skills_boost.html'
+            }
+        ],
+        loans: [
+            {
+                name: 'Canada Student Loan',
+                description: 'Federal student loan program',
+                amount: 'Based on need',
+                link: 'https://www.canada.ca/en/services/benefits/education/student-aid.html'
+            }
+        ]
+    }
+};
+
+// Update tax credits with more specific information
+const taxDeductions = {
+    moving: {
+        name: 'Moving Expenses Deduction',
+        description: 'Deduction for moving 40km+ closer to school/work',
+        details: [
+            'Transportation and storage costs',
+            'Travel expenses',
+            'Temporary living expenses',
+            'Cost of cancelling a lease'
+        ],
+        link: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-21900-moving-expenses.html'
+    },
+    childcare: {
+        name: 'Child Care Expense Deduction',
+        description: 'Deduction for child care while in school/training',
+        details: [
+            'Up to $8,000 per child under 7',
+            'Up to $5,000 per child aged 7-16',
+            'Must be attending school full-time'
+        ],
+        link: 'https://www.canada.ca/en/revenue-agency/services/tax/individuals/topics/about-your-tax-return/tax-return/completing-a-tax-return/deductions-credits-expenses/line-21400-child-care-expenses.html'
+    }
+};
+
+// Update the training display function to include tax credits and provincial programs
+function generateTrainingHTML(training) {
+    // Get financial aid info based on provider
+    const providerKey = training.provider.toLowerCase().replace(/\s+/g, '');
+    const financialAid = financialAidInfo[providerKey];
+
+    // Determine applicable tax credits
+    const applicableTaxCredits = [];
+    if (training.type === 'Certificate' || training.type === 'Diploma' || training.type === 'Degree') {
+        applicableTaxCredits.push(...taxCredits.tuition.credits);
+    }
+    if (training.type.includes('Apprenticeship') || training.name.includes('Trade')) {
+        applicableTaxCredits.push(...taxCredits.apprenticeship.credits);
+        applicableTaxCredits.push(...taxCredits.tools.credits);
+    }
+
+    // Add provincial programs section
+    const provincialProgramsHTML = `
+        <div class="provincial-programs-section mb-3">
+            <p><strong>Additional Funding Programs:</strong></p>
+            <div class="accordion" id="fundingAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#provincialFunding">
+                            BC Provincial Programs
+                        </button>
+                    </h2>
+                    <div id="provincialFunding" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <ul class="list-unstyled">
+                                ${provincialPrograms.bc.grants.map(grant => `
+                                    <li class="mb-2">
+                                        <strong>${grant.name}</strong> - ${grant.amount}
+                                        <br>
+                                        <small class="text-muted">${grant.description}</small>
+                                        <br>
+                                        <a href="${grant.link}" target="_blank" class="btn btn-sm btn-outline-info mt-1">Learn More</a>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#federalFunding">
+                            Federal Programs
+                        </button>
+                    </h2>
+                    <div id="federalFunding" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <ul class="list-unstyled">
+                                ${provincialPrograms.federal.grants.map(grant => `
+                                    <li class="mb-2">
+                                        <strong>${grant.name}</strong> - ${grant.amount}
+                                        <br>
+                                        <small class="text-muted">${grant.description}</small>
+                                        <br>
+                                        <a href="${grant.link}" target="_blank" class="btn btn-sm btn-outline-info mt-1">Learn More</a>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    return `
+        <div class="training-item mb-4">
+            <h5>${training.name}</h5>
+            <p class="mb-2">${training.description}</p>
+            <div class="training-details">
+                <p><strong>Provider:</strong> ${training.provider}</p>
+                <p><strong>Duration:</strong> ${training.duration}</p>
+                <p><strong>Location:</strong> ${training.location}</p>
+                ${training.cost ? `
+                    <div class="cost-section mb-3">
+                        <p><strong>Cost:</strong> ${training.cost}</p>
+                        <p><strong>Additional Costs:</strong></p>
+                        <ul class="small">
+                            ${training.type === 'Certificate' || training.type === 'Diploma' ? `
+                                <li>Books and Materials: ~$500-1,000</li>
+                                <li>Student Fees: ~$200-500/term</li>
+                                <li>Application Fee: $100-150</li>
+                            ` : ''}
+                            ${training.location === 'BC' ? '<li>Health and Dental (optional): ~$250/year</li>' : ''}
+                        </ul>
+                    </div>
+                ` : ''}
+                ${training.prerequisites ? `<p><strong>Prerequisites:</strong> ${training.prerequisites}</p>` : ''}
+                ${financialAid ? `
+                    <div class="financial-aid-section mb-3">
+                        <p><strong>Financial Aid Options:</strong></p>
+                        <ul class="small">
+                            ${financialAid.options.map(option => `<li>${option}</li>`).join('')}
+                        </ul>
+                        <a href="${financialAid.link}" target="_blank" class="btn btn-sm btn-outline-secondary mt-2">
+                            View Financial Aid Details
+                        </a>
+                    </div>
+                ` : ''}
+                ${applicableTaxCredits.length > 0 ? `
+                    <div class="tax-credits-section mb-3">
+                        <p><strong>Available Tax Credits:</strong></p>
+                        <ul class="small">
+                            ${applicableTaxCredits.map(credit => `
+                                <li>
+                                    <strong>${credit.name}</strong> - ${credit.amount}
+                                    <br>
+                                    <small class="text-muted">${credit.description}</small>
+                                </li>
+                            `).join('')}
+                        </ul>
+                        <div class="mt-2">
+                            ${applicableTaxCredits.map(credit => `
+                                <a href="${credit.link}" target="_blank" class="btn btn-sm btn-outline-info me-2 mb-2">
+                                    Learn More About ${credit.name}
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+                ${provincialProgramsHTML}
+                <a href="${training.link}" target="_blank" class="btn btn-sm btn-outline-primary mt-2">Learn More</a>
+            </div>
+        </div>
+    `;
 }
 
 // Mentorship recommendation function
@@ -666,8 +1200,15 @@ function generateResultsHTML(result) {
             </div>
         </div>
 
+        <div class="career-progression mb-4">
+            <h3>Career Progression Path</h3>
+            <div class="career-flowchart">
+                ${generateCareerFlowchart(result)}
+            </div>
+        </div>
+
         <div class="career-path mb-4">
-            <h3>Development Plan</h3>
+            <h3>Training & Resources</h3>
             <div class="development-plan">
                 ${generateDevelopmentPlan(result)}
             </div>
@@ -677,15 +1218,6 @@ function generateResultsHTML(result) {
             <h3>Next Steps</h3>
             <div class="next-steps">
                 ${generateNextSteps(result)}
-            </div>
-        </div>
-
-        <div class="career-path mb-4">
-            <h3>Career Progression Path</h3>
-            <div class="career-progression mb-4">
-                <div class="career-flowchart">
-                    ${generateCareerFlowchart(result)}
-                </div>
             </div>
         </div>
     `;
