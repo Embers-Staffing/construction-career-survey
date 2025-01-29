@@ -355,16 +355,57 @@ h1 {
 
 /* Footer Styling */
 footer {
-    background-color: white;
-    box-shadow: 0 -2px 15px rgba(0,0,0,0.05);
-    margin-top: 4rem !important;
-    position: relative;
-    z-index: 1;
+    background-color: #f8f9fa;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+}
+
+footer .footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 footer p {
     font-size: 0.9rem;
-    color: #666666;
+    color: #6c757d;
+}
+
+footer .separator {
+    margin: 0 1rem;
+    color: #00BCD4;
+}
+
+footer .copyright {
+    font-weight: 500;
+}
+
+footer .built-by {
+    color: #6c757d;
+}
+
+footer .bigfoot-link {
+    color: #00BCD4;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+footer .bigfoot-link:hover {
+    color: #0097a7;
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 576px) {
+    footer p {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    footer .separator {
+        display: none;
+    }
 }
 
 /* Age Selector Styling */
