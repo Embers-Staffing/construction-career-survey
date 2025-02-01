@@ -1,13 +1,25 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import logging
 from firebase_admin import firestore
 from config import init_firebase
 from datetime import datetime, timedelta
 
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+
 # Initialize Firebase
-init_firebase()
-db = firestore.client()
+try:
+    logger.debug("Initializing Firebase...")
+    init_firebase()
+    db = firestore.client()
+    logger.debug("Firebase initialized successfully")
+except Exception as e:
+    st.error(f"Failed to initialize Firebase: {str(e)}")
+    logger.error(f"Firebase initialization error: {str(e)}", exc_info=True)
+    st.stop()
 
 # Page config
 st.set_page_config(
@@ -37,17 +49,21 @@ start_date, end_date = get_date_range()
 # Function to load data
 @st.cache_data(ttl=300)  # Cache for 5 minutes
 def load_survey_data():
-    responses = []
-    docs = db.collection('survey_responses').get()
-    
-    for doc in docs:
-        data = doc.to_dict()
-        # Convert Firestore timestamp to datetime
-        if 'timestamp' in data:
-            data['timestamp'] = data['timestamp'].datetime()
-        responses.append(data)
-    
-    return pd.DataFrame(responses)
+    try:
+        responses = []
+        docs = db.collection('survey_responses').get()
+        
+        for doc in docs:
+            data = doc.to_dict()
+            # Convert Firestore timestamp to datetime
+            if 'timestamp' in data:
+                data['timestamp'] = data['timestamp'].datetime()
+            responses.append(data)
+        
+        return pd.DataFrame(responses)
+    except Exception as e:
+        logger.error(f"Error loading survey data: {str(e)}", exc_info=True)
+        return pd.DataFrame()
 
 # Load data
 try:
@@ -134,4 +150,5 @@ try:
 
 except Exception as e:
     st.error(f"Error loading data: {str(e)}")
-    st.error("Please check your Firebase configuration and try again.")
+    logger.error(f"Error loading data: {str(e)}", exc_info=True)
+    st.stop()
