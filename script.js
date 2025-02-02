@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         DEBUG.info('Initializing application');
 
         // Get form elements
-        const form = document.getElementById('career-form');
+        const form = document.getElementById('careerForm');
         const resultsDiv = document.getElementById('results');
         const yearSelect = document.getElementById('birth-year');
         const monthSelect = document.getElementById('birth-month');
@@ -586,7 +586,7 @@ function displayResults(result, recommendations) {
 }
 
 function initializeForm() {
-    const form = document.getElementById('career-form');
+    const form = document.getElementById('careerForm');
     const yearSelect = document.getElementById('birth-year');
     const monthSelect = document.getElementById('birth-month');
     const hollandCodeCheckboxes = document.querySelectorAll('.holland-code');
