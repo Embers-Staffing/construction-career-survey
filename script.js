@@ -593,8 +593,11 @@ function initializeForm() {
 
     // Initialize years
     const currentYear = new Date().getFullYear();
+    const minYear = currentYear - CONFIG.MAX_AGE;
+    const maxYear = currentYear - CONFIG.MIN_AGE;
+    
     yearSelect.innerHTML = '<option value="">Select Year</option>';
-    for (let year = currentYear - CONFIG.MAX_AGE; year >= currentYear - CONFIG.MIN_AGE; year--) {
+    for (let year = maxYear; year >= minYear; year--) {
         const option = document.createElement('option');
         option.value = year.toString(); // Ensure year is a string
         option.textContent = year;
@@ -603,10 +606,14 @@ function initializeForm() {
 
     // Initialize months
     monthSelect.innerHTML = '<option value="">Select Month</option>';
+    const monthNames = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
     for (let month = 1; month <= 12; month++) {
         const option = document.createElement('option');
         option.value = month.toString(); // Ensure month is a string
-        option.textContent = month;
+        option.textContent = monthNames[month - 1];
         monthSelect.appendChild(option);
     }
 
