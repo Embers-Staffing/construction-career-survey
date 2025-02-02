@@ -280,16 +280,31 @@ document.addEventListener('DOMContentLoaded', async function() {
                 };
 
                 // Get recommendations first
+                const hollandRecommendations = await careerRecommendationService.getHollandCodeRecommendations(hollandCode);
+                const mbtiRecommendations = await careerRecommendationService.getMBTIRecommendations(mbtiType);
+
+                // Check if we have valid recommendations
+                if (!hollandRecommendations && !mbtiRecommendations) {
+                    showNotification('Unable to get career recommendations at this time. Please try again later.', 'error');
+                    return;
+                }
+
                 const recommendations = {
-                    hollandJobs: await careerRecommendationService.getHollandCodeRecommendations(hollandCode),
-                    mbtiJobs: await careerRecommendationService.getMBTIRecommendations(mbtiType)
+                    hollandJobs: hollandRecommendations || { jobs: [], description: 'No specific recommendations available.' },
+                    mbtiJobs: mbtiRecommendations || { jobs: [], description: 'No specific recommendations available.' }
                 };
 
                 // Store response with recommendations
                 const responseData = {
                     ...result,
-                    recommendations
+                    recommendations: {
+                        hollandJobs: recommendations.hollandJobs.jobs || [],
+                        mbtiJobs: recommendations.mbtiJobs.jobs || [],
+                        hollandDescription: recommendations.hollandJobs.description || '',
+                        mbtiDescription: recommendations.mbtiJobs.description || ''
+                    }
                 };
+
                 const responseId = await careerRecommendationService.storeSurveyResponse(responseData);
                 DEBUG.info('Survey response stored with ID:', responseId);
 
