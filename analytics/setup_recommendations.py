@@ -28,6 +28,18 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
         ],
         "description": "People with RIA preferences excel in hands-on leadership roles that require technical knowledge and creative problem-solving."
     },
+    "CER": {
+        "jobs": [
+            "Construction Project Controller",
+            "Quality Assurance Manager",
+            "Construction Financial Manager",
+            "Compliance Officer",
+            "Operations Systems Manager",
+            "Construction Auditor",
+            "Process Improvement Specialist"
+        ],
+        "description": "CER types excel in roles that combine organizational skills with leadership and practical implementation in construction."
+    },
     "AIR": {
         "jobs": [
             "Architectural Designer",
@@ -80,7 +92,7 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
 }
 
 # MBTI Recommendations
-MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
+MBTI_RECOMMENDATIONS = {
     "ISTJ": {
         "jobs": [
             "Project Manager",
@@ -155,15 +167,15 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
     },
     "ENFJ": {
         "jobs": [
-            "Training Manager",
-            "HR Director",
-            "Team Development Lead",
-            "Project Communications Manager",
+            "Construction Training Director",
+            "Team Development Manager",
             "Community Relations Director",
+            "Project Communications Lead",
             "Safety Program Manager",
-            "Workforce Development Manager"
+            "Workforce Development Director",
+            "Construction Leadership Coach"
         ],
-        "description": "ENFJs excel in roles focused on developing and supporting teams."
+        "description": "ENFJs excel in roles focused on developing teams, fostering communication, and leading with empathy in construction."
     },
     "ENFP": {
         "jobs": [
