@@ -26,7 +26,19 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Equipment Operator",
             "Safety Director"
         ],
-        "description": "People with RIA (Realistic, Investigative, Artistic) preferences excel in hands-on leadership roles that require technical knowledge and creative problem-solving."
+        "description": "People with RIA preferences excel in hands-on leadership roles that require technical knowledge and creative problem-solving."
+    },
+    "AIR": {
+        "jobs": [
+            "Architectural Designer",
+            "BIM Coordinator",
+            "Construction Technology Specialist",
+            "Design-Build Manager",
+            "Sustainable Construction Specialist",
+            "Construction Innovation Lead",
+            "Virtual Design Coordinator"
+        ],
+        "description": "AIR types excel in roles that combine creative design with technical implementation and practical construction knowledge."
     },
     "RIE": {
         "jobs": [
@@ -38,7 +50,7 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Technical Specialist",
             "Field Engineer"
         ],
-        "description": "RIE (Realistic, Investigative, Enterprising) types thrive in roles that combine technical expertise with management responsibilities."
+        "description": "RIE types thrive in roles that combine technical expertise with management responsibilities."
     },
     "RSE": {
         "jobs": [
@@ -152,6 +164,18 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Workforce Development Manager"
         ],
         "description": "ENFJs excel in roles focused on developing and supporting teams."
+    },
+    "ENFP": {
+        "jobs": [
+            "Construction Marketing Manager",
+            "Innovation Consultant",
+            "Client Relations Director",
+            "Training Program Developer",
+            "Business Development Manager",
+            "Construction Outreach Coordinator",
+            "Sustainability Program Manager"
+        ],
+        "description": "ENFPs excel in roles that involve creative problem-solving, relationship building, and driving innovation in construction."
     }
 }
 
