@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const yearSelect = document.querySelector('select[name="birthYear"]');
         const monthSelect = document.querySelector('select[name="birthMonth"]');
         const ageDisplay = document.querySelector('.age-display');
+        const hollandCodeCheckboxes = document.querySelectorAll('.holland-code');
 
         if (!form || !yearSelect || !monthSelect) {
             console.error('Required form elements not found', {
@@ -55,6 +56,17 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
             return;
         }
+
+        // Add event listener for Holland Code checkboxes
+        hollandCodeCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const checkedCount = document.querySelectorAll('.holland-code:checked').length;
+                if (checkedCount > 3) {
+                    this.checked = false;
+                    alert('Please select no more than 3 personality types.');
+                }
+            });
+        });
 
         // Initialize years
         const currentYear = new Date().getFullYear();
