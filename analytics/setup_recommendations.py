@@ -28,6 +28,18 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
         ],
         "description": "People with RIA preferences excel in hands-on leadership roles that require technical knowledge and creative problem-solving."
     },
+    "ERS": {
+        "jobs": [
+            "Construction Business Owner",
+            "Project Development Manager",
+            "Site Operations Director",
+            "Construction Sales Manager",
+            "Business Development Lead",
+            "Client Relations Manager",
+            "Construction Recruiter"
+        ],
+        "description": "ERS types excel in roles that combine leadership and business development with practical construction knowledge and people skills."
+    },
     "CER": {
         "jobs": [
             "Construction Project Controller",
@@ -75,18 +87,6 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Construction Estimator"
         ],
         "description": "RSE (Realistic, Social, Enterprising) individuals excel in roles that combine practical skills with team leadership."
-    },
-    "ERS": {
-        "jobs": [
-            "Construction Business Owner",
-            "Project Development Manager",
-            "Site Operations Director",
-            "Construction Sales Manager",
-            "Business Development Lead",
-            "Client Relations Manager",
-            "Construction Recruiter"
-        ],
-        "description": "ERS (Enterprising, Realistic, Social) individuals excel in roles that combine business acumen with practical construction knowledge and people skills."
     }
     # Add more Holland Code combinations as needed
 }

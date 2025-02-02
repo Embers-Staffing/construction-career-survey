@@ -69,14 +69,8 @@ export class CareerRecommendationService {
             ]);
 
             return {
-                hollandCode: {
-                    code: hollandCode,
-                    recommendations: hollandRecommendations
-                },
-                mbtiType: {
-                    type: mbtiType,
-                    recommendations: mbtiRecommendations
-                }
+                hollandCode: hollandRecommendations,
+                mbti: mbtiRecommendations
             };
         } catch (error) {
             console.error('Error getting combined recommendations:', error);
