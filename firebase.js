@@ -56,6 +56,35 @@ export class CareerRecommendationService {
     }
 
     /**
+     * Get combined recommendations based on Holland Code and MBTI type
+     * @param {string} hollandCode - Three-letter Holland Code (e.g., 'RIA')
+     * @param {string} mbtiType - Four-letter MBTI type (e.g., 'ISTJ')
+     * @returns {Promise<Object>} Combined career recommendations
+     */
+    async getRecommendations(hollandCode, mbtiType) {
+        try {
+            const [hollandRecommendations, mbtiRecommendations] = await Promise.all([
+                this.getHollandCodeRecommendations(hollandCode),
+                this.getMBTIRecommendations(mbtiType)
+            ]);
+
+            return {
+                hollandCode: {
+                    code: hollandCode,
+                    recommendations: hollandRecommendations
+                },
+                mbtiType: {
+                    type: mbtiType,
+                    recommendations: mbtiRecommendations
+                }
+            };
+        } catch (error) {
+            console.error('Error getting combined recommendations:', error);
+            throw error;
+        }
+    }
+
+    /**
      * Store a survey response with recommendations
      * @param {Object} surveyData - Survey response data
      * @param {Object} recommendations - Generated recommendations
