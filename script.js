@@ -220,8 +220,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Get form elements
         const form = document.getElementById('careerForm');
         const resultsDiv = document.getElementById('results');
-        const yearSelect = document.getElementById('birth-year');
-        const monthSelect = document.getElementById('birth-month');
+        const yearSelect = document.getElementById('birthYear');
+        const monthSelect = document.getElementById('birthMonth');
         const hollandCodeCheckboxes = document.querySelectorAll('.holland-code');
 
         // Initialize form elements
@@ -238,8 +238,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const formData = new FormData(form);
                 
                 // Calculate age
-                const birthYear = parseInt(formData.get('birth-year'));
-                const birthMonth = parseInt(formData.get('birth-month'));
+                const birthYear = parseInt(formData.get('birthYear'));
+                const birthMonth = parseInt(formData.get('birthMonth'));
                 const age = calculateAge(birthYear, birthMonth);
                 
                 DEBUG.debug('Age calculated:', { year: birthYear, month: birthMonth, age });
@@ -587,8 +587,8 @@ function displayResults(result, recommendations) {
 
 function initializeForm() {
     const form = document.getElementById('careerForm');
-    const yearSelect = document.getElementById('birth-year');
-    const monthSelect = document.getElementById('birth-month');
+    const yearSelect = document.getElementById('birthYear');
+    const monthSelect = document.getElementById('birthMonth');
     const hollandCodeCheckboxes = document.querySelectorAll('.holland-code');
 
     // Initialize years
