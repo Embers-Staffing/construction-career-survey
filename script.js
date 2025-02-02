@@ -530,6 +530,96 @@ document.addEventListener('DOMContentLoaded', async function() {
             return recommendations;
         }
 
+        // Add personality type description utilities
+        const HOLLAND_TRAITS = {
+            'R': 'Realistic (hands-on, practical)',
+            'I': 'Investigative (analytical, intellectual)',
+            'A': 'Artistic (creative, innovative)',
+            'S': 'Social (helpful, cooperative)',
+            'E': 'Enterprising (persuasive, leadership)',
+            'C': 'Conventional (orderly, detail-oriented)'
+        };
+
+        const MBTI_TRAITS = {
+            'E': 'Extroverted',
+            'I': 'Introverted',
+            'S': 'Sensing',
+            'N': 'Intuitive',
+            'T': 'Thinking',
+            'F': 'Feeling',
+            'J': 'Judging',
+            'P': 'Perceiving'
+        };
+
+        function getHollandCodeDescription(code) {
+            if (!code) return '';
+            return code.split('').map(letter => HOLLAND_TRAITS[letter]).join(' + ');
+        }
+
+        function getMBTIDescription(type) {
+            if (!type || type.length !== 4) return '';
+            return type.split('').map(letter => MBTI_TRAITS[letter]).join(' + ');
+        }
+
+        // Update displayResults function to include descriptions
+        function displayResults(result, recommendations) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = `
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Your Profile</h3>
+                        <p><strong>Holland Code:</strong> ${result.hollandCode} <br>
+                           <em class="text-muted">${getHollandCodeDescription(result.hollandCode)}</em></p>
+                        <p><strong>MBTI Type:</strong> ${result.mbtiType} <br>
+                           <em class="text-muted">${getMBTIDescription(result.mbtiType)}</em></p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Recommended Roles</h3>
+                        <div class="mb-4">
+                            <h5>Based on Your Holland Code (${result.hollandCode})</h5>
+                            ${recommendations.hollandCode ? `
+                                <p class="text-muted">${recommendations.hollandCode.description}</p>
+                                <ul class="list-unstyled">
+                                    ${recommendations.hollandCode.jobs.map(job => `<li>• ${job}</li>`).join('')}
+                                </ul>
+                            ` : '<p>No specific recommendations available for this code combination.</p>'}
+                        </div>
+                        <div>
+                            <h5>Based on Your MBTI Type (${result.mbtiType})</h5>
+                            ${recommendations.mbti ? `
+                                <p class="text-muted">${recommendations.mbti.description}</p>
+                                <ul class="list-unstyled">
+                                    ${recommendations.mbti.jobs.map(job => `<li>• ${job}</li>`).join('')}
+                                </ul>
+                            ` : '<p>No specific recommendations available for this personality type.</p>'}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title">Next Steps</h3>
+                        <ul class="list-unstyled">
+                            ${getNextSteps(result).map(step => `<li>• ${step}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Recommended Training</h3>
+                        <ul class="list-unstyled">
+                            ${getTrainingRecommendations(result).map(rec => `<li>• ${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
     } catch (error) {
         console.error('Initialization failed:', error);
     }
