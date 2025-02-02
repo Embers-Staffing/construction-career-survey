@@ -1,3 +1,7 @@
+# Firebase
+**/firebase-credentials.json
+**/serviceAccountKey.json
+
 # Python
 __pycache__/
 *.py[cod]
@@ -19,14 +23,51 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-.env
+
+# Virtual Environment
 venv/
+env/
 ENV/
-analytics/venv/
-.pytest_cache/
+
+# Environment Variables
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+logs/
+log/
+
+# Streamlit
+.streamlit/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Testing
 .coverage
 htmlcov/
+.pytest_cache/
+.tox/
+
+# Distribution
 *.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Local development
+*.sqlite3
+*.db
 
 # Node
 node_modules/
@@ -40,43 +81,7 @@ yarn-error.log*
 .env.production.local
 package-lock.json
 
-# IDEs and editors
-.idea/
-.vscode/
-*.swp
-*.swo
-.DS_Store
-Thumbs.db
-*.sublime-workspace
-*.sublime-project
-
-# Firebase
-analytics/firebase-credentials.json
-**/firebase-debug.log
-**/ui-debug.log
-.firebase/
-**/firestore-debug.log
-**/pubsub-debug.log
-firebase-credentials.json
-.firebase/
-firebase-debug.log
-.firebaserc
-firebase-debug.*.log
-ui-debug.log
-
-# Firebase credentials
-*firebase-credentials*.json
-*serviceAccount*.json
-.env
-.env.local
-
-# Streamlit
-.streamlit/secrets.toml
-.streamlit/config.toml
-**/.streamlit/
-
 # Large files and directories
-*.log
 *.csv
 *.dat
 *.out
@@ -88,8 +93,6 @@ ui-debug.log
 *.rar
 *.7z
 *.dump
-*.sqlite
-*.db
 
 # Temporary files
 *.bak
