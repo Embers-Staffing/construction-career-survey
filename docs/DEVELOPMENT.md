@@ -1,5 +1,58 @@
 # Development Guidelines
 
+## Code Style and Organization
+
+### JavaScript Files
+1. Always use 'use strict' mode
+2. Use the DEBUG utility for logging:
+   ```javascript
+   DEBUG.info('Message');  // For general information
+   DEBUG.debug('Data:', data);  // For debugging details
+   DEBUG.error('Error:', error);  // For error handling
+   ```
+3. Add JSDoc comments for functions:
+   ```javascript
+   /**
+    * Calculate user's age from birth year and month
+    * @param {number} birthYear - Year of birth
+    * @param {number} birthMonth - Month of birth (1-12)
+    * @returns {number|null} Age in years or null if invalid
+    */
+   function calculateAge(birthYear, birthMonth) {
+   ```
+4. Use descriptive variable names
+5. Keep functions focused and single-purpose
+6. Handle errors gracefully with user-friendly messages
+7. Validate data before storing in Firestore
+8. Provide default values for potentially missing data
+
+## Git and Version Control
+
+### Commit Messages
+Use semantic commit messages:
+- `fix:` for bug fixes
+- `feat:` for new features
+- `docs:` for documentation
+- `refactor:` for code changes that neither fix bugs nor add features
+- `style:` for formatting changes
+- `test:` for tests
+- `chore:` for maintenance
+
+Example:
+```
+fix: Update Holland Code validation
+
+1. Normalize Holland Code format
+2. Add error handling
+3. Improve user feedback
+```
+
+### Branch Management
+1. Keep commits focused and atomic
+2. Always update both `main` and `gh-pages` branches
+3. Review changes before merging
+4. Keep branches up to date
+
 ## Data Storage Strategy
 
 ### Database Storage (Firestore)
@@ -126,6 +179,39 @@ Examples:
    - Encrypt sensitive information
    - Follow data protection regulations
    - Regular security audits
+
+## Security and Sensitive Data
+
+### Files to Never Commit
+1. Sensitive files:
+   - `firebase-credentials.json`
+   - `.env` files
+   - API keys
+   - Private configuration files
+   - Personal IDE settings
+
+2. Build artifacts:
+   - `node_modules/`
+   - `dist/`
+   - `build/`
+   - `.cache/`
+
+3. OS-specific files:
+   - `.DS_Store`
+   - `Thumbs.db`
+   - `Desktop.ini`
+
+4. Logs and temporary files:
+   - `*.log`
+   - `*.tmp`
+   - `*.temp`
+   - `*.swp`
+
+### Handling Sensitive Data
+1. Use environment variables for secrets
+2. Keep example files (e.g., `firebase-credentials.example.json`)
+3. Document required environment variables
+4. Use `.gitignore` to prevent accidental commits
 
 ## Deployment Process
 
