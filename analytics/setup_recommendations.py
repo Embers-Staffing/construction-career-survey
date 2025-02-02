@@ -137,8 +137,7 @@ MBTI_RECOMMENDATIONS = {
             "Construction Estimator",
             "Building Code Inspector",
             "Structural Engineer"
-        ],
-        "description": "ISTJs excel in roles requiring attention to detail, systematic thinking, and adherence to standards."
+        ]
     },
     "ESTP": {
         "jobs": [
@@ -149,8 +148,7 @@ MBTI_RECOMMENDATIONS = {
             "Equipment Operator",
             "Field Operations Manager",
             "Emergency Response Coordinator"
-        ],
-        "description": "ESTPs thrive in dynamic, hands-on roles that require quick thinking and adaptability."
+        ]
     },
     "ENTJ": {
         "jobs": [
@@ -161,8 +159,7 @@ MBTI_RECOMMENDATIONS = {
             "Business Development Manager",
             "Strategic Planning Director",
             "Construction Company Owner"
-        ],
-        "description": "ENTJs excel in leadership positions that require strategic thinking and long-term planning."
+        ]
     },
     "ESFP": {
         "jobs": [
@@ -173,8 +170,7 @@ MBTI_RECOMMENDATIONS = {
             "Team Lead",
             "Construction Sales Representative",
             "Site Safety Officer"
-        ],
-        "description": "ESFPs excel in roles that involve direct interaction with people and hands-on work."
+        ]
     },
     "ISFP": {
         "jobs": [
@@ -185,8 +181,7 @@ MBTI_RECOMMENDATIONS = {
             "Custom Finishing Expert",
             "Site Aesthetics Coordinator",
             "Quality Assurance Inspector"
-        ],
-        "description": "ISFPs excel in roles that combine practical skills with aesthetic awareness and attention to detail."
+        ]
     },
     "ISFJ": {
         "jobs": [
@@ -197,8 +192,7 @@ MBTI_RECOMMENDATIONS = {
             "Materials Manager",
             "Project Support Specialist",
             "Maintenance Supervisor"
-        ],
-        "description": "ISFJs excel in roles that require attention to detail, organization, and supporting others."
+        ]
     },
     "ENFJ": {
         "jobs": [
@@ -209,8 +203,7 @@ MBTI_RECOMMENDATIONS = {
             "Safety Program Manager",
             "Workforce Development Director",
             "Construction Leadership Coach"
-        ],
-        "description": "ENFJs excel in roles focused on developing teams, fostering communication, and leading with empathy in construction."
+        ]
     },
     "ENFP": {
         "jobs": [
@@ -221,8 +214,7 @@ MBTI_RECOMMENDATIONS = {
             "Business Development Manager",
             "Construction Outreach Coordinator",
             "Sustainability Program Manager"
-        ],
-        "description": "ENFPs excel in roles that involve creative problem-solving, relationship building, and driving innovation in construction."
+        ]
     },
     "ENTP": {
         "jobs": [
@@ -231,9 +223,28 @@ MBTI_RECOMMENDATIONS = {
             "Construction Systems Analyst",
             "Technology Integration Specialist",
             "Sustainable Construction Consultant"
-        ],
-        "description": "ENTPs are innovative problem-solvers who excel at understanding complex systems and finding creative solutions."
+        ]
     }
+}
+
+# MBTI descriptions
+mbti_descriptions = {
+    'ENFP': 'Extroverted, Intuitive, Feeling, Perceiving - Creative and enthusiastic innovators who excel at inspiring and connecting with others',
+    'ENFJ': 'Extroverted, Intuitive, Feeling, Judging - Natural leaders who are passionate about developing people and driving positive change',
+    'ENTJ': 'Extroverted, Intuitive, Thinking, Judging - Strategic leaders who excel at organizing people and resources to achieve goals',
+    'ENTP': 'Extroverted, Intuitive, Thinking, Perceiving - Quick-thinking innovators who enjoy solving complex problems',
+    'ESFJ': 'Extroverted, Sensing, Feeling, Judging - Supportive team players who value harmony and practical solutions',
+    'ESFP': 'Extroverted, Sensing, Feeling, Perceiving - Action-oriented team players who bring enthusiasm to hands-on work',
+    'ESTJ': 'Extroverted, Sensing, Thinking, Judging - Practical organizers who excel at implementing structured plans',
+    'ESTP': 'Extroverted, Sensing, Thinking, Perceiving - Action-oriented problem solvers who thrive in dynamic environments',
+    'INFJ': 'Introverted, Intuitive, Feeling, Judging - Insightful planners who are driven by their values and vision',
+    'INFP': 'Introverted, Intuitive, Feeling, Perceiving - Thoughtful idealists who care deeply about personal growth',
+    'INTJ': 'Introverted, Intuitive, Thinking, Judging - Strategic thinkers who excel at developing innovative solutions',
+    'INTP': 'Introverted, Intuitive, Thinking, Perceiving - Analytical problem solvers who enjoy theoretical challenges',
+    'ISFJ': 'Introverted, Sensing, Feeling, Judging - Detail-oriented supporters who value tradition and stability',
+    'ISFP': 'Introverted, Sensing, Feeling, Perceiving - Artistic contributors who bring creativity to practical work',
+    'ISTJ': 'Introverted, Sensing, Thinking, Judging - Reliable executors who excel at maintaining order and standards',
+    'ISTP': 'Introverted, Sensing, Thinking, Perceiving - Practical problem solvers who excel in technical roles'
 }
 
 def populate_recommendations():
@@ -260,9 +271,16 @@ def populate_recommendations():
         print(" MBTI recommendations populated")
         for type_code, data in MBTI_RECOMMENDATIONS.items():
             db.collection('mbti_types').document(type_code).set({
-                'jobs': data['jobs'],
-                'description': data['description']
+                'jobs': data['jobs']
             })
+
+        # Store MBTI descriptions
+        for mbti_type, description in mbti_descriptions.items():
+            db.collection('mbti_descriptions').document(mbti_type).set({
+                'description': description
+            })
+
+        print("\n MBTI descriptions populated")
 
         print("\n Verifying recommendations...")
         

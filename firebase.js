@@ -34,24 +34,49 @@ export class CareerRecommendationService {
     }
 
     /**
+     * Get MBTI description from database
+     * @param {string} mbtiType - Four-letter MBTI type (e.g., 'ISTJ')
+     * @returns {Promise<string>} MBTI description
+     */
+    async getMBTIDescription(mbtiType) {
+        try {
+            const descDoc = await this.db.collection('mbti_descriptions').doc(mbtiType).get();
+            if (descDoc.exists) {
+                return descDoc.data().description;
+            }
+            console.warn(`No description found for MBTI type: ${mbtiType}`);
+            return null;
+        } catch (error) {
+            console.error('Error getting MBTI description:', error);
+            return null;
+        }
+    }
+
+    /**
      * Get career recommendations based on MBTI type
      * @param {string} mbtiType - Four-letter MBTI type (e.g., 'ISTJ')
      * @returns {Promise<Object>} Career recommendations
      */
     async getMBTIRecommendations(mbtiType) {
         try {
-            const docRef = doc(this.db, 'mbti_types', mbtiType);
-            const docSnap = await getDoc(docRef);
+            const mbtiDoc = await this.db.collection('mbti_types').doc(mbtiType).get();
+            const descDoc = await this.db.collection('mbti_descriptions').doc(mbtiType).get();
             
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
+            if (!mbtiDoc.exists) {
                 console.warn(`No recommendations found for MBTI type: ${mbtiType}`);
                 return null;
             }
+
+            const data = mbtiDoc.data();
+            const description = descDoc.exists ? descDoc.data().description : '';
+            
+            return {
+                jobs: data.jobs,
+                description: description
+            };
         } catch (error) {
             console.error('Error getting MBTI recommendations:', error);
-            throw error;
+            return null;
         }
     }
 

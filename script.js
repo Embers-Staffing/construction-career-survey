@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <p><strong>Name:</strong> ${result.firstName} ${result.lastName}</p>
                         <p><strong>Age:</strong> ${result.age}</p>
                         <p><strong>Construction Experience:</strong> ${result.constructionExperience}</p>
-                        <p><strong>MBTI Type:</strong> ${result.mbtiType} - ${getMBTIDescription(result.mbtiType)}</p>
+                        <p><strong>MBTI Type:</strong> ${result.mbtiType} - ${await getMBTIDescription(result.mbtiType)}</p>
                         <p><strong>Holland Code:</strong> ${result.hollandCode}</p>
                     </div>
 
@@ -757,27 +757,14 @@ document.addEventListener('DOMContentLoaded', async function() {
             'P': 'Perceiving'
         };
 
-        const MBTI_DESCRIPTIONS = {
-            'ENFP': 'Extroverted, Intuitive, Feeling, Perceiving - Creative and enthusiastic innovators who excel at inspiring and connecting with others',
-            'ENFJ': 'Extroverted, Intuitive, Feeling, Judging - Natural leaders who are passionate about developing people and driving positive change',
-            'ENTJ': 'Extroverted, Intuitive, Thinking, Judging - Strategic leaders who excel at organizing people and resources to achieve goals',
-            'ENTP': 'Extroverted, Intuitive, Thinking, Perceiving - Quick-thinking innovators who enjoy solving complex problems',
-            'ESFJ': 'Extroverted, Sensing, Feeling, Judging - Supportive team players who value harmony and practical solutions',
-            'ESFP': 'Extroverted, Sensing, Feeling, Perceiving - Action-oriented team players who bring enthusiasm to hands-on work',
-            'ESTJ': 'Extroverted, Sensing, Thinking, Judging - Practical organizers who excel at implementing structured plans',
-            'ESTP': 'Extroverted, Sensing, Thinking, Perceiving - Action-oriented problem solvers who thrive in dynamic environments',
-            'INFJ': 'Introverted, Intuitive, Feeling, Judging - Insightful planners who are driven by their values and vision',
-            'INFP': 'Introverted, Intuitive, Feeling, Perceiving - Thoughtful idealists who care deeply about personal growth',
-            'INTJ': 'Introverted, Intuitive, Thinking, Judging - Strategic thinkers who excel at developing innovative solutions',
-            'INTP': 'Introverted, Intuitive, Thinking, Perceiving - Analytical problem solvers who enjoy theoretical challenges',
-            'ISFJ': 'Introverted, Sensing, Feeling, Judging - Detail-oriented supporters who value tradition and stability',
-            'ISFP': 'Introverted, Sensing, Feeling, Perceiving - Artistic contributors who bring creativity to practical work',
-            'ISTJ': 'Introverted, Sensing, Thinking, Judging - Reliable executors who excel at maintaining order and standards',
-            'ISTP': 'Introverted, Sensing, Thinking, Perceiving - Practical problem solvers who excel in technical roles'
-        };
-
-        function getMBTIDescription(type) {
-            return MBTI_DESCRIPTIONS[type] || 'Description not available';
+        async function getMBTIDescription(type) {
+            try {
+                const description = await careerRecommendationService.getMBTIDescription(type);
+                return description || 'Description not available';
+            } catch (error) {
+                console.error('Error fetching MBTI description:', error);
+                return 'Description not available';
+            }
         }
 
         function getHollandCodeDescription(code) {
@@ -845,7 +832,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <p><strong>Holland Code:</strong> ${result.hollandCode} <br>
                            <em class="text-muted">${getHollandCodeDescription(result.hollandCode)}</em></p>
                         <p><strong>MBTI Type:</strong> ${result.mbtiType} <br>
-                           <em class="text-muted">${getMBTIDescription(result.mbtiType)}</em></p>
+                           <em class="text-muted">${await getMBTIDescription(result.mbtiType)}</em></p>
                     </div>
                 </div>
 
