@@ -6,7 +6,7 @@ import { collection, doc, getDoc, setDoc, addDoc } from 'https://www.gstatic.com
 /**
  * Service class for handling career recommendations and survey responses
  */
-class CareerRecommendationService {
+export class CareerRecommendationService {
     constructor() {
         this.db = db;
     }
