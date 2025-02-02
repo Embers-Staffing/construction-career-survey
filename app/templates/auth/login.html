@@ -1,45 +1,97 @@
 {% extends "base.html" %}
 
+{% block styles %}
+<style>
+.login-error {
+    display: none;
+    margin-top: 1rem;
+}
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
+<div class="container">
+    <div class="row justify-content-center mt-5">
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <h1 class="text-center">Sign In</h1>
-                </div>
                 <div class="card-body">
-                    <form action="" method="post" novalidate>
-                        {{ form.hidden_tag() }}
-                        <div class="form-group">
-                            {{ form.email.label(class="form-label") }}
-                            {{ form.email(class="form-control") }}
-                            {% for error in form.email.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
+                    <h2 class="card-title text-center mb-4">Sign In</h2>
+                    <div id="loginError" class="alert alert-danger login-error"></div>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    <div class="alert alert-danger">
+                        {{ messages[0] }}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                    <form id="loginForm">
+                        {{ form.csrf_token }}
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
-                        <div class="form-group mt-3">
-                            {{ form.password.label(class="form-label") }}
-                            {{ form.password(class="form-control") }}
-                            {% for error in form.password.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
                         </div>
-                        <div class="form-check mt-3">
-                            {{ form.remember_me(class="form-check-input") }}
-                            {{ form.remember_me.label(class="form-check-label") }}
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                            <label class="form-check-label" for="remember">Remember Me</label>
                         </div>
-                        <div class="d-grid gap-2 mt-4">
-                            {{ form.submit(class="btn btn-primary") }}
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Sign In</button>
                         </div>
                     </form>
-                </div>
-                <div class="card-footer text-center">
-                    <p>New User? <a href="{{ url_for('auth.register') }}">Click to Register</a></p>
-                    <p><a href="{{ url_for('auth.reset_password') }}">Forgot Your Password?</a></p>
+                    <div class="text-center mt-3">
+                        <p>New User? <a href="{{ url_for('auth.register') }}">Click to Register</a></p>
+                        <p><a href="{{ url_for('auth.reset_password_request') }}">Forgot Your Password?</a></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const errorDiv = document.getElementById('loginError');
+    
+    try {
+        // Sign in with server
+        const response = await fetch("{{ url_for('auth.login') }}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': "{{ form.csrf_token._value() }}"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                remember: document.getElementById('remember').checked
+            })
+        });
+        
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            const data = await response.json();
+            if (data.redirect) {
+                window.location.href = data.redirect;
+            } else if (data.error) {
+                throw new Error(data.error);
+            }
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        errorDiv.textContent = error.message || 'Login failed. Please check your credentials.';
+        errorDiv.style.display = 'block';
+    }
+});
+</script>
 {% endblock %}

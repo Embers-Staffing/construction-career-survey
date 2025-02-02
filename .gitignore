@@ -1,6 +1,7 @@
 # Firebase
 **/firebase-credentials.json
 **/serviceAccountKey.json
+**/firebase-config.js
 
 # Python
 __pycache__/
