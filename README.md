@@ -1,108 +1,137 @@
-# 🏗️ Construction Career Survey  
+# Construction Career Survey
 
-### **Overview**  
-The **Construction Career Survey** web app enables **admin users** to enter and submit participant survey data, storing responses securely in **Firebase Firestore**. The app features **authentication via Firebase**, **frontend hosting on GitHub Pages**, and an **interactive Streamlit dashboard** to analyze career recommendations based on Holland Codes and MBTI results.
+## Overview
+A comprehensive web application for conducting construction career surveys and providing personalized career recommendations based on Holland Code and MBTI personality assessments.
 
----
+## Features
+- Interactive survey interface
+- Real-time data collection with Firebase
+- Personality-based career matching
+- Analytics dashboard for survey insights
+- Secure data handling and storage
 
-## 🚀 **Features**  
-- **Secure Admin Login** – Only authorized admins can enter and submit data.  
-- **Survey Data Submission** – Admins enter participant responses via an interactive form.  
-- **Firestore Database** – Securely stores survey responses for later analysis.  
-- **Streamlit Dashboard** – Provides real-time analytics and career recommendations.  
-- **GitHub Pages Hosting** – Static frontend is hosted and accessible for admins.  
+## Technology Stack
+- Frontend: HTML, CSS, JavaScript
+- Backend: Firebase (Firestore)
+- Analytics: Python, Streamlit
+- Data Processing: Pandas, Plotly
 
----
+## Prerequisites
+- Node.js (v14 or higher)
+- Python (3.8 or higher)
+- Firebase account with Firestore enabled
+- Git
 
-## 🛠️ **Tech Stack**  
-| Component         | Technology Used |
-|------------------|----------------|
-| **Frontend**     | HTML, CSS, JavaScript |
-| **Authentication** | Firebase Authentication |
-| **Database**     | Firebase Firestore |
-| **Hosting**      | GitHub Pages (Frontend) |
-| **Dashboard**    | Streamlit (Python) |
+## Installation
 
----
-
-## 📦 **Installation & Setup**  
-### **1️⃣ Clone the Repository**  
-```sh
+### 1. Clone the Repository
+```bash
 git clone https://github.com/Embers-Staffing/construction-career-survey.git
 cd construction-career-survey
 ```
 
-### **2️⃣ Frontend Setup**
-```sh
-# No additional setup needed for frontend
-# Static files are served directly via GitHub Pages
+### 2. Frontend Setup
+Install the required Node.js dependencies:
+```bash
+npm install
 ```
 
-### **3️⃣ Analytics Dashboard Setup**
-```sh
-# Create and activate virtual environment
+### 3. Analytics Setup
+Set up the Python virtual environment and install dependencies:
+```bash
+cd analytics
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install required packages
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
-
-# Set up Firebase credentials
-# Place your firebase-credentials.json in the analytics directory
 ```
 
-### **4️⃣ Firebase Credentials Setup**
+### 4. Firebase Configuration
 
-To run the analytics dashboard, you need to set up Firebase credentials:
-
-1. Go to the [Firebase Console](https://console.firebase.google.com)
-2. Select your project
-3. Go to Project Settings > Service Accounts
-4. Click "Generate New Private Key"
-5. Save the downloaded JSON file as `analytics/firebase-credentials.json`
-
-**Important:** Never commit the credentials file to version control or share it publicly.
-
-### **5️⃣ Environment Configuration**
-1. Create `.env` file in the root directory
-2. Add required environment variables:
-```sh
+#### Web Application Setup
+1. Create a new project in [Firebase Console](https://console.firebase.google.com)
+2. Enable Firestore Database
+3. Go to Project Settings > General
+4. Under "Your apps", create a new web app
+5. Copy the Firebase configuration object
+6. Create `.env` file in the root directory:
+```bash
 FIREBASE_API_KEY=your_api_key
 FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_AUTH_DOMAIN=your_auth_domain
+FIREBASE_STORAGE_BUCKET=your_storage_bucket
 ```
 
-### **6️⃣ Running the Dashboard**
-```sh
+#### Analytics Dashboard Setup
+1. Go to Project Settings > Service Accounts
+2. Click "Generate New Private Key"
+3. Save the downloaded JSON file as `analytics/firebase-credentials.json`
+4. Ensure this file is not committed to version control
+
+## Running the Application
+
+### Web Survey Interface
+1. Start the development server:
+```bash
+npm start
+```
+2. Access the survey at `http://localhost:3000`
+
+### Analytics Dashboard
+1. Navigate to the analytics directory:
+```bash
 cd analytics
+```
+
+2. Activate the virtual environment:
+```bash
+source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+```
+
+3. Start the Streamlit dashboard:
+```bash
 streamlit run dashboard.py
 ```
 
----
+4. Access the dashboard at `http://localhost:1805`
 
-## 🔒 **Security Notes**
-- Never commit Firebase credentials or `.env` files
-- Keep admin access credentials secure
-- Regularly review authorized users in Firebase Console
+## Development
 
----
+### Project Structure
+```
+construction-career-survey/
+├── index.html              # Main survey interface
+├── assets/                 # Static assets
+├── js/                    # JavaScript files
+├── css/                   # Stylesheets
+├── analytics/             # Analytics dashboard
+│   ├── dashboard.py       # Main dashboard application
+│   ├── config.py         # Firebase configuration
+│   └── requirements.txt   # Python dependencies
+└── README.md
+```
 
-## 📊 **Dashboard Features**
-- Real-time survey response analytics
-- Holland Code result visualization
-- MBTI type distribution analysis
-- Career recommendation insights
-- Data export capabilities
+### Adding Test Data
+The repository includes a script to generate test data:
+```bash
+cd analytics
+python add_dummy_data.py
+```
 
----
+## Security Considerations
+- Never commit Firebase credentials to version control
+- Keep the `.env` file secure and local
+- Regularly rotate API keys and credentials
+- Follow Firebase security rules best practices
 
-## 🤝 **Contributing**
+## Contributing
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
----
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 📝 **License**
-This project is proprietary and confidential. Unauthorized copying, modification, distribution, or use is strictly prohibited.
+## Support
+For support or questions, please open an issue in the GitHub repository.
