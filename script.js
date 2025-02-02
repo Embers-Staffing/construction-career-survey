@@ -52,7 +52,7 @@ const CAREER_DATA = {
             min: 95000,
             max: 150000,
             title: "Senior Level",
-            experience: "5+ years"
+            experience: "5-10 years"
         },
         expert: {
             min: 150000,
@@ -149,16 +149,36 @@ function getCareerProgression(role, experience) {
 
 function getRecommendedTraining(role, experience) {
     const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
+    let recommendations = [];
     
-    // Get relevant training based on role and experience
-    const relevantTraining = {
-        technical: CAREER_DATA.trainingResources.technical.filter(course => 
-            course.level === skillLevel || course.level === 'all'),
-        leadership: experience >= 2 ? CAREER_DATA.trainingResources.leadership : [],
-        technology: CAREER_DATA.trainingResources.technology
-    };
+    // Add technical training based on role
+    recommendations.push(...CAREER_DATA.trainingResources.technical
+        .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
+        .map(course => ({
+            ...course,
+            category: 'Technical Training'
+        }))
+    );
 
-    return relevantTraining;
+    // Add leadership training for experienced professionals
+    if (experience >= 2) {
+        recommendations.push(...CAREER_DATA.trainingResources.leadership
+            .map(course => ({
+                ...course,
+                category: 'Leadership Development'
+            }))
+        );
+    }
+
+    // Add technology training
+    recommendations.push(...CAREER_DATA.trainingResources.technology
+        .map(course => ({
+            ...course,
+            category: 'Technology Skills'
+        }))
+    );
+
+    return recommendations;
 }
 
 // Initialize form when DOM is loaded
@@ -312,7 +332,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <p><strong>Name:</strong> ${result.firstName} ${result.lastName}</p>
                         <p><strong>Age:</strong> ${result.age}</p>
                         <p><strong>Construction Experience:</strong> ${result.constructionExperience}</p>
-                        <p><strong>MBTI Type:</strong> ${result.mbtiType}</p>
+                        <p><strong>MBTI Type:</strong> ${result.mbtiType} - ${getMBTIDescription(result.mbtiType)}</p>
                         <p><strong>Holland Code:</strong> ${result.hollandCode}</p>
                     </div>
 
@@ -352,27 +372,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                         </ul>
                     </div>
 
-                    <div class="next-steps mb-4">
-                        <h3>Recommended Next Steps</h3>
-                        <ul>
-                            ${getNextSteps(result).map(step => `<li>${step}</li>`).join('')}
-                        </ul>
-                    </div>
-
-                    <div class="training mb-4">
-                        <h3>Training & Development</h3>
-                        <ul>
-                            ${getTrainingRecommendations(result).map(rec => `<li>${rec}</li>`).join('')}
-                        </ul>
-                    </div>
-
                     <div class="career-progression mb-4">
                         <h3>Career Progression</h3>
-                        <p><strong>Recommended Career Path:</strong> ${result.hollandCode}</p>
+                        <p><strong>Recommended Career Path:</strong></p>
                         <ul>
-                            ${getCareerProgression(result.hollandCode, result.age).map(step => `
+                            ${getCareerProgression(result.hollandCode, result.constructionExperience).map(step => `
                                 <li>
-                                    <strong>${step.level}</strong> (${step.years}) - $${step.salary.min.toLocaleString()} - $${step.salary.max.toLocaleString()}
+                                    <strong>${step.level}</strong> (${step.years})
+                                    <br>Salary Range: $${step.salary.min.toLocaleString()} - $${step.salary.max.toLocaleString()}
                                 </li>
                             `).join('')}
                         </ul>
@@ -380,16 +387,32 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                     <div class="recommended-training mb-4">
                         <h3>Recommended Training</h3>
-                        <ul>
-                            ${getRecommendedTraining(result.hollandCode, result.age).technical.map(course => `
-                                <li>
-                                    <strong>${course.name}</strong> (${course.duration}) - ${course.cost}
-                                </li>
+                        ${getRecommendedTraining(result.hollandCode, result.constructionExperience)
+                            .reduce((acc, course) => {
+                                if (!acc[course.category]) {
+                                    acc[course.category] = [];
+                                }
+                                acc[course.category].push(course);
+                                return acc;
+                            }, {})
+                            .map((courses, category) => `
+                                <div class="mb-3">
+                                    <h4>${category}</h4>
+                                    <ul>
+                                        ${courses.map(course => `
+                                            <li>
+                                                <strong>${course.name}</strong>
+                                                <br>Provider: ${course.provider}
+                                                <br>Duration: ${course.duration}
+                                                <br>Cost: ${course.cost}
+                                                ${course.url ? `<br><a href="${course.url}" target="_blank">Learn More</a>` : ''}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
                             `).join('')}
-                        </ul>
                     </div>
                 `;
-
                 // Show results section and scroll
                 resultsDiv.style.display = 'block';
                 resultsDiv.scrollIntoView({ behavior: 'smooth' });
@@ -704,14 +727,66 @@ document.addEventListener('DOMContentLoaded', async function() {
             'P': 'Perceiving'
         };
 
+        const MBTI_DESCRIPTIONS = {
+            'ENFP': 'Extroverted, Intuitive, Feeling, Perceiving - Creative and enthusiastic innovators who excel at inspiring and connecting with others',
+            'ENFJ': 'Extroverted, Intuitive, Feeling, Judging - Natural leaders who are passionate about developing people and driving positive change',
+            'ENTJ': 'Extroverted, Intuitive, Thinking, Judging - Strategic leaders who excel at organizing people and resources to achieve goals',
+            'ENTP': 'Extroverted, Intuitive, Thinking, Perceiving - Quick-thinking innovators who enjoy solving complex problems',
+            'ESFJ': 'Extroverted, Sensing, Feeling, Judging - Supportive team players who value harmony and practical solutions',
+            'ESFP': 'Extroverted, Sensing, Feeling, Perceiving - Action-oriented team players who bring enthusiasm to hands-on work',
+            'ESTJ': 'Extroverted, Sensing, Thinking, Judging - Practical organizers who excel at implementing structured plans',
+            'ESTP': 'Extroverted, Sensing, Thinking, Perceiving - Action-oriented problem solvers who thrive in dynamic environments',
+            'INFJ': 'Introverted, Intuitive, Feeling, Judging - Insightful planners who are driven by their values and vision',
+            'INFP': 'Introverted, Intuitive, Feeling, Perceiving - Thoughtful idealists who care deeply about personal growth',
+            'INTJ': 'Introverted, Intuitive, Thinking, Judging - Strategic thinkers who excel at developing innovative solutions',
+            'INTP': 'Introverted, Intuitive, Thinking, Perceiving - Analytical problem solvers who enjoy theoretical challenges',
+            'ISFJ': 'Introverted, Sensing, Feeling, Judging - Detail-oriented supporters who value tradition and stability',
+            'ISFP': 'Introverted, Sensing, Feeling, Perceiving - Artistic contributors who bring creativity to practical work',
+            'ISTJ': 'Introverted, Sensing, Thinking, Judging - Reliable executors who excel at maintaining order and standards',
+            'ISTP': 'Introverted, Sensing, Thinking, Perceiving - Practical problem solvers who excel in technical roles'
+        };
+
+        function getMBTIDescription(type) {
+            return MBTI_DESCRIPTIONS[type] || 'Description not available';
+        }
+
         function getHollandCodeDescription(code) {
             if (!code) return '';
             return code.split('').map(letter => HOLLAND_TRAITS[letter]).join(' + ');
         }
 
-        function getMBTIDescription(type) {
-            if (!type || type.length !== 4) return '';
-            return type.split('').map(letter => MBTI_TRAITS[letter]).join(' + ');
+        function getRecommendedTraining(role, experience) {
+            const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
+            let recommendations = [];
+            
+            // Add technical training based on role
+            recommendations.push(...CAREER_DATA.trainingResources.technical
+                .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
+                .map(course => ({
+                    ...course,
+                    category: 'Technical Training'
+                }))
+            );
+
+            // Add leadership training for experienced professionals
+            if (experience >= 2) {
+                recommendations.push(...CAREER_DATA.trainingResources.leadership
+                    .map(course => ({
+                        ...course,
+                        category: 'Leadership Development'
+                    }))
+                );
+            }
+
+            // Add technology training
+            recommendations.push(...CAREER_DATA.trainingResources.technology
+                .map(course => ({
+                    ...course,
+                    category: 'Technology Skills'
+                }))
+            );
+
+            return recommendations;
         }
 
         // Update displayResults function to include descriptions
@@ -765,7 +840,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <div class="card-body">
                         <h3 class="card-title">Recommended Training</h3>
                         <ul class="list-unstyled">
-                            ${getTrainingRecommendations(result).map(rec => `<li>• ${rec}</li>`).join('')}
+                            ${getRecommendedTraining(result.hollandCode, result.constructionExperience).map(rec => `<li>• ${rec}</li>`).join('')}
                         </ul>
                     </div>
                 </div>
