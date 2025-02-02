@@ -1,12 +1,7 @@
 'use strict';
 
-import { firebaseConfig } from './config.js';
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-import { getFirestore, collection, doc, getDoc, setDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import { app, db } from './public-config.js';
+import { collection, doc, getDoc, setDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
 
 /**
  * Service class for handling career recommendations and survey responses
