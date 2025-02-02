@@ -57,13 +57,26 @@ document.addEventListener('DOMContentLoaded', async function() {
             return;
         }
 
+        // Add notification utility
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Remove notification after animation ends
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
         // Add event listener for Holland Code checkboxes
         hollandCodeCheckboxes.forEach(checkbox => {
             checkbox.addEventListener('change', function() {
                 const checkedCount = document.querySelectorAll('.holland-code:checked').length;
                 if (checkedCount > 3) {
                     this.checked = false;
-                    alert('Please select no more than 3 personality types.');
+                    showNotification('Please select no more than 3 personality types.', 'warning');
                 }
             });
         });
@@ -232,7 +245,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 
             } catch (error) {
                 DEBUG.error('Error processing form:', error);
-                alert('There was an error processing your information. Please try again.');
+                showNotification('There was an error processing your information. Please try again.', 'error');
             }
         });
 
