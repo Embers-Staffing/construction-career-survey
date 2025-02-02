@@ -55,17 +55,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Initialize years
         const currentYear = new Date().getFullYear();
         yearSelect.innerHTML = '<option value="">Select Year</option>';
-        for (let i = currentYear - CONFIG.MIN_AGE; i >= currentYear - CONFIG.MAX_AGE; i--) {
+        for (let year = currentYear - CONFIG.MIN_AGE; year >= currentYear - CONFIG.MAX_AGE; year--) {
             const option = document.createElement('option');
-            option.value = i;
-            option.textContent = i;
+            option.value = year.toString(); // Ensure year is a string
+            option.textContent = year;
             yearSelect.appendChild(option);
         }
 
         // Add event listeners for age calculation
         function updateAge() {
-            const year = yearSelect.value;
-            const month = monthSelect.value;
+            const year = parseInt(yearSelect.value); // Parse year as integer
+            const month = parseInt(monthSelect.value); // Parse month as integer
             
             if (year && month && ageDisplay) {
                 const today = new Date();
