@@ -99,6 +99,18 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Construction Estimator"
         ],
         "description": "RSE (Realistic, Social, Enterprising) individuals excel in roles that combine practical skills with team leadership."
+    },
+    "EIS": {
+        "jobs": [
+            "Construction Project Manager",
+            "Construction HR Director",
+            "Training and Development Manager",
+            "Construction Consultant",
+            "Stakeholder Relations Manager",
+            "Construction Program Director",
+            "Business Strategy Manager"
+        ],
+        "description": "EIS types excel in roles that combine leadership and interpersonal skills with analytical thinking, making them effective in managing both projects and people in construction."
     }
     # Add more Holland Code combinations as needed
 }
