@@ -1,23 +1,26 @@
-# Firebase
+# Sensitive files and credentials
 **/firebase-credentials.json
 **/serviceAccountKey.json
 **/firebase-config.js
 **/config.js
-.env*
-
-# Sensitive files
 **/deploy-rules.js
 config.py
+.env*
+*.pem
+*.key
+*.crt
 
-# Python
+# Build artifacts and dependencies
+node_modules/
+dist/
+build/
+.cache/
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -35,88 +38,45 @@ wheels/
 venv/
 env/
 ENV/
+.venv/
+.env/
+.ENV/
 
-# Environment Variables
-.env
-.env.*
-
-# IDE
+# IDE and Editor files
 .idea/
 .vscode/
 *.swp
 *.swo
+*.swn
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
 
-# Logs
+# Logs and databases
 *.log
-logs/
-log/
-
-# Streamlit
-.streamlit/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb
-
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
-.tox/
-
-# Distribution
-*.pyc
-*.pyo
-*.pyd
-.Python
-*.so
-
-# Local development
-*.sqlite3
-*.db
-
-# Node
-node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.npm
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-package-lock.json
-
-# Large files and directories
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-*.zip
-*.tar
-*.tar.gz
-*.rar
-*.7z
-*.dump
+*.sqlite
+*.db
 
 # Temporary files
-*.bak
 *.tmp
 *.temp
-*~
-*.cache
 .temp/
 .tmp/
-
-# Test files
-**/test_*.py
-**/tests/
-**/debug_*.py
-**/minimal.py
-test.html
-test-*.js
-test-*.html
-
-# Config files with sensitive data
+*.bak
+*.cache
