@@ -250,15 +250,16 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
 
                 // Get Holland Code
-                const hollandCode = Array.from(hollandCodeCheckboxes)
-                    .filter(cb => cb.checked)
-                    .map(cb => cb.value)
-                    .join('');
+                const selectedHollandCodes = Array.from(document.querySelectorAll('.holland-code:checked'))
+                    .map(cb => cb.value);
 
-                if (hollandCode.length !== 3) {
+                if (selectedHollandCodes.length !== 3) {
                     showNotification('Please select exactly three Holland Code traits.', 'error');
                     return;
                 }
+
+                const hollandCode = selectedHollandCodes.join('');
+                DEBUG.debug('Holland Code:', hollandCode);
 
                 // Get MBTI type
                 const mbtiType = getMBTIType(formData);
