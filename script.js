@@ -35,6 +35,73 @@ const CONFIG = {
 
 // Career progression and salary data
 const CAREER_DATA = {
+    trainingResources: {
+        technical: [
+            {
+                name: "OSHA 30-Hour Construction Safety",
+                provider: "OSHA Training Institute",
+                duration: "30 hours",
+                cost: "$189",
+                level: "entry",
+                url: "https://www.osha.com/courses/30-hour-construction"
+            },
+            {
+                name: "Construction Project Management Fundamentals",
+                provider: "Construction Management Association of America",
+                duration: "40 hours",
+                cost: "$599",
+                level: "mid",
+                url: "https://www.cmaanet.org/certification"
+            },
+            {
+                name: "Blueprint Reading and Construction Drawings",
+                provider: "American Institute of Constructors",
+                duration: "20 hours",
+                cost: "$299",
+                level: "entry",
+                url: "https://www.professionalconstructor.org/"
+            }
+        ],
+        leadership: [
+            {
+                name: "Construction Leadership and Communication",
+                provider: "Associated General Contractors",
+                duration: "24 hours",
+                cost: "$449",
+                url: "https://www.agc.org/learn/education-training"
+            },
+            {
+                name: "Team Management in Construction",
+                provider: "Construction Management Association",
+                duration: "16 hours",
+                cost: "$349",
+                url: "https://www.cmaanet.org/professional-development"
+            }
+        ],
+        technology: [
+            {
+                name: "Building Information Modeling (BIM)",
+                provider: "Autodesk",
+                duration: "40 hours",
+                cost: "$699",
+                url: "https://www.autodesk.com/certification/construction"
+            },
+            {
+                name: "Construction Technology and Innovation",
+                provider: "Construction Industry Institute",
+                duration: "32 hours",
+                cost: "$549",
+                url: "https://www.construction-institute.org/resources"
+            },
+            {
+                name: "Digital Construction Tools",
+                provider: "Associated Builders and Contractors",
+                duration: "24 hours",
+                cost: "$399",
+                url: "https://www.abc.org/Education-Training"
+            }
+        ]
+    },
     salaryRanges: {
         entry: {
             min: 45000,
@@ -60,63 +127,6 @@ const CAREER_DATA = {
             title: "Expert Level",
             experience: "10+ years"
         }
-    },
-    trainingResources: {
-        technical: [
-            {
-                name: "Construction Management Basics",
-                provider: "Coursera",
-                url: "https://www.coursera.org/construction-management",
-                duration: "6 weeks",
-                cost: "Free to audit"
-            },
-            {
-                name: "BIM Fundamentals",
-                provider: "LinkedIn Learning",
-                url: "https://www.linkedin.com/learning/bim-fundamentals",
-                duration: "4 weeks",
-                cost: "$49.99/month"
-            },
-            {
-                name: "OSHA Safety Certification",
-                provider: "OSHA Training Institute",
-                url: "https://www.osha.gov/training",
-                duration: "30 hours",
-                cost: "$179"
-            }
-        ],
-        leadership: [
-            {
-                name: "Construction Leadership Institute",
-                provider: "AGC",
-                url: "https://www.agc.org/leadership",
-                duration: "12 weeks",
-                cost: "Varies"
-            },
-            {
-                name: "Project Management Professional (PMP)",
-                provider: "PMI",
-                url: "https://www.pmi.org/certifications/project-management-pmp",
-                duration: "Self-paced",
-                cost: "$555 for exam"
-            }
-        ],
-        technology: [
-            {
-                name: "Construction Tech Stack",
-                provider: "Udemy",
-                url: "https://www.udemy.com/construction-tech",
-                duration: "8 weeks",
-                cost: "$199"
-            },
-            {
-                name: "Digital Construction Certificate",
-                provider: "Autodesk",
-                url: "https://www.autodesk.com/certification",
-                duration: "Self-paced",
-                cost: "$250"
-            }
-        ]
     }
 };
 
@@ -148,53 +158,65 @@ function getCareerProgression(role, experience) {
 }
 
 function getRecommendedTraining(role, experience) {
-    const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
-    let recommendations = [];
-    
-    // Add technical training based on role
-    if (CAREER_DATA.trainingResources.technical) {
-        recommendations.push(...CAREER_DATA.trainingResources.technical
-            .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
-            .map(course => ({
-                ...course,
-                category: 'Technical Training'
-            }))
-        );
-    }
-
-    // Add leadership training for experienced professionals
-    if (experience >= 2 && CAREER_DATA.trainingResources.leadership) {
-        recommendations.push(...CAREER_DATA.trainingResources.leadership
-            .map(course => ({
-                ...course,
-                category: 'Leadership Development'
-            }))
-        );
-    }
-
-    // Add technology training
-    if (CAREER_DATA.trainingResources.technology) {
-        recommendations.push(...CAREER_DATA.trainingResources.technology
-            .map(course => ({
-                ...course,
-                category: 'Technology Skills'
-            }))
-        );
-    }
-
-    // Group recommendations by category
-    const groupedRecommendations = recommendations.reduce((acc, course) => {
-        if (!acc[course.category]) {
-            acc[course.category] = [];
+    try {
+        const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
+        let recommendations = [];
+        
+        // Add technical training based on role
+        if (CAREER_DATA.trainingResources?.technical) {
+            recommendations.push(...CAREER_DATA.trainingResources.technical
+                .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
+                .map(course => ({
+                    ...course,
+                    category: 'Technical Training'
+                }))
+            );
         }
-        acc[course.category].push(course);
-        return acc;
-    }, {});
 
-    return Object.entries(groupedRecommendations).map(([category, courses]) => ({
-        category,
-        courses
-    }));
+        // Add leadership training for experienced professionals
+        if (experience >= 2 && CAREER_DATA.trainingResources?.leadership) {
+            recommendations.push(...CAREER_DATA.trainingResources.leadership
+                .map(course => ({
+                    ...course,
+                    category: 'Leadership Development'
+                }))
+            );
+        }
+
+        // Add technology training
+        if (CAREER_DATA.trainingResources?.technology) {
+            recommendations.push(...CAREER_DATA.trainingResources.technology
+                .map(course => ({
+                    ...course,
+                    category: 'Technology Skills'
+                }))
+            );
+        }
+
+        // Return empty array if no recommendations
+        if (recommendations.length === 0) {
+            console.warn('No training recommendations found for:', { role, experience });
+            return [];
+        }
+
+        // Group recommendations by category
+        const groupedRecommendations = recommendations.reduce((acc, course) => {
+            if (!acc[course.category]) {
+                acc[course.category] = [];
+            }
+            acc[course.category].push(course);
+            return acc;
+        }, {});
+
+        // Convert to array format
+        return Object.entries(groupedRecommendations).map(([category, courses]) => ({
+            category,
+            courses
+        }));
+    } catch (error) {
+        console.error('Error getting training recommendations:', error);
+        return []; // Return empty array on error
+    }
 }
 
 function calculateAge(birthYear, birthMonth) {
@@ -416,8 +438,12 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                     <div class="recommended-training mb-4">
                         <h3>Recommended Training</h3>
-                        ${getRecommendedTraining(result.hollandCode, result.constructionExperience)
-                            .map(group => `
+                        ${(() => {
+                            const training = getRecommendedTraining(result.hollandCode, result.constructionExperience);
+                            if (!training || training.length === 0) {
+                                return '<p>No specific training recommendations available yet.</p>';
+                            }
+                            return training.map(group => `
                                 <div class="mb-3">
                                     <h4>${group.category}</h4>
                                     <ul>
@@ -432,7 +458,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                                         `).join('')}
                                     </ul>
                                 </div>
-                            `).join('')}
+                            `).join('');
+                        })()}
                     </div>
                 `;
                 // Show results section and scroll
