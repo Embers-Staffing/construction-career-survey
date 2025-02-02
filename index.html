@@ -283,14 +283,13 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label" for="certificationAwareness">Do you have any construction-related certifications?</label>
+                    <h4 class="form-label h6">Do you have any construction-related certifications?</h4>
                     <select class="form-select" name="certificationAwareness" id="certificationAwareness" required>
                         <option value="">Choose...</option>
-                        <option value="none">No certifications yet</option>
-                        <option value="basic">Basic safety certifications</option>
-                        <option value="trade">Trade-specific certifications</option>
-                        <option value="advanced">Advanced industry certifications</option>
-                        <option value="multiple">Multiple certifications</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No, but I'm interested in getting certified</option>
+                        <option value="not-interested">No, and I'm not currently interested</option>
+                        <option value="unsure">I need more information about certifications</option>
                     </select>
                     <div class="invalid-feedback">Please select an option.</div>
                 </div>
@@ -349,7 +348,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <h3 class="form-label">What type of work environment do you prefer?</h3>
+                    <h4 class="form-label h6">What type of work environment do you prefer?</h4>
                     <div id="environmentComfort-list">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="environmentComfort" value="outdoor" id="environmentComfort-outdoor" required>
@@ -368,14 +367,13 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label" for="travelWillingness">Are you willing to travel for work?</label>
+                    <h4 class="form-label h6">Are you willing to travel for work?</h4>
                     <select class="form-select" name="travelWillingness" id="travelWillingness" required>
                         <option value="">Choose...</option>
-                        <option value="no">No travel</option>
-                        <option value="local">Local travel only</option>
-                        <option value="regional">Regional travel</option>
-                        <option value="national">National travel</option>
-                        <option value="international">International travel</option>
+                        <option value="no-travel">No travel - local work only</option>
+                        <option value="occasional">Occasional travel (few times per year)</option>
+                        <option value="regular">Regular travel (monthly)</option>
+                        <option value="extensive">Extensive travel (weekly)</option>
                     </select>
                     <div class="invalid-feedback">Please select an option.</div>
                 </div>
@@ -408,19 +406,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label" for="salaryTarget">What is your target salary range?</label>
-                    <select class="form-select" name="salaryTarget" id="salaryTarget" required>
-                        <option value="">Choose...</option>
-                        <option value="entry">Entry level ($30,000 - $50,000)</option>
-                        <option value="mid">Mid level ($50,000 - $80,000)</option>
-                        <option value="senior">Senior level ($80,000 - $120,000)</option>
-                        <option value="executive">Executive level ($120,000+)</option>
-                    </select>
-                    <div class="invalid-feedback">Please select an option.</div>
-                </div>
-
-                <div class="mb-4">
-                    <label class="form-label" for="advancementPreference">How do you prefer to advance your career?</label>
+                    <h4 class="form-label h6">How do you prefer to advance your career?</h4>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="advancementPreference" value="education" id="advancementPreference-education" required>
                         <label class="form-check-label" for="advancementPreference-education">Through formal education and certifications</label>
@@ -437,15 +423,30 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label" for="mentorshipType">What type of mentorship would you prefer?</label>
+                    <h4 class="form-label h6">What type of mentorship would you prefer?</h4>
                     <select class="form-select" name="mentorshipType" id="mentorshipType" required>
                         <option value="">Choose...</option>
-                        <option value="formal">Formal mentorship program</option>
-                        <option value="informal">Informal on-the-job mentoring</option>
-                        <option value="peer">Peer mentoring and collaboration</option>
-                        <option value="industry">Industry expert mentoring</option>
+                        <option value="one-on-one">One-on-one mentorship</option>
+                        <option value="group">Group mentorship</option>
+                        <option value="peer">Peer mentorship</option>
+                        <option value="industry">Industry expert mentorship</option>
                     </select>
-                    <div class="invalid-feedback">Please select an option.</div>
+                    <div class="invalid-feedback">Please select a mentorship preference.</div>
+                </div>
+
+                <div class="mb-4">
+                    <h4 class="form-label h6">What is your target salary range?</h4>
+                    <select class="form-select" name="salaryTarget" id="salaryTarget" required>
+                        <option value="">Choose...</option>
+                        <option value="30-40k">$30,000 - $40,000</option>
+                        <option value="40-50k">$40,000 - $50,000</option>
+                        <option value="50-60k">$50,000 - $60,000</option>
+                        <option value="60-70k">$60,000 - $70,000</option>
+                        <option value="70-80k">$70,000 - $80,000</option>
+                        <option value="80-100k">$80,000 - $100,000</option>
+                        <option value="100k+">$100,000+</option>
+                    </select>
+                    <div class="invalid-feedback">Please select a salary range.</div>
                 </div>
             </div>
 
