@@ -28,6 +28,18 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
         ],
         "description": "People with RIA preferences excel in hands-on leadership roles that require technical knowledge and creative problem-solving."
     },
+    "ARS": {
+        "jobs": [
+            "Construction Technology Specialist",
+            "BIM Manager",
+            "Virtual Construction Coordinator",
+            "Construction Innovation Lead",
+            "Digital Construction Specialist",
+            "Construction Systems Analyst",
+            "Construction Automation Expert"
+        ],
+        "description": "ARS types excel in roles that combine analytical thinking with practical implementation and team coordination in construction technology."
+    },
     "ERS": {
         "jobs": [
             "Construction Business Owner",
