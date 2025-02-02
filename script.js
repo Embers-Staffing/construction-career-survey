@@ -144,91 +144,67 @@ document.addEventListener('DOMContentLoaded', async function() {
                     throw new Error('Results elements not found');
                 }
 
+                // Get recommendations data safely
+                const hollandRecommendations = recommendations?.hollandCode?.recommendations || {};
+                const mbtiRecommendations = recommendations?.mbtiType?.recommendations || {};
+
                 // Generate and display results HTML
                 resultsContent.innerHTML = `
                     <div class="career-path mb-4">
                         <h3>Personal Profile</h3>
                         <p><strong>Name:</strong> ${result.firstName} ${result.lastName}</p>
                         <p><strong>Age:</strong> ${result.age}</p>
-                        <p><strong>Experience:</strong> ${result.constructionExperience} years</p>
+                        <p><strong>Construction Experience:</strong> ${result.constructionExperience}</p>
                         <p><strong>MBTI Type:</strong> ${result.mbtiType}</p>
                         <p><strong>Holland Code:</strong> ${result.hollandCode}</p>
-                        <p><strong>Work Environment:</strong> ${result.environmentPreference}</p>
                     </div>
 
-                    <div class="career-path mb-4">
-                        <h3>Your Personality Profile</h3>
-                        <div class="mb-4">
-                            <h4>Holland Code Analysis</h4>
-                            <p>${recommendations.hollandCodeDescription}</p>
-                        </div>
-                        <div class="mb-4">
-                            <h4>MBTI Analysis</h4>
-                            <p>${recommendations.mbtiDescription}</p>
-                        </div>
+                    <div class="recommendations mb-4">
+                        <h3>Career Recommendations</h3>
+                        ${hollandRecommendations.careers ? `
+                            <div class="mb-3">
+                                <h4>Based on Your Holland Code (${recommendations.hollandCode.code}):</h4>
+                                <ul>
+                                    ${hollandRecommendations.careers.map(career => `<li>${career}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : '<p>No specific Holland Code recommendations available yet.</p>'}
+
+                        ${mbtiRecommendations.careers ? `
+                            <div class="mb-3">
+                                <h4>Based on Your MBTI Type (${recommendations.mbtiType.type}):</h4>
+                                <ul>
+                                    ${mbtiRecommendations.careers.map(career => `<li>${career}</li>`).join('')}
+                                </ul>
+                            </div>
+                        ` : '<p>No specific MBTI recommendations available yet.</p>'}
                     </div>
 
-                    <div class="career-path mb-4">
-                        <h3>Recommended Career Paths</h3>
-                        <div class="recommendations">
-                            ${recommendations.jobs.map(job => `
-                                <div class="recommendation-card mb-3">
-                                    <h4>${job}</h4>
-                                    <div class="career-details">
-                                        <p><strong>Salary Range:</strong> ${getSalaryRange(job)}</p>
-                                        <p><strong>Required Skills:</strong> ${getRequiredSkills(job).join(', ')}</p>
-                                        <p><strong>Career Growth:</strong> ${getCareerGrowth(job)}</p>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
+                    <div class="skills-match mb-4">
+                        <h3>Skills Analysis</h3>
+                        <p><strong>Current Technical Skills:</strong></p>
+                        <ul>
+                            ${result.technicalSkills.map(skill => `<li>${skill}</li>`).join('')}
+                        </ul>
+                        
+                        <p><strong>Interested in Construction Technologies:</strong></p>
+                        <ul>
+                            ${result.techInterests.map(tech => `<li>${tech}</li>`).join('')}
+                        </ul>
                     </div>
 
-                    <div id="careerFlowchart" class="career-path mb-4">
-                        <h3>Career Progression Paths</h3>
-                        <div class="career-flowchart">
-                            ${recommendations.jobs.slice(0, 3).map(job => `
-                                <div class="career-progression-track">
-                                    <h4 class="mb-3">${job} Track</h4>
-                                    <div class="progression-steps">
-                                        ${getProgressionSteps(job).map((step, index) => `
-                                            <div class="progression-step">
-                                                <div class="step-content">
-                                                    <h5>${step.title}</h5>
-                                                    <p class="salary">${step.salary}</p>
-                                                    <div class="timeframe">Typical timeframe: ${step.timeframe}</div>
-                                                </div>
-                                                ${index < 3 ? '<div class="step-arrow">→</div>' : ''}
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
+                    <div class="next-steps mb-4">
+                        <h3>Recommended Next Steps</h3>
+                        <ul>
+                            ${getNextSteps(result).map(step => `<li>${step}</li>`).join('')}
+                        </ul>
                     </div>
 
-                    <div id="trainingResources" class="career-path mb-4">
-                        <h3>Recommended Training & Resources</h3>
-                        <div class="training-recommendations">
-                            ${getTrainingRecommendations(result).map(training => `
-                                <div class="training-item mb-3">
-                                    <h4>${training.name}</h4>
-                                    <p>${training.description}</p>
-                                    <p><strong>Duration:</strong> ${training.duration}</p>
-                                    <p><strong>Provider:</strong> ${training.provider}</p>
-                                    <a href="${training.link}" target="_blank" class="btn btn-outline-primary btn-sm">Learn More</a>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div class="career-path mb-4">
-                        <h3>Next Steps</h3>
-                        <ol class="next-steps">
-                            ${getNextSteps(result).map(step => `
-                                <li class="mb-2">${step}</li>
-                            `).join('')}
-                        </ol>
+                    <div class="training mb-4">
+                        <h3>Training & Development</h3>
+                        <ul>
+                            ${getTrainingRecommendations(result).map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
                     </div>
                 `;
 
