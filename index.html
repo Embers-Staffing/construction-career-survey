@@ -63,11 +63,11 @@
                     <div class="col-md-6 mb-4">
                         <label class="form-label">Age</label>
                         <div class="age-selector">
-                            <select class="form-select" name="birth-year" required>
+                            <select class="form-select" name="birthYear" required>
                                 <option value="">Select Year</option>
                                 <!-- Years will be populated by JavaScript -->
                             </select>
-                            <select class="form-select" name="birth-month" required>
+                            <select class="form-select" name="birthMonth" required>
                                 <option value="">Select Month</option>
                                 <option value="1">January</option>
                                 <option value="2">February</option>
@@ -82,6 +82,7 @@
                                 <option value="11">November</option>
                                 <option value="12">December</option>
                             </select>
+                            <div class="age-display" style="display: none;"></div>
                         </div>
                         <div class="invalid-feedback">Please select your birth date (must be 16-70 years old).</div>
                     </div>
@@ -115,11 +116,11 @@
                     <div class="mb-3">
                         <label class="form-label">How do you prefer to focus your attention?</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-ei" value="E" required>
+                            <input class="form-check-input" type="radio" name="mbtiEI" value="E" required>
                             <label class="form-check-label">Externally - energized by social interaction (Extroversion)</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-ei" value="I">
+                            <input class="form-check-input" type="radio" name="mbtiEI" value="I">
                             <label class="form-check-label">Internally - energized by quiet reflection (Introversion)</label>
                         </div>
                     </div>
@@ -127,11 +128,11 @@
                     <div class="mb-3">
                         <label class="form-label">How do you prefer to take in information?</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-sn" value="S" required>
+                            <input class="form-check-input" type="radio" name="mbtiSN" value="S" required>
                             <label class="form-check-label">Through concrete facts and details (Sensing)</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-sn" value="N">
+                            <input class="form-check-input" type="radio" name="mbtiSN" value="N">
                             <label class="form-check-label">Through patterns and possibilities (Intuition)</label>
                         </div>
                     </div>
@@ -139,11 +140,11 @@
                     <div class="mb-3">
                         <label class="form-label">How do you prefer to make decisions?</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-tf" value="T" required>
+                            <input class="form-check-input" type="radio" name="mbtiTF" value="T" required>
                             <label class="form-check-label">Based on logic and objective analysis (Thinking)</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-tf" value="F">
+                            <input class="form-check-input" type="radio" name="mbtiTF" value="F">
                             <label class="form-check-label">Based on values and people impact (Feeling)</label>
                         </div>
                     </div>
@@ -151,11 +152,11 @@
                     <div class="mb-3">
                         <label class="form-label">How do you prefer to organize your life?</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-jp" value="J" required>
+                            <input class="form-check-input" type="radio" name="mbtiJP" value="J" required>
                             <label class="form-check-label">Structured and planned (Judging)</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbti-jp" value="P">
+                            <input class="form-check-input" type="radio" name="mbtiJP" value="P">
                             <label class="form-check-label">Flexible and adaptable (Perceiving)</label>
                         </div>
                     </div>
@@ -169,7 +170,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="realistic">
+                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="realistic">
                                 <label class="form-check-label">
                                     <strong>Realistic (R)</strong>
                                     <p class="text-muted mb-0">You enjoy working with your hands, tools, machines, or animals. You value practical things you can see and touch.</p>
@@ -182,7 +183,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="investigative">
+                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="investigative">
                                 <label class="form-check-label">
                                     <strong>Investigative (I)</strong>
                                     <p class="text-muted mb-0">You like to solve complex problems, analyze data, and understand how things work.</p>
@@ -195,7 +196,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="artistic">
+                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="artistic">
                                 <label class="form-check-label">
                                     <strong>Artistic (A)</strong>
                                     <p class="text-muted mb-0">You value creativity, innovation, and unique solutions to problems.</p>
@@ -208,7 +209,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="social">
+                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="social">
                                 <label class="form-check-label">
                                     <strong>Social (S)</strong>
                                     <p class="text-muted mb-0">You enjoy working with and helping others, teaching, or providing guidance.</p>
@@ -221,7 +222,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="enterprising">
+                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="enterprising">
                                 <label class="form-check-label">
                                     <strong>Enterprising (E)</strong>
                                     <p class="text-muted mb-0">You like to lead, persuade others, and make business decisions.</p>
@@ -234,7 +235,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="holland" value="conventional">
+                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="conventional">
                                 <label class="form-check-label">
                                     <strong>Conventional (C)</strong>
                                     <p class="text-muted mb-0">You are detail-oriented, organized, and good with numbers and processes.</p>
@@ -253,34 +254,34 @@
                 <div class="mb-4">
                     <label class="form-label">What technical skills do you currently have? (Select all that apply)</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="skills" value="hand-tools">
+                        <input class="form-check-input" type="checkbox" name="technicalSkills" value="hand-tools">
                         <label class="form-check-label">Hand and power tools</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="skills" value="blueprint">
+                        <input class="form-check-input" type="checkbox" name="technicalSkills" value="blueprint">
                         <label class="form-check-label">Blueprint reading</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="skills" value="math">
+                        <input class="form-check-input" type="checkbox" name="technicalSkills" value="math">
                         <label class="form-check-label">Construction math and measurements</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="skills" value="safety">
+                        <input class="form-check-input" type="checkbox" name="technicalSkills" value="safety">
                         <label class="form-check-label">Safety procedures and protocols</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="skills" value="equipment">
+                        <input class="form-check-input" type="checkbox" name="technicalSkills" value="equipment">
                         <label class="form-check-label">Heavy equipment operation</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="skills" value="computer">
+                        <input class="form-check-input" type="checkbox" name="technicalSkills" value="computer">
                         <label class="form-check-label">Computer and software skills</label>
                     </div>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label">Do you have any construction-related certifications?</label>
-                    <select class="form-select" name="certification-awareness" required>
+                    <select class="form-select" name="certificationAwareness" required>
                         <option value="">Choose...</option>
                         <option value="none">No certifications yet</option>
                         <option value="basic">Basic safety certifications</option>
@@ -299,23 +300,23 @@
                 <div class="mb-4">
                     <label class="form-label">Which construction roles interest you the most? (Choose up to three)</label>
                     <div class="form-check">
-                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="trades">
+                        <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="trades">
                         <label class="form-check-label">Tradesperson (e.g., electrician, plumber, carpenter)</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="heavy-machinery">
+                        <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="heavy-machinery">
                         <label class="form-check-label">Heavy Machinery Operator</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="tech-specialist">
+                        <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="tech-specialist">
                         <label class="form-check-label">Construction Technology Specialist (drones, VR, AI)</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="estimator">
+                        <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="estimator">
                         <label class="form-check-label">Cost Estimator/Quantity Surveyor</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input career-choice" type="checkbox" name="career-interests" value="project-management">
+                        <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="project-management">
                         <label class="form-check-label">Project Management</label>
                     </div>
                 </div>
@@ -323,19 +324,19 @@
                 <div class="mb-4">
                     <label class="form-label">Which construction technologies interest you? (Select all that apply)</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="tech-interests" value="drones">
+                        <input class="form-check-input" type="checkbox" name="techInterests" value="drones">
                         <label class="form-check-label">Drone mapping and surveying</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="tech-interests" value="vr-ar">
+                        <input class="form-check-input" type="checkbox" name="techInterests" value="vr-ar">
                         <label class="form-check-label">Virtual/Augmented Reality</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="tech-interests" value="bim">
+                        <input class="form-check-input" type="checkbox" name="techInterests" value="bim">
                         <label class="form-check-label">Building Information Modeling (BIM)</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="tech-interests" value="ai">
+                        <input class="form-check-input" type="checkbox" name="techInterests" value="ai">
                         <label class="form-check-label">AI and automation</label>
                     </div>
                 </div>
@@ -343,15 +344,15 @@
                 <div class="mb-4">
                     <label class="form-label">What type of work environment do you prefer?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="environment-comfort" value="outdoor" required>
+                        <input class="form-check-input" type="radio" name="environmentComfort" value="outdoor" required>
                         <label class="form-check-label">Primarily outdoor work</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="environment-comfort" value="indoor">
+                        <input class="form-check-input" type="radio" name="environmentComfort" value="indoor">
                         <label class="form-check-label">Primarily indoor work</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="environment-comfort" value="mixed">
+                        <input class="form-check-input" type="radio" name="environmentComfort" value="mixed">
                         <label class="form-check-label">Mix of indoor and outdoor work</label>
                     </div>
                     <div class="invalid-feedback">Please select an option.</div>
@@ -359,7 +360,7 @@
 
                 <div class="mb-4">
                     <label class="form-label">Are you willing to travel for work?</label>
-                    <select class="form-select" name="travel-willingness" required>
+                    <select class="form-select" name="travelWillingness" required>
                         <option value="">Choose...</option>
                         <option value="no">No travel</option>
                         <option value="local">Local travel only</option>
@@ -378,26 +379,26 @@
                 <div class="mb-4">
                     <label class="form-label">What are your career goals? (Select up to 3)</label>
                     <div class="form-check">
-                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="leadership">
+                        <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="leadership">
                         <label class="form-check-label">Advance to leadership positions</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="specialist">
+                        <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="specialist">
                         <label class="form-check-label">Become a specialist in my field</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="business">
+                        <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="business">
                         <label class="form-check-label">Start my own business</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input career-goal" type="checkbox" name="career-goals" value="innovation">
+                        <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="innovation">
                         <label class="form-check-label">Work with new technologies</label>
                     </div>
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label">What is your target salary range?</label>
-                    <select class="form-select" name="salary-target" required>
+                    <select class="form-select" name="salaryTarget" required>
                         <option value="">Choose...</option>
                         <option value="entry">Entry level ($30,000 - $50,000)</option>
                         <option value="mid">Mid level ($50,000 - $80,000)</option>
@@ -410,15 +411,15 @@
                 <div class="mb-4">
                     <label class="form-label">How do you prefer to advance your career?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="advancement-preference" value="education" required>
+                        <input class="form-check-input" type="radio" name="advancementPreference" value="education" required>
                         <label class="form-check-label">Through formal education and certifications</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="advancement-preference" value="experience">
+                        <input class="form-check-input" type="radio" name="advancementPreference" value="experience">
                         <label class="form-check-label">Through hands-on experience and mentorship</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="advancement-preference" value="both">
+                        <input class="form-check-input" type="radio" name="advancementPreference" value="both">
                         <label class="form-check-label">A combination of both</label>
                     </div>
                     <div class="invalid-feedback">Please select an option.</div>
@@ -426,7 +427,7 @@
 
                 <div class="mb-4">
                     <label class="form-label">What type of mentorship would you prefer?</label>
-                    <select class="form-select" name="mentorship-type" required>
+                    <select class="form-select" name="mentorshipType" required>
                         <option value="">Choose...</option>
                         <option value="formal">Formal mentorship program</option>
                         <option value="informal">Informal on-the-job mentoring</option>
