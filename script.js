@@ -33,6 +33,134 @@ const CONFIG = {
     PROGRESS_INCREMENT: 10
 };
 
+// Career progression and salary data
+const CAREER_DATA = {
+    salaryRanges: {
+        entry: {
+            min: 45000,
+            max: 65000,
+            title: "Entry Level",
+            experience: "0-2 years"
+        },
+        mid: {
+            min: 65000,
+            max: 95000,
+            title: "Mid Level",
+            experience: "2-5 years"
+        },
+        senior: {
+            min: 95000,
+            max: 150000,
+            title: "Senior Level",
+            experience: "5+ years"
+        },
+        expert: {
+            min: 150000,
+            max: 250000,
+            title: "Expert Level",
+            experience: "10+ years"
+        }
+    },
+    trainingResources: {
+        technical: [
+            {
+                name: "Construction Management Basics",
+                provider: "Coursera",
+                url: "https://www.coursera.org/construction-management",
+                duration: "6 weeks",
+                cost: "Free to audit"
+            },
+            {
+                name: "BIM Fundamentals",
+                provider: "LinkedIn Learning",
+                url: "https://www.linkedin.com/learning/bim-fundamentals",
+                duration: "4 weeks",
+                cost: "$49.99/month"
+            },
+            {
+                name: "OSHA Safety Certification",
+                provider: "OSHA Training Institute",
+                url: "https://www.osha.gov/training",
+                duration: "30 hours",
+                cost: "$179"
+            }
+        ],
+        leadership: [
+            {
+                name: "Construction Leadership Institute",
+                provider: "AGC",
+                url: "https://www.agc.org/leadership",
+                duration: "12 weeks",
+                cost: "Varies"
+            },
+            {
+                name: "Project Management Professional (PMP)",
+                provider: "PMI",
+                url: "https://www.pmi.org/certifications/project-management-pmp",
+                duration: "Self-paced",
+                cost: "$555 for exam"
+            }
+        ],
+        technology: [
+            {
+                name: "Construction Tech Stack",
+                provider: "Udemy",
+                url: "https://www.udemy.com/construction-tech",
+                duration: "8 weeks",
+                cost: "$199"
+            },
+            {
+                name: "Digital Construction Certificate",
+                provider: "Autodesk",
+                url: "https://www.autodesk.com/certification",
+                duration: "Self-paced",
+                cost: "$250"
+            }
+        ]
+    }
+};
+
+function getCareerProgression(role, experience) {
+    const progressionPaths = {
+        "Project Manager": [
+            { level: "Assistant Project Manager", years: "0-2", salary: CAREER_DATA.salaryRanges.entry },
+            { level: "Project Manager", years: "2-5", salary: CAREER_DATA.salaryRanges.mid },
+            { level: "Senior Project Manager", years: "5-10", salary: CAREER_DATA.salaryRanges.senior },
+            { level: "Program Director", years: "10+", salary: CAREER_DATA.salaryRanges.expert }
+        ],
+        "Site Supervisor": [
+            { level: "Assistant Supervisor", years: "0-2", salary: CAREER_DATA.salaryRanges.entry },
+            { level: "Site Supervisor", years: "2-5", salary: CAREER_DATA.salaryRanges.mid },
+            { level: "Senior Supervisor", years: "5-10", salary: CAREER_DATA.salaryRanges.senior },
+            { level: "Operations Director", years: "10+", salary: CAREER_DATA.salaryRanges.expert }
+        ],
+        // Add more career paths as needed
+    };
+
+    const defaultPath = [
+        { level: "Entry Level", years: "0-2", salary: CAREER_DATA.salaryRanges.entry },
+        { level: "Mid Level", years: "2-5", salary: CAREER_DATA.salaryRanges.mid },
+        { level: "Senior Level", years: "5-10", salary: CAREER_DATA.salaryRanges.senior },
+        { level: "Expert Level", years: "10+", salary: CAREER_DATA.salaryRanges.expert }
+    ];
+
+    return progressionPaths[role] || defaultPath;
+}
+
+function getRecommendedTraining(role, experience) {
+    const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
+    
+    // Get relevant training based on role and experience
+    const relevantTraining = {
+        technical: CAREER_DATA.trainingResources.technical.filter(course => 
+            course.level === skillLevel || course.level === 'all'),
+        leadership: experience >= 2 ? CAREER_DATA.trainingResources.leadership : [],
+        technology: CAREER_DATA.trainingResources.technology
+    };
+
+    return relevantTraining;
+}
+
 // Initialize form when DOM is loaded
 document.addEventListener('DOMContentLoaded', async function() {
     try {
@@ -174,8 +302,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
 
                 // Get recommendations data safely
-                const hollandRecommendations = recommendations?.hollandCode?.recommendations || {};
-                const mbtiRecommendations = recommendations?.mbtiType?.recommendations || {};
+                const hollandRecommendations = recommendations?.hollandCode || {};
+                const mbtiRecommendations = recommendations?.mbti || {};
 
                 // Generate and display results HTML
                 resultsContent.innerHTML = `
@@ -190,20 +318,22 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                     <div class="recommendations mb-4">
                         <h3>Career Recommendations</h3>
-                        ${hollandRecommendations.careers ? `
+                        ${hollandRecommendations.jobs ? `
                             <div class="mb-3">
-                                <h4>Based on Your Holland Code (${recommendations.hollandCode.code}):</h4>
+                                <h4>Based on Your Holland Code (${result.hollandCode}):</h4>
+                                <p>${hollandRecommendations.description || ''}</p>
                                 <ul>
-                                    ${hollandRecommendations.careers.map(career => `<li>${career}</li>`).join('')}
+                                    ${hollandRecommendations.jobs.map(job => `<li>${job}</li>`).join('')}
                                 </ul>
                             </div>
                         ` : '<p>No specific Holland Code recommendations available yet.</p>'}
 
-                        ${mbtiRecommendations.careers ? `
+                        ${mbtiRecommendations.jobs ? `
                             <div class="mb-3">
-                                <h4>Based on Your MBTI Type (${recommendations.mbtiType.type}):</h4>
+                                <h4>Based on Your MBTI Type (${result.mbtiType}):</h4>
+                                <p>${mbtiRecommendations.description || ''}</p>
                                 <ul>
-                                    ${mbtiRecommendations.careers.map(career => `<li>${career}</li>`).join('')}
+                                    ${mbtiRecommendations.jobs.map(job => `<li>${job}</li>`).join('')}
                                 </ul>
                             </div>
                         ` : '<p>No specific MBTI recommendations available yet.</p>'}
@@ -233,6 +363,29 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <h3>Training & Development</h3>
                         <ul>
                             ${getTrainingRecommendations(result).map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="career-progression mb-4">
+                        <h3>Career Progression</h3>
+                        <p><strong>Recommended Career Path:</strong> ${result.hollandCode}</p>
+                        <ul>
+                            ${getCareerProgression(result.hollandCode, result.age).map(step => `
+                                <li>
+                                    <strong>${step.level}</strong> (${step.years}) - $${step.salary.min.toLocaleString()} - $${step.salary.max.toLocaleString()}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="recommended-training mb-4">
+                        <h3>Recommended Training</h3>
+                        <ul>
+                            ${getRecommendedTraining(result.hollandCode, result.age).technical.map(course => `
+                                <li>
+                                    <strong>${course.name}</strong> (${course.duration}) - ${course.cost}
+                                </li>
+                            `).join('')}
                         </ul>
                     </div>
                 `;
