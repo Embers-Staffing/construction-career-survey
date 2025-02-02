@@ -1,82 +1,92 @@
 'use strict';
 
-import { app, db } from './public-config.js';
-import { collection, doc, getDoc, setDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+// Import Firebase modules
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyA5u_38A4uHPRh9V9tEGqLAm3GVEmnGrNs",
+    authDomain: "construction-career-survey.firebaseapp.com",
+    projectId: "construction-career-survey",
+    storageBucket: "construction-career-survey.appspot.com",
+    messagingSenderId: "1019913567537",
+    appId: "1:1019913567537:web:8e5b2d1b9e1c9b1b9e1c9b"
+};
 
 /**
  * Service class for handling career recommendations and survey responses
  */
-export class CareerRecommendationService {
+class CareerRecommendationService {
     constructor() {
-        this.db = db;
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        this.db = getFirestore(app);
     }
 
     /**
-     * Get career recommendations based on Holland Code
-     * @param {string} hollandCode - Three-letter Holland Code (e.g., 'RIA')
-     * @returns {Promise<Object>} Career recommendations
+     * Get MBTI type description
+     * @param {string} type - MBTI type code (e.g., 'INTJ')
+     * @returns {Promise<string>} Description of the MBTI type
+     */
+    async getMBTIDescription(type) {
+        try {
+            const docRef = doc(this.db, 'mbti_descriptions', type);
+            const docSnap = await getDoc(docRef);
+            
+            if (!docSnap.exists()) {
+                console.warn(`No description found for MBTI type: ${type}`);
+                return null;
+            }
+            
+            return docSnap.data().description;
+        } catch (error) {
+            console.error('Error getting MBTI description:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get MBTI recommendations
+     * @param {string} mbtiType - MBTI type code
+     * @returns {Promise<Object>} MBTI recommendations
+     */
+    async getMBTIRecommendations(mbtiType) {
+        try {
+            const docRef = doc(this.db, 'mbti_types', mbtiType);
+            const docSnap = await getDoc(docRef);
+            
+            if (!docSnap.exists()) {
+                console.warn(`No recommendations found for MBTI type: ${mbtiType}`);
+                return null;
+            }
+            
+            return docSnap.data();
+        } catch (error) {
+            console.error('Error getting MBTI recommendations:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Get Holland Code recommendations
+     * @param {string} hollandCode - Holland Code (e.g., 'RIA')
+     * @returns {Promise<Object>} Holland Code recommendations
      */
     async getHollandCodeRecommendations(hollandCode) {
         try {
             const docRef = doc(this.db, 'holland_codes', hollandCode);
             const docSnap = await getDoc(docRef);
             
-            if (docSnap.exists()) {
-                return docSnap.data();
-            } else {
+            if (!docSnap.exists()) {
                 console.warn(`No recommendations found for Holland Code: ${hollandCode}`);
                 return null;
             }
+            
+            return docSnap.data();
         } catch (error) {
             console.error('Error getting Holland Code recommendations:', error);
             throw error;
-        }
-    }
-
-    /**
-     * Get MBTI description from database
-     * @param {string} mbtiType - Four-letter MBTI type (e.g., 'ISTJ')
-     * @returns {Promise<string>} MBTI description
-     */
-    async getMBTIDescription(mbtiType) {
-        try {
-            const descDoc = await this.db.collection('mbti_descriptions').doc(mbtiType).get();
-            if (descDoc.exists) {
-                return descDoc.data().description;
-            }
-            console.warn(`No description found for MBTI type: ${mbtiType}`);
-            return null;
-        } catch (error) {
-            console.error('Error getting MBTI description:', error);
-            return null;
-        }
-    }
-
-    /**
-     * Get career recommendations based on MBTI type
-     * @param {string} mbtiType - Four-letter MBTI type (e.g., 'ISTJ')
-     * @returns {Promise<Object>} Career recommendations
-     */
-    async getMBTIRecommendations(mbtiType) {
-        try {
-            const mbtiDoc = await this.db.collection('mbti_types').doc(mbtiType).get();
-            const descDoc = await this.db.collection('mbti_descriptions').doc(mbtiType).get();
-            
-            if (!mbtiDoc.exists) {
-                console.warn(`No recommendations found for MBTI type: ${mbtiType}`);
-                return null;
-            }
-
-            const data = mbtiDoc.data();
-            const description = descDoc.exists ? descDoc.data().description : '';
-            
-            return {
-                jobs: data.jobs,
-                description: description
-            };
-        } catch (error) {
-            console.error('Error getting MBTI recommendations:', error);
-            return null;
         }
     }
 
@@ -136,15 +146,15 @@ export class CareerRecommendationService {
     async getTrainingRecommendations(role, experience) {
         try {
             const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
-            const snapshot = await this.db.collection('training_resources').get();
+            const querySnapshot = await getDocs(collection(this.db, 'training_resources'));
             
-            if (snapshot.empty) {
+            if (querySnapshot.empty) {
                 console.warn('No training resources found');
                 return [];
             }
 
             const recommendations = [];
-            snapshot.forEach(doc => {
+            querySnapshot.forEach(doc => {
                 const course = doc.data();
                 if (!course.level || course.level === skillLevel || course.level === 'all') {
                     recommendations.push(course);
