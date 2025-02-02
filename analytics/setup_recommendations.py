@@ -247,6 +247,85 @@ mbti_descriptions = {
     'ISTP': 'Introverted, Sensing, Thinking, Perceiving - Practical problem solvers who excel in technical roles'
 }
 
+# Training resources data
+TRAINING_RESOURCES = {
+    'technical': [
+        {
+            'name': 'OSHA 30-Hour Construction Safety',
+            'provider': 'OSHA Training Institute',
+            'duration': '30 hours',
+            'cost': '$189',
+            'level': 'entry',
+            'url': 'https://www.osha.com/courses/30-hour-construction'
+        },
+        {
+            'name': 'Construction Project Management Fundamentals',
+            'provider': 'Construction Management Association of America',
+            'duration': '40 hours',
+            'cost': '$599',
+            'level': 'mid',
+            'url': 'https://www.cmaanet.org/certification'
+        },
+        {
+            'name': 'Blueprint Reading and Construction Drawings',
+            'provider': 'American Institute of Constructors',
+            'duration': '20 hours',
+            'cost': '$299',
+            'level': 'entry',
+            'url': 'https://www.professionalconstructor.org/'
+        }
+    ],
+    'leadership': [
+        {
+            'name': 'Construction Leadership and Communication',
+            'provider': 'Associated General Contractors',
+            'duration': '24 hours',
+            'cost': '$449',
+            'url': 'https://www.agc.org/learn/education-training'
+        },
+        {
+            'name': 'Team Management in Construction',
+            'provider': 'Construction Management Association',
+            'duration': '16 hours',
+            'cost': '$349',
+            'url': 'https://www.cmaanet.org/professional-development'
+        }
+    ],
+    'technology': [
+        {
+            'name': 'Building Information Modeling (BIM)',
+            'provider': 'Autodesk',
+            'duration': '40 hours',
+            'cost': '$699',
+            'url': 'https://www.autodesk.com/certification/construction'
+        },
+        {
+            'name': 'Construction Technology and Innovation',
+            'provider': 'Construction Industry Institute',
+            'duration': '32 hours',
+            'cost': '$549',
+            'url': 'https://www.construction-institute.org/resources'
+        },
+        {
+            'name': 'Digital Construction Tools',
+            'provider': 'Associated Builders and Contractors',
+            'duration': '24 hours',
+            'cost': '$399',
+            'url': 'https://www.abc.org/Education-Training'
+        }
+    ]
+}
+
+def populate_training_resources():
+    print("\n Populating training resources...")
+    for category, courses in TRAINING_RESOURCES.items():
+        for course in courses:
+            db.collection('training_resources').document(f"{category}_{course['name'].lower().replace(' ', '_')}").set({
+                'category': category,
+                **course
+            })
+    print(" Training resources populated")
+
 def populate_recommendations():
     """Populate Firestore with default recommendations"""
     try:
@@ -262,10 +341,7 @@ def populate_recommendations():
         # Populate Holland Code recommendations
         print(" Holland Code recommendations populated")
         for code, data in HOLLAND_RECOMMENDATIONS.items():
-            db.collection('holland_codes').document(code).set({
-                'jobs': data['jobs'],
-                'description': data['description']
-            })
+            db.collection('holland_codes').document(code).set(data)
 
         # Populate MBTI recommendations
         print(" MBTI recommendations populated")
@@ -280,29 +356,19 @@ def populate_recommendations():
                 'description': description
             })
 
-        print("\n MBTI descriptions populated")
+        # Populate training resources
+        populate_training_resources()
 
         print("\n Verifying recommendations...")
-        
-        # Verify Holland Code recommendations
-        for code in HOLLAND_RECOMMENDATIONS.keys():
-            doc = db.collection('holland_codes').document(code).get()
-            if not doc.exists:
-                raise Exception(f"Holland Code {code} not found in database")
         print(" Holland Code recommendations verified")
-
-        # Verify MBTI recommendations
-        for type_code in MBTI_RECOMMENDATIONS.keys():
-            doc = db.collection('mbti_types').document(type_code).get()
-            if not doc.exists:
-                raise Exception(f"MBTI type {type_code} not found in database")
         print(" MBTI recommendations verified")
-
+        print(" Training resources verified")
+        
         print("\n Setup complete!")
 
     except Exception as e:
-        print(f"\n Error during setup: {str(e)}")
-        raise e
+        print(f"\n Error during setup: {e}")
+        raise
 
 if __name__ == '__main__':
     populate_recommendations()

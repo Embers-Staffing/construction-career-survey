@@ -157,44 +157,11 @@ function getCareerProgression(role, experience) {
     return progressionPaths[role] || defaultPath;
 }
 
-function getRecommendedTraining(role, experience) {
+async function getRecommendedTraining(role, experience) {
     try {
-        const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
-        let recommendations = [];
+        const recommendations = await careerRecommendationService.getTrainingRecommendations(role, experience);
         
-        // Add technical training based on role
-        if (CAREER_DATA.trainingResources?.technical) {
-            recommendations.push(...CAREER_DATA.trainingResources.technical
-                .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
-                .map(course => ({
-                    ...course,
-                    category: 'Technical Training'
-                }))
-            );
-        }
-
-        // Add leadership training for experienced professionals
-        if (experience >= 2 && CAREER_DATA.trainingResources?.leadership) {
-            recommendations.push(...CAREER_DATA.trainingResources.leadership
-                .map(course => ({
-                    ...course,
-                    category: 'Leadership Development'
-                }))
-            );
-        }
-
-        // Add technology training
-        if (CAREER_DATA.trainingResources?.technology) {
-            recommendations.push(...CAREER_DATA.trainingResources.technology
-                .map(course => ({
-                    ...course,
-                    category: 'Technology Skills'
-                }))
-            );
-        }
-
-        // Return empty array if no recommendations
-        if (recommendations.length === 0) {
+        if (!recommendations || recommendations.length === 0) {
             console.warn('No training recommendations found for:', { role, experience });
             return [];
         }
@@ -438,8 +405,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                     <div class="recommended-training mb-4">
                         <h3>Recommended Training</h3>
-                        ${(() => {
-                            const training = getRecommendedTraining(result.hollandCode, result.constructionExperience);
+                        ${await (async () => {
+                            const training = await getRecommendedTraining(result.hollandCode, result.constructionExperience);
                             if (!training || training.length === 0) {
                                 return '<p>No specific training recommendations available yet.</p>';
                             }

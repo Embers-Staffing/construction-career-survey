@@ -126,6 +126,37 @@ export class CareerRecommendationService {
             throw error;
         }
     }
+
+    /**
+     * Get training recommendations based on experience level
+     * @param {string} role - Role or job title
+     * @param {number} experience - Years of experience
+     * @returns {Promise<Array>} Training recommendations
+     */
+    async getTrainingRecommendations(role, experience) {
+        try {
+            const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
+            const snapshot = await this.db.collection('training_resources').get();
+            
+            if (snapshot.empty) {
+                console.warn('No training resources found');
+                return [];
+            }
+
+            const recommendations = [];
+            snapshot.forEach(doc => {
+                const course = doc.data();
+                if (!course.level || course.level === skillLevel || course.level === 'all') {
+                    recommendations.push(course);
+                }
+            });
+
+            return recommendations;
+        } catch (error) {
+            console.error('Error getting training recommendations:', error);
+            return [];
+        }
+    }
 }
 
 // Export a singleton instance
