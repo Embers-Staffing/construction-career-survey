@@ -192,44 +192,54 @@ MBTI_RECOMMENDATIONS = {
 }
 
 def populate_recommendations():
-    """
-    Populate the Firestore database with recommendations for both Holland Codes and MBTI types.
-    """
-    # Populate Holland Code recommendations
-    holland_collection = db.collection('recommendations').document('holland_codes')
-    holland_collection.set({
-        'codes': HOLLAND_RECOMMENDATIONS
-    })
-    print(" Holland Code recommendations populated")
+    """Populate Firestore with default recommendations"""
+    try:
+        print("\n Starting recommendations setup...")
+        
+        # Initialize Firebase Admin
+        cred = credentials.Certificate('firebase-credentials.json')
+        if not firebase_admin._apps:
+            firebase_admin.initialize_app(cred)
+        
+        db = firestore.client()
 
-    # Populate MBTI recommendations
-    mbti_collection = db.collection('recommendations').document('mbti_types')
-    mbti_collection.set({
-        'types': MBTI_RECOMMENDATIONS
-    })
-    print(" MBTI recommendations populated")
+        # Populate Holland Code recommendations
+        print(" Holland Code recommendations populated")
+        for code, data in HOLLAND_RECOMMENDATIONS.items():
+            db.collection('holland_codes').document(code).set({
+                'jobs': data['jobs'],
+                'description': data['description']
+            })
 
-def verify_recommendations():
-    """
-    Verify that recommendations were properly stored in the database.
-    """
-    # Verify Holland Codes
-    holland_doc = db.collection('recommendations').document('holland_codes').get()
-    if holland_doc.exists:
+        # Populate MBTI recommendations
+        print(" MBTI recommendations populated")
+        for type_code, data in MBTI_RECOMMENDATIONS.items():
+            db.collection('mbti_types').document(type_code).set({
+                'jobs': data['jobs'],
+                'description': data['description']
+            })
+
+        print("\n Verifying recommendations...")
+        
+        # Verify Holland Code recommendations
+        for code in HOLLAND_RECOMMENDATIONS.keys():
+            doc = db.collection('holland_codes').document(code).get()
+            if not doc.exists:
+                raise Exception(f"Holland Code {code} not found in database")
         print(" Holland Code recommendations verified")
-    else:
-        print(" Holland Code recommendations missing")
 
-    # Verify MBTI types
-    mbti_doc = db.collection('recommendations').document('mbti_types').get()
-    if mbti_doc.exists:
+        # Verify MBTI recommendations
+        for type_code in MBTI_RECOMMENDATIONS.keys():
+            doc = db.collection('mbti_types').document(type_code).get()
+            if not doc.exists:
+                raise Exception(f"MBTI type {type_code} not found in database")
         print(" MBTI recommendations verified")
-    else:
-        print(" MBTI recommendations missing")
 
-if __name__ == "__main__":
-    print(" Starting recommendations setup...")
+        print("\n Setup complete!")
+
+    except Exception as e:
+        print(f"\n Error during setup: {str(e)}")
+        raise e
+
+if __name__ == '__main__':
     populate_recommendations()
-    print("\n Verifying recommendations...")
-    verify_recommendations()
-    print("\n Setup complete!")
