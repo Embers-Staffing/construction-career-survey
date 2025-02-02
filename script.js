@@ -152,16 +152,18 @@ function getRecommendedTraining(role, experience) {
     let recommendations = [];
     
     // Add technical training based on role
-    recommendations.push(...CAREER_DATA.trainingResources.technical
-        .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
-        .map(course => ({
-            ...course,
-            category: 'Technical Training'
-        }))
-    );
+    if (CAREER_DATA.trainingResources.technical) {
+        recommendations.push(...CAREER_DATA.trainingResources.technical
+            .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
+            .map(course => ({
+                ...course,
+                category: 'Technical Training'
+            }))
+        );
+    }
 
     // Add leadership training for experienced professionals
-    if (experience >= 2) {
+    if (experience >= 2 && CAREER_DATA.trainingResources.leadership) {
         recommendations.push(...CAREER_DATA.trainingResources.leadership
             .map(course => ({
                 ...course,
@@ -171,14 +173,49 @@ function getRecommendedTraining(role, experience) {
     }
 
     // Add technology training
-    recommendations.push(...CAREER_DATA.trainingResources.technology
-        .map(course => ({
-            ...course,
-            category: 'Technology Skills'
-        }))
-    );
+    if (CAREER_DATA.trainingResources.technology) {
+        recommendations.push(...CAREER_DATA.trainingResources.technology
+            .map(course => ({
+                ...course,
+                category: 'Technology Skills'
+            }))
+        );
+    }
 
-    return recommendations;
+    // Group recommendations by category
+    const groupedRecommendations = recommendations.reduce((acc, course) => {
+        if (!acc[course.category]) {
+            acc[course.category] = [];
+        }
+        acc[course.category].push(course);
+        return acc;
+    }, {});
+
+    return Object.entries(groupedRecommendations).map(([category, courses]) => ({
+        category,
+        courses
+    }));
+}
+
+function calculateAge(birthYear, birthMonth) {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth() + 1; // JavaScript months are 0-based
+
+    if (!birthYear || isNaN(birthYear) || !birthMonth || isNaN(birthMonth)) {
+        console.log('[DEBUG] Invalid age inputs:', { year: birthYear, month: birthMonth });
+        return null;
+    }
+
+    let age = currentYear - birthYear;
+    
+    // Adjust age if birthday hasn't occurred this year
+    if (currentMonth < birthMonth) {
+        age--;
+    }
+
+    console.log('[DEBUG] Age calculated:', { year: birthYear, month: birthMonth, age: age });
+    return age;
 }
 
 // Initialize form when DOM is loaded
@@ -245,15 +282,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const month = parseInt(monthSelect.value); // Parse month as integer
             
             if (!isNaN(year) && !isNaN(month) && ageDisplay) {
-                const today = new Date();
-                const birthDate = new Date(year, month - 1);
-                let age = today.getFullYear() - birthDate.getFullYear();
-                
-                const monthDiff = today.getMonth() - birthDate.getMonth();
-                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-                    age--;
-                }
-                
+                const age = calculateAge(year, month);
                 ageDisplay.textContent = `Age: ${age} years old`;
                 ageDisplay.style.display = 'block';
                 DEBUG.debug('Age calculated:', { year, month, age });
@@ -388,18 +417,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                     <div class="recommended-training mb-4">
                         <h3>Recommended Training</h3>
                         ${getRecommendedTraining(result.hollandCode, result.constructionExperience)
-                            .reduce((acc, course) => {
-                                if (!acc[course.category]) {
-                                    acc[course.category] = [];
-                                }
-                                acc[course.category].push(course);
-                                return acc;
-                            }, {})
-                            .map((courses, category) => `
+                            .map(group => `
                                 <div class="mb-3">
-                                    <h4>${category}</h4>
+                                    <h4>${group.category}</h4>
                                     <ul>
-                                        ${courses.map(course => `
+                                        ${group.courses.map(course => `
                                             <li>
                                                 <strong>${course.name}</strong>
                                                 <br>Provider: ${course.provider}
@@ -434,16 +456,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         // Helper function to calculate age
-        function calculateAge(year, month) {
+        function calculateAge(birthYear, birthMonth) {
             const today = new Date();
-            const birthDate = new Date(year, month - 1);
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const monthDiff = today.getMonth() - birthDate.getMonth();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth() + 1; // JavaScript months are 0-based
+
+            if (!birthYear || isNaN(birthYear) || !birthMonth || isNaN(birthMonth)) {
+                console.log('[DEBUG] Invalid age inputs:', { year: birthYear, month: birthMonth });
+                return null;
+            }
+
+            let age = currentYear - birthYear;
             
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            // Adjust age if birthday hasn't occurred this year
+            if (currentMonth < birthMonth) {
                 age--;
             }
-            
+
+            console.log('[DEBUG] Age calculated:', { year: birthYear, month: birthMonth, age: age });
             return age;
         }
 
@@ -760,16 +790,18 @@ document.addEventListener('DOMContentLoaded', async function() {
             let recommendations = [];
             
             // Add technical training based on role
-            recommendations.push(...CAREER_DATA.trainingResources.technical
-                .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
-                .map(course => ({
-                    ...course,
-                    category: 'Technical Training'
-                }))
-            );
+            if (CAREER_DATA.trainingResources.technical) {
+                recommendations.push(...CAREER_DATA.trainingResources.technical
+                    .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
+                    .map(course => ({
+                        ...course,
+                        category: 'Technical Training'
+                    }))
+                );
+            }
 
             // Add leadership training for experienced professionals
-            if (experience >= 2) {
+            if (experience >= 2 && CAREER_DATA.trainingResources.leadership) {
                 recommendations.push(...CAREER_DATA.trainingResources.leadership
                     .map(course => ({
                         ...course,
@@ -779,14 +811,28 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
 
             // Add technology training
-            recommendations.push(...CAREER_DATA.trainingResources.technology
-                .map(course => ({
-                    ...course,
-                    category: 'Technology Skills'
-                }))
-            );
+            if (CAREER_DATA.trainingResources.technology) {
+                recommendations.push(...CAREER_DATA.trainingResources.technology
+                    .map(course => ({
+                        ...course,
+                        category: 'Technology Skills'
+                    }))
+                );
+            }
 
-            return recommendations;
+            // Group recommendations by category
+            const groupedRecommendations = recommendations.reduce((acc, course) => {
+                if (!acc[course.category]) {
+                    acc[course.category] = [];
+                }
+                acc[course.category].push(course);
+                return acc;
+            }, {});
+
+            return Object.entries(groupedRecommendations).map(([category, courses]) => ({
+                category,
+                courses
+            }));
         }
 
         // Update displayResults function to include descriptions

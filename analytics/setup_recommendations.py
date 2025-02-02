@@ -111,6 +111,17 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Business Strategy Manager"
         ],
         "description": "EIS types excel in roles that combine leadership and interpersonal skills with analytical thinking, making them effective in managing both projects and people in construction."
+    },
+    "EIR": {
+        "jobs": [
+            "Construction Project Manager",
+            "Site Safety Manager",
+            "Quality Control Manager",
+            "Building Systems Engineer",
+            "Construction Technology Specialist",
+            "Building Information Modeling (BIM) Manager"
+        ],
+        "description": "Enterprising-Investigative-Realistic types excel in roles that combine leadership, analysis, and hands-on problem-solving."
     }
     # Add more Holland Code combinations as needed
 }
@@ -212,6 +223,16 @@ MBTI_RECOMMENDATIONS = {
             "Sustainability Program Manager"
         ],
         "description": "ENFPs excel in roles that involve creative problem-solving, relationship building, and driving innovation in construction."
+    },
+    "ENTP": {
+        "jobs": [
+            "Construction Innovation Manager",
+            "Project Development Lead",
+            "Construction Systems Analyst",
+            "Technology Integration Specialist",
+            "Sustainable Construction Consultant"
+        ],
+        "description": "ENTPs are innovative problem-solvers who excel at understanding complex systems and finding creative solutions."
     }
 }
 
