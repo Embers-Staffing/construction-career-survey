@@ -1,6 +1,6 @@
 'use strict';
 
-import { CareerRecommendationService } from './firebase.js';
+import { careerRecommendationService } from './firebase.js';
 
 // Debug utilities
 const DEBUG = {
@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
         DEBUG.info('Initializing application');
         
-        // Initialize recommendation service
-        const recommendationService = new CareerRecommendationService();
+        // Use the singleton instance
+        const recommendationService = careerRecommendationService;
         
         // Initialize form elements
         const form = document.getElementById('careerForm');
