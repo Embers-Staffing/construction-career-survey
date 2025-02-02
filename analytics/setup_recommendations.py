@@ -26,7 +26,7 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Equipment Operator",
             "Safety Director"
         ],
-        "description": "People with RIA (Realistic, Investigative, Artistic) preferences excel in hands-on leadership roles that require technical knowledge and creative problem-solving. They are well-suited for positions that combine practical skills with planning and design elements."
+        "description": "People with RIA (Realistic, Investigative, Artistic) preferences excel in hands-on leadership roles that require technical knowledge and creative problem-solving."
     },
     "RIE": {
         "jobs": [
@@ -38,7 +38,7 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Technical Specialist",
             "Field Engineer"
         ],
-        "description": "RIE (Realistic, Investigative, Enterprising) types thrive in roles that combine technical expertise with management responsibilities. They excel at analyzing problems and implementing practical solutions while leading teams."
+        "description": "RIE (Realistic, Investigative, Enterprising) types thrive in roles that combine technical expertise with management responsibilities."
     },
     "RSE": {
         "jobs": [
@@ -50,7 +50,19 @@ HOLLAND_RECOMMENDATIONS: Dict[str, Dict] = {
             "Field Operations Manager",
             "Construction Estimator"
         ],
-        "description": "RSE (Realistic, Social, Enterprising) individuals excel in roles that combine practical skills with team leadership. They are natural at managing people while maintaining hands-on involvement in projects."
+        "description": "RSE (Realistic, Social, Enterprising) individuals excel in roles that combine practical skills with team leadership."
+    },
+    "ERS": {
+        "jobs": [
+            "Construction Business Owner",
+            "Project Development Manager",
+            "Site Operations Director",
+            "Construction Sales Manager",
+            "Business Development Lead",
+            "Client Relations Manager",
+            "Construction Recruiter"
+        ],
+        "description": "ERS (Enterprising, Realistic, Social) individuals excel in roles that combine business acumen with practical construction knowledge and people skills."
     }
     # Add more Holland Code combinations as needed
 }
@@ -67,7 +79,7 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Building Code Inspector",
             "Structural Engineer"
         ],
-        "description": "ISTJs excel in roles requiring attention to detail, systematic thinking, and adherence to standards. They make excellent managers and inspectors in construction due to their methodical approach and reliability."
+        "description": "ISTJs excel in roles requiring attention to detail, systematic thinking, and adherence to standards."
     },
     "ESTP": {
         "jobs": [
@@ -79,7 +91,7 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Field Operations Manager",
             "Emergency Response Coordinator"
         ],
-        "description": "ESTPs thrive in dynamic, hands-on roles that require quick thinking and adaptability. They excel in positions that involve active problem-solving and direct oversight of operations."
+        "description": "ESTPs thrive in dynamic, hands-on roles that require quick thinking and adaptability."
     },
     "ENTJ": {
         "jobs": [
@@ -91,7 +103,7 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Strategic Planning Director",
             "Construction Company Owner"
         ],
-        "description": "ENTJs excel in leadership positions that require strategic thinking and long-term planning. They are natural leaders who can effectively manage large-scale construction projects and organizations."
+        "description": "ENTJs excel in leadership positions that require strategic thinking and long-term planning."
     },
     "ESFP": {
         "jobs": [
@@ -103,7 +115,19 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Construction Sales Representative",
             "Site Safety Officer"
         ],
-        "description": "ESFPs excel in roles that involve direct interaction with people and hands-on work. They are natural problem solvers who can think on their feet and adapt quickly to changing situations on construction sites."
+        "description": "ESFPs excel in roles that involve direct interaction with people and hands-on work."
+    },
+    "ISFP": {
+        "jobs": [
+            "Interior Construction Specialist",
+            "Architectural Assistant",
+            "Design-Build Coordinator",
+            "Renovation Specialist",
+            "Custom Finishing Expert",
+            "Site Aesthetics Coordinator",
+            "Quality Assurance Inspector"
+        ],
+        "description": "ISFPs excel in roles that combine practical skills with aesthetic awareness and attention to detail."
     },
     "ISFJ": {
         "jobs": [
@@ -115,7 +139,7 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Project Support Specialist",
             "Maintenance Supervisor"
         ],
-        "description": "ISFJs excel in roles that require attention to detail, organization, and supporting others. They are reliable and thorough in maintaining safety and quality standards."
+        "description": "ISFJs excel in roles that require attention to detail, organization, and supporting others."
     },
     "ENFJ": {
         "jobs": [
@@ -127,7 +151,7 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Safety Program Manager",
             "Workforce Development Manager"
         ],
-        "description": "ENFJs excel in roles focused on developing and supporting teams. They are natural leaders who can effectively manage and motivate construction teams while maintaining positive relationships."
+        "description": "ENFJs excel in roles focused on developing and supporting teams."
     }
 }
 

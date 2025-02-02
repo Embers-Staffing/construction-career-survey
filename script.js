@@ -292,109 +292,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             return growth[careerPath] || 'Entry Level → Mid Level → Senior Level → Leadership';
         }
 
-        function getTrainingRecommendations(result) {
-            const recommendations = [];
-            
-            // Base recommendations on career interests
-            result.careerInterests.forEach(interest => {
-                switch(interest) {
-                    case 'trades':
-                        recommendations.push({
-                            name: 'Red Seal Certification',
-                            description: 'Industry-recognized certification for skilled trades',
-                            duration: '3-4 years',
-                            provider: 'ITA BC',
-                            link: 'https://www.itabc.ca/'
-                        });
-                        break;
-                    case 'project-management':
-                        recommendations.push({
-                            name: 'Project Management Professional (PMP)',
-                            description: 'Globally recognized project management certification',
-                            duration: '6-12 months',
-                            provider: 'PMI',
-                            link: 'https://www.pmi.org/'
-                        });
-                        break;
-                    case 'tech-specialist':
-                        recommendations.push({
-                            name: 'Construction Technology Certificate',
-                            description: 'Advanced training in construction technology and software',
-                            duration: '1 year',
-                            provider: 'BCIT',
-                            link: 'https://www.bcit.ca/'
-                        });
-                        break;
-                    case 'estimator':
-                        recommendations.push({
-                            name: 'Construction Estimating Certificate',
-                            description: 'Specialized training in construction cost estimation',
-                            duration: '6-8 months',
-                            provider: 'BCIT',
-                            link: 'https://www.bcit.ca/'
-                        });
-                        break;
-                    case 'heavy-machinery':
-                        recommendations.push({
-                            name: 'Heavy Equipment Operator Certification',
-                            description: 'Certification for operating construction machinery',
-                            duration: '3-6 months',
-                            provider: 'Operating Engineers Training Institute',
-                            link: 'https://www.iuoe115.ca/'
-                        });
-                        break;
-                }
-            });
-
-            return recommendations;
-        }
-
-        function getNextSteps(result) {
-            const steps = [];
-            
-            // Add basic steps
-            steps.push('Update your resume to highlight relevant skills and experience');
-            
-            // Add certification steps based on experience
-            if (result.constructionExperience === '0') {
-                steps.push('Complete basic safety certifications (WHMIS, First Aid)');
-                steps.push('Consider entry-level training programs or apprenticeships');
-            }
-            
-            // Add steps based on career interests
-            result.careerInterests.forEach(interest => {
-                switch(interest) {
-                    case 'trades':
-                        steps.push('Research apprenticeship opportunities in your preferred trade');
-                        steps.push('Contact local unions or trade associations');
-                        break;
-                    case 'project-management':
-                        steps.push('Gain field experience in construction operations');
-                        steps.push('Begin PMP certification preparation');
-                        break;
-                    case 'tech-specialist':
-                        steps.push('Take online courses in construction technology');
-                        steps.push('Get familiar with BIM and project management software');
-                        break;
-                    case 'estimator':
-                        steps.push('Develop strong mathematical and analytical skills');
-                        steps.push('Learn industry-standard estimating software');
-                        break;
-                    case 'heavy-machinery':
-                        steps.push('Obtain necessary equipment operator licenses');
-                        steps.push('Start with smaller equipment to gain experience');
-                        break;
-                }
-            });
-            
-            // Add networking steps
-            steps.push('Join professional associations in your chosen field');
-            steps.push('Connect with industry professionals on LinkedIn');
-            
-            return steps;
-        }
-
-        // Add this new helper function for progression steps
         function getProgressionSteps(careerPath) {
             const progressions = {
                 'trades': [
@@ -531,6 +428,93 @@ document.addEventListener('DOMContentLoaded', async function() {
                     timeframe: '8+ years'
                 }
             ];
+        }
+
+        function getNextSteps(result) {
+            const steps = [];
+            
+            // Add basic steps based on experience level
+            if (result.constructionExperience === 'none') {
+                steps.push(
+                    "Research basic construction terminology and concepts",
+                    "Consider entry-level construction training programs",
+                    "Look into OSHA safety certifications",
+                    "Explore apprenticeship opportunities"
+                );
+            } else if (result.constructionExperience === 'beginner') {
+                steps.push(
+                    "Pursue relevant certifications in your area of interest",
+                    "Join construction industry associations",
+                    "Build your professional network",
+                    "Consider specialized training programs"
+                );
+            } else {
+                steps.push(
+                    "Look for leadership development opportunities",
+                    "Consider advanced certifications",
+                    "Explore mentorship opportunities",
+                    "Stay updated with industry innovations"
+                );
+            }
+
+            // Add skill-based recommendations
+            if (result.technicalSkills && result.technicalSkills.length > 0) {
+                steps.push(`Build upon your existing skills: ${result.technicalSkills.join(', ')}`);
+            }
+
+            // Add technology-focused steps
+            if (result.techInterests && result.techInterests.length > 0) {
+                steps.push(`Explore training in: ${result.techInterests.join(', ')}`);
+            }
+
+            return steps;
+        }
+
+        function getTrainingRecommendations(result) {
+            const recommendations = [];
+
+            // Basic safety training
+            recommendations.push(
+                "OSHA Construction Safety Certification",
+                "First Aid and CPR Training"
+            );
+
+            // Experience-based recommendations
+            if (result.constructionExperience === 'none') {
+                recommendations.push(
+                    "Introduction to Construction Methods",
+                    "Basic Tool Safety Training",
+                    "Construction Math Fundamentals"
+                );
+            } else if (result.constructionExperience === 'beginner') {
+                recommendations.push(
+                    "Advanced Safety Training",
+                    "Equipment Operation Certification",
+                    "Project Management Basics"
+                );
+            } else {
+                recommendations.push(
+                    "Leadership and Supervision Training",
+                    "Advanced Project Management",
+                    "Construction Business Management"
+                );
+            }
+
+            // Add technical skill recommendations
+            if (result.technicalSkills && result.technicalSkills.length > 0) {
+                result.technicalSkills.forEach(skill => {
+                    recommendations.push(`Advanced training in ${skill}`);
+                });
+            }
+
+            // Add technology-focused training
+            if (result.techInterests && result.techInterests.length > 0) {
+                result.techInterests.forEach(tech => {
+                    recommendations.push(`Certification in ${tech}`);
+                });
+            }
+
+            return recommendations;
         }
 
     } catch (error) {
