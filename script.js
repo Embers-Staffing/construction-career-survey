@@ -186,13 +186,14 @@ async function getRecommendedTraining(role, experience) {
     }
 }
 
+// Helper function to calculate age
 function calculateAge(birthYear, birthMonth) {
     const today = new Date();
     const currentYear = today.getFullYear();
     const currentMonth = today.getMonth() + 1; // JavaScript months are 0-based
 
     if (!birthYear || isNaN(birthYear) || !birthMonth || isNaN(birthMonth)) {
-        console.log('[DEBUG] Invalid age inputs:', { year: birthYear, month: birthMonth });
+        DEBUG.debug('Invalid age inputs:', { year: birthYear, month: birthMonth });
         return null;
     }
 
@@ -203,7 +204,7 @@ function calculateAge(birthYear, birthMonth) {
         age--;
     }
 
-    console.log('[DEBUG] Age calculated:', { year: birthYear, month: birthMonth, age: age });
+    DEBUG.debug('Age calculated:', { year: birthYear, month: birthMonth, age: age });
     return age;
 }
 
@@ -308,28 +309,6 @@ function getMBTIType(formData) {
            (formData.get('mbtiSN') || '') +
            (formData.get('mbtiTF') || '') +
            (formData.get('mbtiJP') || '');
-}
-
-// Helper function to calculate age
-function calculateAge(birthYear, birthMonth) {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1; // JavaScript months are 0-based
-
-    if (!birthYear || isNaN(birthYear) || !birthMonth || isNaN(birthMonth)) {
-        console.log('[DEBUG] Invalid age inputs:', { year: birthYear, month: birthMonth });
-        return null;
-    }
-
-    let age = currentYear - birthYear;
-    
-    // Adjust age if birthday hasn't occurred this year
-    if (currentMonth < birthMonth) {
-        age--;
-    }
-
-    console.log('[DEBUG] Age calculated:', { year: birthYear, month: birthMonth, age: age });
-    return age;
 }
 
 function getSalaryRange(careerPath) {
