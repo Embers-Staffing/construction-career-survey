@@ -162,7 +162,7 @@ async function getRecommendedTraining(role, experience) {
         const recommendations = await careerRecommendationService.getTrainingRecommendations(role, experience);
         
         if (!recommendations || recommendations.length === 0) {
-            console.warn('No training recommendations found for:', { role, experience });
+            DEBUG.debug('No training recommendations found for:', { role, experience });
             return [];
         }
 
@@ -181,12 +181,11 @@ async function getRecommendedTraining(role, experience) {
             courses
         }));
     } catch (error) {
-        console.error('Error getting training recommendations:', error);
+        DEBUG.error('Error getting training recommendations:', error);
         return []; // Return empty array on error
     }
 }
 
-// Helper function to calculate age
 function calculateAge(birthYear, birthMonth) {
     const today = new Date();
     const currentYear = today.getFullYear();
@@ -206,6 +205,11 @@ function calculateAge(birthYear, birthMonth) {
 
     DEBUG.debug('Age calculated:', { year: birthYear, month: birthMonth, age: age });
     return age;
+}
+
+function getTrainingRecommendations(result) {
+    const { role, experience } = result;
+    return getRecommendedTraining(role, experience);
 }
 
 // Initialize form when DOM is loaded
@@ -522,104 +526,7 @@ function getNextSteps(result) {
     return steps;
 }
 
-function getTrainingRecommendations(result) {
-    const recommendations = [];
-
-    // Basic safety training
-    recommendations.push(
-        "OSHA Construction Safety Certification",
-        "First Aid and CPR Training"
-    );
-
-    // Experience-based recommendations
-    if (result.constructionExperience === 'none') {
-        recommendations.push(
-            "Introduction to Construction Methods",
-            "Basic Tool Safety Training",
-            "Construction Math Fundamentals"
-        );
-    } else if (result.constructionExperience === 'beginner') {
-        recommendations.push(
-            "Advanced Safety Training",
-            "Equipment Operation Certification",
-            "Project Management Basics"
-        );
-    } else {
-        recommendations.push(
-            "Leadership and Supervision Training",
-            "Advanced Project Management",
-            "Construction Business Management"
-        );
-    }
-
-    // Add technical skill recommendations
-    if (result.technicalSkills && result.technicalSkills.length > 0) {
-        result.technicalSkills.forEach(skill => {
-            recommendations.push(`Advanced training in ${skill}`);
-        });
-    }
-
-    // Add technology-focused training
-    if (result.techInterests && result.techInterests.length > 0) {
-        result.techInterests.forEach(tech => {
-            recommendations.push(`Certification in ${tech}`);
-        });
-    }
-
-    return recommendations;
-}
-
-function getRecommendedTraining(role, experience) {
-    const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
-    let recommendations = [];
-    
-    // Add technical training based on role
-    if (CAREER_DATA.trainingResources.technical) {
-        recommendations.push(...CAREER_DATA.trainingResources.technical
-            .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
-            .map(course => ({
-                ...course,
-                category: 'Technical Training'
-            }))
-        );
-    }
-
-    // Add leadership training for experienced professionals
-    if (experience >= 2 && CAREER_DATA.trainingResources.leadership) {
-        recommendations.push(...CAREER_DATA.trainingResources.leadership
-            .map(course => ({
-                ...course,
-                category: 'Leadership Development'
-            }))
-        );
-    }
-
-    // Add technology training
-    if (CAREER_DATA.trainingResources.technology) {
-        recommendations.push(...CAREER_DATA.trainingResources.technology
-            .map(course => ({
-                ...course,
-                category: 'Technology Skills'
-            }))
-        );
-    }
-
-    // Group recommendations by category
-    const groupedRecommendations = recommendations.reduce((acc, course) => {
-        if (!acc[course.category]) {
-            acc[course.category] = [];
-        }
-        acc[course.category].push(course);
-        return acc;
-    }, {});
-
-    return Object.entries(groupedRecommendations).map(([category, courses]) => ({
-        category,
-        courses
-    }));
-}
-
-async function displayResults(result, recommendations) {
+function displayResults(result, recommendations) {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = `
         <div class="card mb-4">
