@@ -1,6 +1,6 @@
 'use strict';
 
-import { CareerRecommendationService } from '../firebase.js';
+import { CareerRecommendationService } from './firebase.js';
 
 // Debug utilities
 const DEBUG = {
