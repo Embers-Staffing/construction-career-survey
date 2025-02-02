@@ -51,7 +51,19 @@ pip install -r requirements.txt
 # Place your firebase-credentials.json in the analytics directory
 ```
 
-### **4️⃣ Environment Configuration**
+### **4️⃣ Firebase Credentials Setup**
+
+To run the analytics dashboard, you need to set up Firebase credentials:
+
+1. Go to the [Firebase Console](https://console.firebase.google.com)
+2. Select your project
+3. Go to Project Settings > Service Accounts
+4. Click "Generate New Private Key"
+5. Save the downloaded JSON file as `analytics/firebase-credentials.json`
+
+**Important:** Never commit the credentials file to version control or share it publicly.
+
+### **5️⃣ Environment Configuration**
 1. Create `.env` file in the root directory
 2. Add required environment variables:
 ```sh
@@ -59,7 +71,7 @@ FIREBASE_API_KEY=your_api_key
 FIREBASE_PROJECT_ID=your_project_id
 ```
 
-### **5️⃣ Running the Dashboard**
+### **6️⃣ Running the Dashboard**
 ```sh
 cd analytics
 streamlit run dashboard.py

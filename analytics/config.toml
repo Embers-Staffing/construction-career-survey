@@ -1,0 +1,8 @@
+[server]
+port = 8511
+address = "127.0.0.1"
+baseUrlPath = ""
+enableCORS = true
+enableXsrfProtection = true
+maxUploadSize = 200
+maxMessageSize = 200

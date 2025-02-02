@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from firebase_admin import credentials, initialize_app
+from firebase_admin import credentials, initialize_app, get_app
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 def init_firebase():
     """Initialize Firebase Admin SDK"""
     try:
-        # Check if app is already initialized
-        logger.debug("Attempting to initialize Firebase...")
-        initialize_app()
+        # Try to get the default app - if it exists, we're already initialized
+        app = get_app()
         logger.debug("Firebase already initialized")
+        return app
     except ValueError:
         # Look for credentials file
         creds_path = os.path.join(os.path.dirname(__file__), 'firebase-credentials.json')
@@ -31,8 +31,9 @@ def init_firebase():
             # Initialize with credentials if not already done
             logger.debug("Loading credentials from file...")
             cred = credentials.Certificate(creds_path)
-            initialize_app(cred)
+            app = initialize_app(cred)
             logger.debug("Firebase initialized successfully")
+            return app
         except Exception as e:
             logger.error(f"Error initializing Firebase: {str(e)}")
             raise

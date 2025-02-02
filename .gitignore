@@ -64,6 +64,12 @@ firebase-debug.log
 firebase-debug.*.log
 ui-debug.log
 
+# Firebase credentials
+*firebase-credentials*.json
+*serviceAccount*.json
+.env
+.env.local
+
 # Streamlit
 .streamlit/secrets.toml
 .streamlit/config.toml
