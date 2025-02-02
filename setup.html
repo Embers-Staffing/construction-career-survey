@@ -1,46 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setup Admin - Construction Career Explorer</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Setup Construction Career Survey Database</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow">
-                    <div class="card-body">
-                        <h1 class="text-center mb-4">Setting up admin user...</h1>
-                        <div id="status" class="mt-4"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<body>
+    <h1>Setup Construction Career Survey Database</h1>
+    <p>This page will populate the Firestore database with initial career recommendations.</p>
+    <p>Check the browser console for detailed progress.</p>
+    <div id="status"></div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    
-    <!-- Initialize Firebase -->
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBJL16XmFwU7BAk9ypZuWtz0oPmkA62HvI",
-            authDomain: "construction-career-survey.firebaseapp.com",
-            projectId: "construction-career-survey",
-            storageBucket: "construction-career-survey.firebasestorage.app",
-            messagingSenderId: "505628721728",
-            appId: "1:505628721728:web:8b539a03956290b1c155a5"
-        };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-    </script>
-    
-    <!-- Setup script -->
-    <script src="setup-admin.js"></script>
+    <!-- Load Firebase -->
+    <script type="module" src="config.js"></script>
+    <script type="module" src="setup_recommendations.js"></script>
 </body>
 </html>

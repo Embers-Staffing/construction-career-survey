@@ -18,15 +18,23 @@ service cloud.firestore {
       allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
       allow write: if isAdmin();
     }
-    
-    // Survey responses - only admins can read and write
-    match /survey_responses/{responseId} {
-      allow read, write: if isAdmin();
+
+    // Holland Codes recommendations - anyone can read, only admins can write
+    match /holland_codes/{code} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
     
-    // Deny access to all other collections by default
-    match /{document=**} {
-      allow read, write: if false;
+    // MBTI recommendations - anyone can read, only admins can write
+    match /mbti_types/{type} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Survey responses - anyone can create, only admins can read/update/delete
+    match /survey_responses/{responseId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
     }
   }
 }

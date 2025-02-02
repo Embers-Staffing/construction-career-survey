@@ -1,5 +1,7 @@
 'use strict';
 
+import { CareerRecommendationService } from './firebase.js';
+
 // Debug utilities
 const DEBUG = {
     enabled: true,
@@ -32,9 +34,12 @@ const CONFIG = {
 };
 
 // Initialize form when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     try {
         DEBUG.info('Initializing application');
+        
+        // Initialize recommendation service
+        const recommendationService = new CareerRecommendationService();
         
         // Initialize form elements
         const form = document.getElementById('careerForm');
@@ -88,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         DEBUG.info('Date selectors initialized successfully');
         
         // Form submission handler
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             try {
@@ -114,6 +119,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     mentorshipType: formData.get('mentorship-type')
                 };
 
+                // Get recommendations from Firebase
+                const recommendations = await recommendationService.getRecommendations(
+                    result.hollandCode,
+                    result.mbtiType
+                );
+
+                // Store survey response with recommendations
+                await recommendationService.storeSurveyResponse(result, recommendations);
+
                 // Show results
                 const resultsDiv = document.getElementById('results');
                 const resultsContent = document.getElementById('resultsContent');
@@ -135,16 +149,27 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
 
                     <div class="career-path mb-4">
+                        <h3>Your Personality Profile</h3>
+                        <div class="mb-4">
+                            <h4>Holland Code Analysis</h4>
+                            <p>${recommendations.hollandCodeDescription}</p>
+                        </div>
+                        <div class="mb-4">
+                            <h4>MBTI Analysis</h4>
+                            <p>${recommendations.mbtiDescription}</p>
+                        </div>
+                    </div>
+
+                    <div class="career-path mb-4">
                         <h3>Recommended Career Paths</h3>
                         <div class="recommendations">
-                            ${result.careerInterests.map(interest => `
+                            ${recommendations.jobs.map(job => `
                                 <div class="recommendation-card mb-3">
-                                    <h4>${interest.charAt(0).toUpperCase() + interest.slice(1).replace('-', ' ')}</h4>
-                                    <p class="text-muted">Based on your ${result.mbtiType} personality type and ${result.hollandCode} interests</p>
+                                    <h4>${job}</h4>
                                     <div class="career-details">
-                                        <p><strong>Salary Range:</strong> ${getSalaryRange(interest)}</p>
-                                        <p><strong>Required Skills:</strong> ${getRequiredSkills(interest).join(', ')}</p>
-                                        <p><strong>Career Growth:</strong> ${getCareerGrowth(interest)}</p>
+                                        <p><strong>Salary Range:</strong> ${getSalaryRange(job)}</p>
+                                        <p><strong>Required Skills:</strong> ${getRequiredSkills(job).join(', ')}</p>
+                                        <p><strong>Career Growth:</strong> ${getCareerGrowth(job)}</p>
                                     </div>
                                 </div>
                             `).join('')}
@@ -152,12 +177,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
 
                     <div id="careerFlowchart" class="career-path mb-4">
+                        <h3>Career Progression Paths</h3>
                         <div class="career-flowchart">
-                            ${result.careerInterests.map(interest => `
+                            ${recommendations.jobs.slice(0, 3).map(job => `
                                 <div class="career-progression-track">
-                                    <h4 class="mb-3">${interest.charAt(0).toUpperCase() + interest.slice(1).replace('-', ' ')} Track</h4>
+                                    <h4 class="mb-3">${job} Track</h4>
                                     <div class="progression-steps">
-                                        ${getProgressionSteps(interest).map((step, index) => `
+                                        ${getProgressionSteps(job).map((step, index) => `
                                             <div class="progression-step">
                                                 <div class="step-content">
                                                     <h5>${step.title}</h5>
@@ -174,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
 
                     <div id="trainingResources" class="career-path mb-4">
+                        <h3>Recommended Training & Resources</h3>
                         <div class="training-recommendations">
                             ${getTrainingRecommendations(result).map(training => `
                                 <div class="training-item mb-3">
@@ -201,8 +228,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 resultsDiv.style.display = 'block';
                 resultsDiv.scrollIntoView({ behavior: 'smooth' });
                 
-                DEBUG.info('Results displayed successfully', result);
-
+                DEBUG.info('Results displayed successfully');
+                
             } catch (error) {
                 DEBUG.error('Error processing form:', error);
                 alert('There was an error processing your information. Please try again.');

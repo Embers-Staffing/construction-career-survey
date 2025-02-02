@@ -57,6 +57,12 @@ analytics/firebase-credentials.json
 .firebase/
 **/firestore-debug.log
 **/pubsub-debug.log
+firebase-credentials.json
+.firebase/
+firebase-debug.log
+.firebaserc
+firebase-debug.*.log
+ui-debug.log
 
 # Streamlit
 .streamlit/secrets.toml
@@ -93,3 +99,9 @@ analytics/firebase-credentials.json
 **/tests/
 **/debug_*.py
 **/minimal.py
+test.html
+test-*.js
+test-*.html
+
+# Config files with sensitive data
+config.js
