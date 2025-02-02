@@ -1,6 +1,13 @@
 # Firebase
 **/firebase-credentials.json
 **/serviceAccountKey.json
+**/firebase-config.js
+**/config.js
+.env*
+
+# Sensitive files
+**/deploy-rules.js
+config.py
 
 # Python
 __pycache__/
@@ -113,4 +120,3 @@ test-*.js
 test-*.html
 
 # Config files with sensitive data
-config.js

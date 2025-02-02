@@ -43,12 +43,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         // Initialize form elements
         const form = document.getElementById('careerForm');
-        const yearSelect = document.querySelector('select[name="birth-year"]');
-        const monthSelect = document.querySelector('select[name="birth-month"]');
+        const yearSelect = document.querySelector('select[name="birthYear"]');
+        const monthSelect = document.querySelector('select[name="birthMonth"]');
         const ageDisplay = document.querySelector('.age-display');
 
         if (!form || !yearSelect || !monthSelect) {
-            console.error('Required form elements not found');
+            console.error('Required form elements not found', {
+                form: !!form,
+                yearSelect: !!yearSelect,
+                monthSelect: !!monthSelect
+            });
             return;
         }
 
@@ -67,7 +71,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const year = parseInt(yearSelect.value); // Parse year as integer
             const month = parseInt(monthSelect.value); // Parse month as integer
             
-            if (year && month && ageDisplay) {
+            if (!isNaN(year) && !isNaN(month) && ageDisplay) {
                 const today = new Date();
                 const birthDate = new Date(year, month - 1);
                 let age = today.getFullYear() - birthDate.getFullYear();
@@ -84,6 +88,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (ageDisplay) {
                     ageDisplay.style.display = 'none';
                 }
+                DEBUG.debug('Invalid age inputs:', { year, month });
             }
         }
 
@@ -104,19 +109,22 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const result = {
                     firstName: formData.get('firstName'),
                     lastName: formData.get('lastName'),
-                    age: calculateAge(formData.get('birth-year'), formData.get('birth-month')),
+                    birthYear: parseInt(formData.get('birthYear')),
+                    birthMonth: parseInt(formData.get('birthMonth')),
+                    age: calculateAge(parseInt(formData.get('birthYear')), parseInt(formData.get('birthMonth'))),
                     constructionExperience: formData.get('constructionExperience'),
                     mbtiType: getMBTIType(formData),
-                    hollandCode: formData.getAll('holland').join(''),
-                    careerInterests: formData.getAll('career-interests'),
-                    techInterests: formData.getAll('tech-interests'),
-                    environment: formData.get('environment-comfort'),
-                    travelWillingness: formData.get('travel-willingness'),
-                    skills: formData.getAll('skills'),
-                    careerGoals: formData.getAll('career-goals'),
-                    salaryTarget: formData.get('salary-target'),
-                    advancementPreference: formData.get('advancement-preference'),
-                    mentorshipType: formData.get('mentorship-type')
+                    hollandCode: formData.getAll('hollandCode').join(''),
+                    technicalSkills: formData.getAll('technicalSkills'),
+                    certificationLevel: formData.get('certificationAwareness'),
+                    careerInterests: formData.getAll('careerInterests'),
+                    techInterests: formData.getAll('techInterests'),
+                    environmentPreference: formData.get('environmentComfort'),
+                    travelPreference: formData.get('travelWillingness'),
+                    careerGoals: formData.getAll('careerGoals'),
+                    salaryTarget: formData.get('salaryTarget'),
+                    advancementPreference: formData.get('advancementPreference'),
+                    mentorshipPreference: formData.get('mentorshipType')
                 };
 
                 // Get recommendations from Firebase
@@ -145,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <p><strong>Experience:</strong> ${result.constructionExperience} years</p>
                         <p><strong>MBTI Type:</strong> ${result.mbtiType}</p>
                         <p><strong>Holland Code:</strong> ${result.hollandCode}</p>
-                        <p><strong>Work Environment:</strong> ${result.environment}</p>
+                        <p><strong>Work Environment:</strong> ${result.environmentPreference}</p>
                     </div>
 
                     <div class="career-path mb-4">
@@ -238,12 +246,10 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         // Helper function to get MBTI type
         function getMBTIType(formData) {
-            const ei = formData.get('mbti-ei') || '';
-            const sn = formData.get('mbti-sn') || '';
-            const tf = formData.get('mbti-tf') || '';
-            const jp = formData.get('mbti-jp') || '';
-            
-            return `${ei}${sn}${tf}${jp}`;
+            return (formData.get('mbtiEI') || '') +
+                   (formData.get('mbtiSN') || '') +
+                   (formData.get('mbtiTF') || '') +
+                   (formData.get('mbtiJP') || '');
         }
 
         // Helper function to calculate age

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>Analytics Dashboard</h1>
+                <a href="{{ url_for('survey.index') }}" class="btn btn-outline-primary">Back to Survey Dashboard</a>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Analytics Platform Coming Soon!</h5>
+                    <p class="card-text">Our analytics platform is under development. Here's what you'll be able to do:</p>
+                    <div class="row mt-4">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-bar fa-3x mb-3 text-primary"></i>
+                                    <h5 class="card-title">Survey Results</h5>
+                                    <p class="card-text">View detailed analytics of survey responses and trends</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-user-graduate fa-3x mb-3 text-success"></i>
+                                    <h5 class="card-title">Career Insights</h5>
+                                    <p class="card-text">Analyze career paths and development opportunities</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-file-export fa-3x mb-3 text-info"></i>
+                                    <h5 class="card-title">Export Data</h5>
+                                    <p class="card-text">Download reports and raw data for further analysis</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mt-4">
+                        <h6 class="alert-heading">Development in Progress</h6>
+                        <p class="mb-0">We're building powerful analytics tools to help you understand construction career trends and make data-driven decisions. Check back soon!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+.card .fa-3x {
+    color: #007bff;
+}
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}
