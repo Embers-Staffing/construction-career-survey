@@ -115,28 +115,32 @@ document.addEventListener('DOMContentLoaded', async function() {
             
             try {
                 DEBUG.info('Form submitted, processing...');
+                
+                // Get form data
                 const formData = new FormData(form);
                 
+                // Process Holland Code selections
+                const hollandCodeSelections = Array.from(document.querySelectorAll('.holland-code:checked'))
+                    .map(checkbox => checkbox.value.charAt(0).toUpperCase())
+                    .sort()
+                    .join('');
+
                 // Create result object
                 const result = {
                     firstName: formData.get('firstName'),
                     lastName: formData.get('lastName'),
-                    birthYear: parseInt(formData.get('birthYear')),
-                    birthMonth: parseInt(formData.get('birthMonth')),
+                    email: formData.get('email'),
                     age: calculateAge(parseInt(formData.get('birthYear')), parseInt(formData.get('birthMonth'))),
                     constructionExperience: formData.get('constructionExperience'),
                     mbtiType: getMBTIType(formData),
-                    hollandCode: formData.getAll('hollandCode').join(''),
-                    technicalSkills: formData.getAll('technicalSkills'),
-                    certificationLevel: formData.get('certificationAwareness'),
-                    careerInterests: formData.getAll('careerInterests'),
-                    techInterests: formData.getAll('techInterests'),
+                    hollandCode: hollandCodeSelections,
                     environmentPreference: formData.get('environmentComfort'),
-                    travelPreference: formData.get('travelWillingness'),
-                    careerGoals: formData.getAll('careerGoals'),
-                    salaryTarget: formData.get('salaryTarget'),
-                    advancementPreference: formData.get('advancementPreference'),
-                    mentorshipPreference: formData.get('mentorshipType')
+                    technicalSkills: Array.from(formData.getAll('technicalSkills')),
+                    certifications: Array.from(formData.getAll('certifications')),
+                    travelPreference: formData.get('travelPreference'),
+                    techInterests: Array.from(formData.getAll('techInterests')),
+                    careerGoals: formData.get('careerGoals'),
+                    additionalInfo: formData.get('additionalInfo')
                 };
 
                 // Get recommendations from Firebase

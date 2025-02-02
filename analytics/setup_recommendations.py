@@ -92,8 +92,43 @@ MBTI_RECOMMENDATIONS: Dict[str, Dict] = {
             "Construction Company Owner"
         ],
         "description": "ENTJs excel in leadership positions that require strategic thinking and long-term planning. They are natural leaders who can effectively manage large-scale construction projects and organizations."
+    },
+    "ESFP": {
+        "jobs": [
+            "Construction Site Coordinator",
+            "Safety Trainer",
+            "Client Relations Manager",
+            "Field Operations Supervisor",
+            "Team Lead",
+            "Construction Sales Representative",
+            "Site Safety Officer"
+        ],
+        "description": "ESFPs excel in roles that involve direct interaction with people and hands-on work. They are natural problem solvers who can think on their feet and adapt quickly to changing situations on construction sites."
+    },
+    "ISFJ": {
+        "jobs": [
+            "Construction Administrator",
+            "Quality Assurance Specialist",
+            "Documentation Manager",
+            "Safety Compliance Officer",
+            "Materials Manager",
+            "Project Support Specialist",
+            "Maintenance Supervisor"
+        ],
+        "description": "ISFJs excel in roles that require attention to detail, organization, and supporting others. They are reliable and thorough in maintaining safety and quality standards."
+    },
+    "ENFJ": {
+        "jobs": [
+            "Training Manager",
+            "HR Director",
+            "Team Development Lead",
+            "Project Communications Manager",
+            "Community Relations Director",
+            "Safety Program Manager",
+            "Workforce Development Manager"
+        ],
+        "description": "ENFJs excel in roles focused on developing and supporting teams. They are natural leaders who can effectively manage and motivate construction teams while maintaining positive relationships."
     }
-    # Add more MBTI types as needed
 }
 
 def populate_recommendations():
