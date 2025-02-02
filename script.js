@@ -270,24 +270,28 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 // Prepare result object
                 const result = {
-                    firstName: formData.get('first-name'),
-                    lastName: formData.get('last-name'),
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
                     age,
-                    constructionExperience: parseInt(formData.get('construction-experience')) || 0,
+                    constructionExperience: parseInt(formData.get('constructionExperience')) || 0,
                     hollandCode,
                     mbtiType,
                     timestamp: new Date().toISOString()
                 };
 
-                // Store response
-                const responseId = await careerRecommendationService.storeSurveyResponse(result);
-                DEBUG.info('Survey response stored with ID:', responseId);
-
-                // Get recommendations
+                // Get recommendations first
                 const recommendations = {
                     hollandJobs: await careerRecommendationService.getHollandCodeRecommendations(hollandCode),
                     mbtiJobs: await careerRecommendationService.getMBTIRecommendations(mbtiType)
                 };
+
+                // Store response with recommendations
+                const responseData = {
+                    ...result,
+                    recommendations
+                };
+                const responseId = await careerRecommendationService.storeSurveyResponse(responseData);
+                DEBUG.info('Survey response stored with ID:', responseId);
 
                 // Display results
                 await displayResults(result, recommendations);
