@@ -766,113 +766,87 @@ document.addEventListener('DOMContentLoaded', async function() {
             return code.split('').map(letter => HOLLAND_TRAITS[letter]).join(' + ');
         }
 
-        function getRecommendedTraining(role, experience) {
-            const skillLevel = experience < 2 ? 'entry' : experience < 5 ? 'mid' : 'senior';
-            let recommendations = [];
-            
-            // Add technical training based on role
-            if (CAREER_DATA.trainingResources.technical) {
-                recommendations.push(...CAREER_DATA.trainingResources.technical
-                    .filter(course => !course.level || course.level === skillLevel || course.level === 'all')
-                    .map(course => ({
-                        ...course,
-                        category: 'Technical Training'
-                    }))
-                );
-            }
+        async function displayResults(result, recommendations) {
+            try {
+                const mbtiDescription = await getMBTIDescription(result.mbtiType);
+                const hollandDescription = getHollandCodeDescription(result.hollandCode);
 
-            // Add leadership training for experienced professionals
-            if (experience >= 2 && CAREER_DATA.trainingResources.leadership) {
-                recommendations.push(...CAREER_DATA.trainingResources.leadership
-                    .map(course => ({
-                        ...course,
-                        category: 'Leadership Development'
-                    }))
-                );
-            }
-
-            // Add technology training
-            if (CAREER_DATA.trainingResources.technology) {
-                recommendations.push(...CAREER_DATA.trainingResources.technology
-                    .map(course => ({
-                        ...course,
-                        category: 'Technology Skills'
-                    }))
-                );
-            }
-
-            // Group recommendations by category
-            const groupedRecommendations = recommendations.reduce((acc, course) => {
-                if (!acc[course.category]) {
-                    acc[course.category] = [];
-                }
-                acc[course.category].push(course);
-                return acc;
-            }, {});
-
-            return Object.entries(groupedRecommendations).map(([category, courses]) => ({
-                category,
-                courses
-            }));
-        }
-
-        // Update displayResults function to include descriptions
-        function displayResults(result, recommendations) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = `
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h3 class="card-title">Your Profile</h3>
-                        <p><strong>Holland Code:</strong> ${result.hollandCode} <br>
-                           <em class="text-muted">${getHollandCodeDescription(result.hollandCode)}</em></p>
-                        <p><strong>MBTI Type:</strong> ${result.mbtiType} <br>
-                           <em class="text-muted">${await getMBTIDescription(result.mbtiType)}</em></p>
-                    </div>
-                </div>
-
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h3 class="card-title">Recommended Roles</h3>
-                        <div class="mb-4">
-                            <h5>Based on Your Holland Code (${result.hollandCode})</h5>
-                            ${recommendations.hollandCode ? `
-                                <p class="text-muted">${recommendations.hollandCode.description}</p>
-                                <ul class="list-unstyled">
-                                    ${recommendations.hollandCode.jobs.map(job => `<li>• ${job}</li>`).join('')}
-                                </ul>
-                            ` : '<p>No specific recommendations available for this code combination.</p>'}
-                        </div>
-                        <div>
-                            <h5>Based on Your MBTI Type (${result.mbtiType})</h5>
-                            ${recommendations.mbti ? `
-                                <p class="text-muted">${recommendations.mbti.description}</p>
-                                <ul class="list-unstyled">
-                                    ${recommendations.mbti.jobs.map(job => `<li>• ${job}</li>`).join('')}
-                                </ul>
-                            ` : '<p>No specific recommendations available for this personality type.</p>'}
+                const resultsDiv = document.getElementById('results');
+                resultsDiv.innerHTML = `
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Your Profile</h3>
+                            <p><strong>Holland Code:</strong> ${result.hollandCode} <br>
+                               <em class="text-muted">${hollandDescription}</em></p>
+                            <p><strong>MBTI Type:</strong> ${result.mbtiType} <br>
+                               <em class="text-muted">${mbtiDescription}</em></p>
                         </div>
                     </div>
-                </div>
 
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h3 class="card-title">Next Steps</h3>
-                        <ul class="list-unstyled">
-                            ${getNextSteps(result).map(step => `<li>• ${step}</li>`).join('')}
-                        </ul>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="card-title">Recommended Roles</h3>
+                            <div class="mb-4">
+                                <h5>Based on Your Holland Code (${result.hollandCode})</h5>
+                                ${recommendations.hollandJobs.map(job => `
+                                    <div class="job-recommendation">
+                                        <h6>${job.title}</h6>
+                                        <p>${job.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div>
+                                <h5>Based on Your MBTI Type (${result.mbtiType})</h5>
+                                ${recommendations.mbtiJobs.map(job => `
+                                    <div class="job-recommendation">
+                                        <h6>${job.title}</h6>
+                                        <p>${job.description}</p>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
                     </div>
-                </div>
+                `;
 
-                <div class="card">
+                // Show training recommendations
+                const trainingDiv = document.createElement('div');
+                trainingDiv.className = 'card mb-4';
+                trainingDiv.innerHTML = `
                     <div class="card-body">
                         <h3 class="card-title">Recommended Training</h3>
-                        <ul class="list-unstyled">
-                            ${getRecommendedTraining(result.hollandCode, result.constructionExperience).map(rec => `<li>• ${rec}</li>`).join('')}
-                        </ul>
+                        ${await (async () => {
+                            const training = await getRecommendedTraining(result.hollandCode, result.constructionExperience);
+                            if (!training || training.length === 0) {
+                                return '<p>No specific training recommendations available yet.</p>';
+                            }
+                            return training.map(group => `
+                                <div class="mb-3">
+                                    <h4 class="text-capitalize">${group.category}</h4>
+                                    <ul class="list-unstyled">
+                                        ${group.courses.map(course => `
+                                            <li class="mb-3">
+                                                <strong>${course.name}</strong>
+                                                <br>Provider: ${course.provider}
+                                                <br>Duration: ${course.duration}
+                                                <br>Cost: ${course.cost}
+                                                ${course.url ? `<br><a href="${course.url}" target="_blank" class="btn btn-sm btn-primary mt-2">Learn More</a>` : ''}
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            `).join('');
+                        })()}
                     </div>
-                </div>
-            `;
-            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+                `;
+                resultsDiv.appendChild(trainingDiv);
+                
+                resultsDiv.style.display = 'block';
+                resultsDiv.scrollIntoView({ behavior: 'smooth' });
+            } catch (error) {
+                console.error('Error displaying results:', error);
+                showNotification('There was an error displaying your results. Please try again.', 'error');
+            }
         }
 
     } catch (error) {
