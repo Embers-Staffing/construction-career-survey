@@ -288,27 +288,37 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const hollandRecommendations = await careerRecommendationService.getHollandCodeRecommendations(hollandCode);
                 const mbtiRecommendations = await careerRecommendationService.getMBTIRecommendations(mbtiType);
 
-                // Check if we have valid recommendations
-                if (!hollandRecommendations && !mbtiRecommendations) {
-                    showNotification('Unable to get career recommendations at this time. Please try again later.', 'error');
-                    return;
-                }
+                DEBUG.debug('Recommendations:', { holland: hollandRecommendations, mbti: mbtiRecommendations });
 
+                // Initialize recommendations with default values
                 const recommendations = {
-                    hollandJobs: hollandRecommendations || { jobs: [], description: 'No specific recommendations available.' },
-                    mbtiJobs: mbtiRecommendations || { jobs: [], description: 'No specific recommendations available.' }
+                    hollandJobs: {
+                        jobs: hollandRecommendations?.jobs || [],
+                        description: hollandRecommendations?.description || 'No specific recommendations available.'
+                    },
+                    mbtiJobs: {
+                        jobs: mbtiRecommendations?.jobs || [],
+                        description: mbtiRecommendations?.description || 'No specific recommendations available.'
+                    }
                 };
+
+                // Check if we have any recommendations
+                if (recommendations.hollandJobs.jobs.length === 0 && recommendations.mbtiJobs.jobs.length === 0) {
+                    showNotification('No career recommendations found for your profile. Please try different selections.', 'warning');
+                }
 
                 // Store response with recommendations
                 const responseData = {
                     ...result,
                     recommendations: {
-                        hollandJobs: recommendations.hollandJobs.jobs || [],
-                        mbtiJobs: recommendations.mbtiJobs.jobs || [],
-                        hollandDescription: recommendations.hollandJobs.description || '',
-                        mbtiDescription: recommendations.mbtiJobs.description || ''
+                        hollandJobs: recommendations.hollandJobs.jobs,
+                        mbtiJobs: recommendations.mbtiJobs.jobs,
+                        hollandDescription: recommendations.hollandJobs.description,
+                        mbtiDescription: recommendations.mbtiJobs.description
                     }
                 };
+
+                DEBUG.debug('Response data:', responseData);
 
                 const responseId = await careerRecommendationService.storeSurveyResponse(responseData);
                 DEBUG.info('Survey response stored with ID:', responseId);
