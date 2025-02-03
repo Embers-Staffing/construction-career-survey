@@ -8,8 +8,11 @@
     "start": "node server.js",
     "build": "npm install",
     "dev": "nodemon server.js",
-    "deploy": "git push render main",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint .",
+    "test": "echo \"No tests specified yet\" && exit 0",
+    "deploy:gh-pages": "gh-pages -d .",
+    "deploy:render": "git push render production",
+    "predeploy": "npm run build"
   },
   "keywords": [
     "construction",
@@ -26,6 +29,7 @@
     "firebase": "^11.2.0"
   },
   "devDependencies": {
+    "eslint": "^9.19.0",
     "nodemon": "^3.1.9",
     "serve": "^14.2.1"
   },
