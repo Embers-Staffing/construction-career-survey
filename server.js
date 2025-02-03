@@ -1,6 +1,10 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+import http from 'http';
+import { promises as fs } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join, extname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const PORT = 3000;
 const MIME_TYPES = {
@@ -14,7 +18,7 @@ const MIME_TYPES = {
     '.ico': 'image/x-icon',
 };
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
     console.log(`${req.method} ${req.url}`);
     
     // Handle favicon.ico requests
@@ -24,47 +28,31 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // Clean up URL and map root to index.html
-    let filePath = '.' + req.url;
-    if (filePath === './') {
-        filePath = './index.html';
-    }
+    // Normalize the URL
+    let filePath = join(__dirname, req.url === '/' ? 'index.html' : req.url);
     
-    // Handle URLs without .html extension
-    if (!path.extname(filePath)) {
-        filePath += '.html';
-    }
-
-    // Get the file extension
-    const extname = path.extname(filePath);
-    const contentType = MIME_TYPES[extname] || 'application/octet-stream';
-
-    // Read the file
-    fs.readFile(filePath, (error, content) => {
-        if (error) {
-            if (error.code === 'ENOENT') {
-                // File not found
-                fs.readFile('./404.html', (err, content) => {
-                    if (err) {
-                        // If no 404.html exists, send plain text
-                        res.writeHead(404, { 'Content-Type': 'text/plain' });
-                        res.end('Error 404: File not found');
-                    } else {
-                        res.writeHead(404, { 'Content-Type': 'text/html' });
-                        res.end(content, 'utf-8');
-                    }
-                });
-            } else {
-                // Server error
-                res.writeHead(500);
-                res.end(`Server Error: ${error.code}`);
-            }
+    try {
+        // Check if file exists and read it
+        const data = await fs.readFile(filePath);
+        
+        // Get the file extension and content type
+        const ext = extname(filePath);
+        const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+        
+        // Send the response
+        res.writeHead(200, { 'Content-Type': contentType });
+        res.end(data);
+    } catch (error) {
+        // If file not found or error reading file
+        console.error(`Error serving ${filePath}:`, error);
+        if (error.code === 'ENOENT') {
+            res.writeHead(404);
+            res.end('404 Not Found');
         } else {
-            // Success
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
+            res.writeHead(500);
+            res.end('500 Internal Server Error');
         }
-    });
+    }
 });
 
 server.listen(PORT, () => {
