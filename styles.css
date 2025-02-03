@@ -641,3 +641,17 @@ footer .bigfoot-link:hover {
 .notification.warning {
     border-left-color: #ffc107;
 }
+
+/* List Styling */
+.list-unstyled li {
+    position: relative;
+    padding-left: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.list-unstyled li:before {
+    content: "•";
+    position: absolute;
+    left: 0.5em;
+    color: #666;
+}

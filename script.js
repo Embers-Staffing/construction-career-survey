@@ -580,13 +580,13 @@ async function displayResults(result, recommendations) {
                 <h3 class="card-title">Career Matches</h3>
                 <h4>Based on Holland Code (${result.hollandCode})</h4>
                 <ul class="list-unstyled">
-                    ${recommendations.hollandJobs.jobs.map(job => `<li>• ${job}</li>`).join('')}
+                    ${recommendations.hollandJobs.jobs.map(job => `<li>${job}</li>`).join('')}
                 </ul>
                 <p class="mt-3">${recommendations.hollandJobs.description}</p>
                 
                 <h4 class="mt-4">Based on MBTI Type (${result.mbtiType})</h4>
                 <ul class="list-unstyled">
-                    ${recommendations.mbtiJobs.jobs.map(job => `<li>• ${job}</li>`).join('')}
+                    ${recommendations.mbtiJobs.jobs.map(job => `<li>${job}</li>`).join('')}
                 </ul>
                 <p class="mt-3">${recommendations.mbtiJobs.description}</p>
             </div>
@@ -596,7 +596,7 @@ async function displayResults(result, recommendations) {
             <div class="card-body">
                 <h3 class="card-title">Next Steps</h3>
                 <ul class="list-unstyled">
-                    ${getNextSteps(result).map(step => `<li>• ${step}</li>`).join('')}
+                    ${getNextSteps(result).map(step => `<li>${step}</li>`).join('')}
                 </ul>
             </div>
         </div>
@@ -605,7 +605,7 @@ async function displayResults(result, recommendations) {
             <div class="card-body">
                 <h3 class="card-title">Recommended Training</h3>
                 <ul class="list-unstyled">
-                    ${trainingRecs.map(rec => `<li>• ${rec}</li>`).join('')}
+                    ${trainingRecs.map(rec => `<li>${rec}</li>`).join('')}
                 </ul>
             </div>
         </div>
