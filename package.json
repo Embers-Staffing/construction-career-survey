@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Construction Career Explorer Survey with Firebase Integration",
   "type": "module",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "start": "serve -s .",
-    "build": "echo 'No build step required for static files'",
-    "dev": "serve -s . -l 3000",
+    "start": "node server.js",
+    "build": "npm install",
+    "dev": "nodemon server.js",
     "deploy": "git push render main",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,9 +21,12 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
     "firebase": "^11.2.0"
   },
   "devDependencies": {
+    "nodemon": "^3.1.9",
     "serve": "^14.2.1"
   },
   "engines": {

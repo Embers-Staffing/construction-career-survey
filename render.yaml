@@ -1,17 +1,11 @@
 services:
   - type: web
     name: construction-career-survey
-    env: static
+    env: node
     buildCommand: npm install
-    staticPublishPath: ./
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: no-cache
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    startCommand: node server.js
     envVars:
       - key: FIREBASE_CONFIG
         sync: false
+    healthCheckPath: /
+    autoDeploy: true
