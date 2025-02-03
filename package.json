@@ -1,38 +1,27 @@
 {
   "name": "construction-career-survey",
   "version": "1.0.0",
-  "description": "Construction Career Explorer Survey with Google Apps Script Integration",
+  "description": "Construction Career Explorer Survey - Static Demo Version",
+  "type": "module",
   "main": "index.html",
   "scripts": {
-    "start": "serve",
-    "build": "echo 'No build step required for static files'",
-    "dev": "serve -l 3000",
-    "deploy": "echo 'Add your deployment script here'",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "audit": "npm audit fix --force"
+    "start": "serve -s .",
+    "dev": "serve -s . -l 3000",
+    "deploy": "gh-pages -d ."
   },
   "keywords": [
     "construction",
     "career",
     "survey",
-    "google-apps-script"
+    "mbti"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^5.3.3",
-    "firebase": "^11.2.0",
-    "jquery": "^3.6.4",
-    "popper.js": "^1.16.1"
+    "bootstrap": "^5.3.3"
   },
   "devDependencies": {
+    "gh-pages": "^6.3.0",
     "serve": "^14.2.1"
-  },
-  "engines": {
-    "node": ">=16.0.0"
-  },
-  "resolutions": {
-    "glob-parent": ">=5.1.2",
-    "minimist": ">=1.2.6"
   }
 }

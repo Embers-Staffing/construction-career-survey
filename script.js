@@ -1,6 +1,6 @@
 'use strict';
 
-import { careerRecommendationService } from './firebase.js';
+import { getRecommendations, getCareerDetails } from './data/career-data.js';
 
 // Debug utilities
 const DEBUG = {
@@ -29,79 +29,11 @@ const DEBUG = {
 const CONFIG = {
     MIN_AGE: 16,
     MAX_AGE: 70,
-    PROGRESS_INTERVAL: 200,
-    PROGRESS_INCREMENT: 10
+    MBTI_TYPES: ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P']
 };
 
 // Career progression and salary data
 const CAREER_DATA = {
-    trainingResources: {
-        technical: [
-            {
-                name: "OSHA 30-Hour Construction Safety",
-                provider: "OSHA Training Institute",
-                duration: "30 hours",
-                cost: "$189",
-                level: "entry",
-                url: "https://www.osha.com/courses/30-hour-construction"
-            },
-            {
-                name: "Construction Project Management Fundamentals",
-                provider: "Construction Management Association of America",
-                duration: "40 hours",
-                cost: "$599",
-                level: "mid",
-                url: "https://www.cmaanet.org/certification"
-            },
-            {
-                name: "Blueprint Reading and Construction Drawings",
-                provider: "American Institute of Constructors",
-                duration: "20 hours",
-                cost: "$299",
-                level: "entry",
-                url: "https://www.professionalconstructor.org/"
-            }
-        ],
-        leadership: [
-            {
-                name: "Construction Leadership and Communication",
-                provider: "Associated General Contractors",
-                duration: "24 hours",
-                cost: "$449",
-                url: "https://www.agc.org/learn/education-training"
-            },
-            {
-                name: "Team Management in Construction",
-                provider: "Construction Management Association",
-                duration: "16 hours",
-                cost: "$349",
-                url: "https://www.cmaanet.org/professional-development"
-            }
-        ],
-        technology: [
-            {
-                name: "Building Information Modeling (BIM)",
-                provider: "Autodesk",
-                duration: "40 hours",
-                cost: "$699",
-                url: "https://www.autodesk.com/certification/construction"
-            },
-            {
-                name: "Construction Technology and Innovation",
-                provider: "Construction Industry Institute",
-                duration: "32 hours",
-                cost: "$549",
-                url: "https://www.construction-institute.org/resources"
-            },
-            {
-                name: "Digital Construction Tools",
-                provider: "Associated Builders and Contractors",
-                duration: "24 hours",
-                cost: "$399",
-                url: "https://www.abc.org/Education-Training"
-            }
-        ]
-    },
     salaryRanges: {
         entry: {
             min: 45000,
@@ -155,205 +87,6 @@ function getCareerProgression(role, experience) {
     ];
 
     return progressionPaths[role] || defaultPath;
-}
-
-async function getRecommendedTraining(role, experience) {
-    try {
-        const recommendations = await careerRecommendationService.getTrainingRecommendations(role, experience);
-        
-        if (!recommendations || recommendations.length === 0) {
-            DEBUG.debug('No training recommendations found for:', { role, experience });
-            return [];
-        }
-
-        // Group recommendations by category
-        const groupedRecommendations = recommendations.reduce((acc, course) => {
-            if (!acc[course.category]) {
-                acc[course.category] = [];
-            }
-            acc[course.category].push(course);
-            return acc;
-        }, {});
-
-        // Convert to array format
-        return Object.entries(groupedRecommendations).map(([category, courses]) => ({
-            category,
-            courses
-        }));
-    } catch (error) {
-        DEBUG.error('Error getting training recommendations:', error);
-        return []; // Return empty array on error
-    }
-}
-
-function calculateAge(birthYear, birthMonth) {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1; // JavaScript months are 0-based
-
-    if (!birthYear || isNaN(birthYear) || !birthMonth || isNaN(birthMonth)) {
-        DEBUG.debug('Invalid age inputs:', { year: birthYear, month: birthMonth });
-        return null;
-    }
-
-    let age = currentYear - birthYear;
-    
-    // Adjust age if birthday hasn't occurred this year
-    if (currentMonth < birthMonth) {
-        age--;
-    }
-
-    DEBUG.debug('Age calculated:', { year: birthYear, month: birthMonth, age: age });
-    return age;
-}
-
-async function getTrainingRecommendations(result) {
-    try {
-        const { constructionExperience } = result;
-        const recommendations = await careerRecommendationService.getTrainingRecommendations('construction', constructionExperience);
-        return recommendations || [];
-    } catch (error) {
-        console.error('Error getting training recommendations:', error);
-        return [];
-    }
-}
-
-// Initialize form when DOM is loaded
-document.addEventListener('DOMContentLoaded', async function() {
-    try {
-        DEBUG.info('Initializing application');
-
-        // Get form elements
-        const form = document.getElementById('careerForm');
-        const resultsDiv = document.getElementById('results');
-        const yearSelect = document.getElementById('birthYear');
-        const monthSelect = document.getElementById('birthMonth');
-        const hollandCodeCheckboxes = document.querySelectorAll('.holland-code');
-
-        // Initialize form elements
-        initializeForm();
-
-        // Add event listener for form submission
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            try {
-                DEBUG.info('Form submitted, processing...');
-                
-                // Get form data
-                const formData = new FormData(form);
-                
-                // Calculate age
-                const birthYear = parseInt(formData.get('birthYear'));
-                const birthMonth = parseInt(formData.get('birthMonth'));
-                const age = calculateAge(birthYear, birthMonth);
-                
-                DEBUG.debug('Age calculated:', { year: birthYear, month: birthMonth, age });
-
-                if (age === null || age < CONFIG.MIN_AGE) {
-                    showNotification('Please enter a valid birth date. You must be at least 16 years old.', 'error');
-                    return;
-                }
-
-                // Get Holland Code
-                const selectedHollandCodes = Array.from(document.querySelectorAll('.holland-code:checked'))
-                    .map(cb => {
-                        // Extract first letter and convert to uppercase
-                        const match = cb.value.match(/^[a-zA-Z]/);
-                        return match ? match[0].toUpperCase() : '';
-                    })
-                    .filter(code => code !== ''); // Remove any empty codes
-
-                if (selectedHollandCodes.length !== 3) {
-                    showNotification('Please select exactly three Holland Code traits.', 'error');
-                    return;
-                }
-
-                const hollandCode = selectedHollandCodes.sort().join('');
-                DEBUG.debug('Holland Code:', { raw: selectedHollandCodes, normalized: hollandCode });
-
-                // Get MBTI type
-                const mbtiType = getMBTIType(formData);
-                if (!mbtiType) {
-                    showNotification('Please complete all personality type questions.', 'error');
-                    return;
-                }
-
-                // Prepare result object
-                const result = {
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    age,
-                    constructionExperience: parseInt(formData.get('constructionExperience')) || 0,
-                    hollandCode,
-                    mbtiType,
-                    timestamp: new Date().toISOString()
-                };
-
-                // Get recommendations first
-                const hollandRecommendations = await careerRecommendationService.getHollandCodeRecommendations(hollandCode);
-                const mbtiRecommendations = await careerRecommendationService.getMBTIRecommendations(mbtiType);
-
-                DEBUG.debug('Recommendations:', { holland: hollandRecommendations, mbti: mbtiRecommendations });
-
-                // Initialize recommendations with default values
-                const recommendations = {
-                    hollandJobs: {
-                        jobs: hollandRecommendations?.jobs || [],
-                        description: hollandRecommendations?.description || 'No specific recommendations available.'
-                    },
-                    mbtiJobs: {
-                        jobs: mbtiRecommendations?.jobs || [],
-                        description: mbtiRecommendations?.description || 'No specific recommendations available.'
-                    }
-                };
-
-                // Check if we have any recommendations
-                if (recommendations.hollandJobs.jobs.length === 0 && recommendations.mbtiJobs.jobs.length === 0) {
-                    showNotification('No career recommendations found for your profile. Please try different selections.', 'warning');
-                }
-
-                // Store response with recommendations
-                const responseData = {
-                    ...result,
-                    recommendations: {
-                        hollandJobs: recommendations.hollandJobs.jobs,
-                        mbtiJobs: recommendations.mbtiJobs.jobs,
-                        hollandDescription: recommendations.hollandJobs.description,
-                        mbtiDescription: recommendations.mbtiJobs.description
-                    }
-                };
-
-                DEBUG.debug('Response data:', responseData);
-
-                const responseId = await careerRecommendationService.storeSurveyResponse(responseData);
-                DEBUG.info('Survey response stored with ID:', responseId);
-
-                // Display results
-                await displayResults(result, recommendations);
-                
-                // Show success message
-                showNotification('Your career recommendations are ready!', 'success');
-                
-                DEBUG.info('Results displayed successfully');
-                
-            } catch (error) {
-                DEBUG.error('Error processing form:', error);
-                showNotification('There was an error processing your information. Please try again.', 'error');
-            }
-        });
-
-    } catch (error) {
-        console.error('Initialization failed:', error);
-    }
-});
-
-// Helper function to get MBTI type
-function getMBTIType(formData) {
-    return (formData.get('mbtiEI') || '') +
-           (formData.get('mbtiSN') || '') +
-           (formData.get('mbtiTF') || '') +
-           (formData.get('mbtiJP') || '');
 }
 
 function getSalaryRange(careerPath) {
@@ -567,28 +300,17 @@ function getNextSteps(result) {
     return steps;
 }
 
-async function displayResults(result, recommendations) {
+async function displayResults(result, careerDetails) {
     const resultsDiv = document.getElementById('results');
     resultsDiv.style.display = 'block';
-
-    // Get training recommendations
-    const trainingRecs = await getTrainingRecommendations(result);
 
     resultsDiv.innerHTML = `
         <div class="card mb-4">
             <div class="card-body">
                 <h3 class="card-title">Career Matches</h3>
-                <h4>Based on Holland Code (${result.hollandCode})</h4>
                 <ul class="list-unstyled">
-                    ${recommendations.hollandJobs.jobs.map(job => `<li>${job}</li>`).join('')}
+                    ${careerDetails.map(career => `<li>${career.title}</li>`).join('')}
                 </ul>
-                <p class="mt-3">${recommendations.hollandJobs.description}</p>
-                
-                <h4 class="mt-4">Based on MBTI Type (${result.mbtiType})</h4>
-                <ul class="list-unstyled">
-                    ${recommendations.mbtiJobs.jobs.map(job => `<li>${job}</li>`).join('')}
-                </ul>
-                <p class="mt-3">${recommendations.mbtiJobs.description}</p>
             </div>
         </div>
 
@@ -603,10 +325,17 @@ async function displayResults(result, recommendations) {
 
         <div class="card">
             <div class="card-body">
-                <h3 class="card-title">Recommended Training</h3>
-                <ul class="list-unstyled">
-                    ${trainingRecs.map(rec => `<li>${rec}</li>`).join('')}
-                </ul>
+                <h3 class="card-title">Career Details</h3>
+                ${careerDetails.map(career => `
+                    <h4>${career.title}</h4>
+                    <p>Salary Range: ${getSalaryRange(career.title)}</p>
+                    <p>Required Skills: ${getRequiredSkills(career.title).join(', ')}</p>
+                    <p>Career Growth: ${getCareerGrowth(career.title)}</p>
+                    <p>Progression Steps:</p>
+                    <ul class="list-unstyled">
+                        ${getProgressionSteps(career.title).map(step => `<li>${step.title} - ${step.salary} - ${step.timeframe}</li>`).join('')}
+                    </ul>
+                `).join('')}
             </div>
         </div>
     `;
@@ -667,4 +396,68 @@ function showNotification(message, type = 'info') {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+// Initialize form when DOM is loaded
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        DEBUG.info('Initializing application');
+        initializeForm();
+
+        // Get form elements
+        const form = document.getElementById('careerForm');
+        
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            try {
+                DEBUG.info('Form submitted, processing...');
+                const formData = new FormData(form);
+                
+                // Get MBTI type from form data
+                const mbtiType = getMBTIType(formData);
+                DEBUG.info('MBTI Type:', mbtiType);
+
+                // Get career recommendations
+                const recommendations = getRecommendations(mbtiType);
+                DEBUG.info('Career recommendations:', recommendations);
+
+                if (recommendations && recommendations.length > 0) {
+                    const result = {
+                        mbtiType,
+                        recommendations,
+                        selectedCareer: recommendations[0]
+                    };
+
+                    // Get detailed information for the recommended careers
+                    const careerDetails = recommendations.map(career => ({
+                        title: career,
+                        ...getCareerDetails(career)
+                    }));
+
+                    // Display results
+                    displayResults(result, careerDetails);
+                    
+                    // Show success message
+                    showNotification('Your career recommendations are ready!', 'success');
+                } else {
+                    showNotification('No recommendations found for your personality type.', 'warning');
+                }
+                
+            } catch (error) {
+                DEBUG.error('Error processing form:', error);
+                showNotification('There was an error processing your information. Please try again.', 'error');
+            }
+        });
+
+    } catch (error) {
+        console.error('Initialization failed:', error);
+    }
+});
+
+function getMBTIType(formData) {
+    return (formData.get('mbtiEI') || '') +
+           (formData.get('mbtiSN') || '') +
+           (formData.get('mbtiTF') || '') +
+           (formData.get('mbtiJP') || '');
 }

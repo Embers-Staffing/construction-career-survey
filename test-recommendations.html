@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Career Recommendations</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        .card {
+            border: 1px solid #ddd;
+            padding: 1em;
+            margin: 1em 0;
+            border-radius: 4px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        button { margin: 0.5em; padding: 0.5em 1em; }
+    </style>
+</head>
+<body>
+    <h1>Test Career Recommendations</h1>
+    
+    <div class="card">
+        <h2>Test Holland Code Recommendations</h2>
+        <button onclick="testHollandCode('RIA')">Test RIA</button>
+        <button onclick="testHollandCode('RIE')">Test RIE</button>
+        <button onclick="testHollandCode('RSE')">Test RSE</button>
+        <div id="holland-result"></div>
+    </div>
+
+    <div class="card">
+        <h2>Test MBTI Recommendations</h2>
+        <button onclick="testMBTI('ISTJ')">Test ISTJ</button>
+        <button onclick="testMBTI('ESTP')">Test ESTP</button>
+        <button onclick="testMBTI('ENTJ')">Test ENTJ</button>
+        <div id="mbti-result"></div>
+    </div>
+
+    <div class="card">
+        <h2>Test Survey Storage</h2>
+        <button onclick="testSurveyStorage()">Test Store Survey</button>
+        <div id="storage-result"></div>
+    </div>
+
+    <script type="module">
+        import { careerRecommendationService } from './firebase.js';
+
+        // Make functions available globally
+        window.testHollandCode = async (code) => {
+            try {
+                const result = await careerRecommendationService.getHollandCodeRecommendations(code);
+                document.getElementById('holland-result').innerHTML = `
+                    <pre class="success">${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('holland-result').innerHTML = `
+                    <pre class="error">${error.message}</pre>
+                `;
+            }
+        };
+
+        window.testMBTI = async (type) => {
+            try {
+                const result = await careerRecommendationService.getMBTIRecommendations(type);
+                document.getElementById('mbti-result').innerHTML = `
+                    <pre class="success">${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('mbti-result').innerHTML = `
+                    <pre class="error">${error.message}</pre>
+                `;
+            }
+        };
+
+        window.testSurveyStorage = async () => {
+            try {
+                const sampleSurvey = {
+                    personalInfo: {
+                        name: 'Test User',
+                        email: 'test@example.com'
+                    },
+                    hollandCode: 'RIA',
+                    mbtiType: 'ISTJ'
+                };
+
+                const hollandRecs = await careerRecommendationService.getHollandCodeRecommendations('RIA');
+                const mbtiRecs = await careerRecommendationService.getMBTIRecommendations('ISTJ');
+
+                const responseId = await careerRecommendationService.storeSurveyResponse(
+                    sampleSurvey,
+                    { hollandRecs, mbtiRecs }
+                );
+
+                document.getElementById('storage-result').innerHTML = `
+                    <pre class="success">Survey stored successfully! ID: ${responseId}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('storage-result').innerHTML = `
+                    <pre class="error">${error.message}</pre>
+                `;
+            }
+        };
+    </script>
+</body>
+</html>
