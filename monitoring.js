@@ -1,58 +1,55 @@
 import promBundle from 'express-prom-bundle';
-import { register, collectDefaultMetrics } from 'prom-client';
+import client from 'prom-client';
 
-// Collect default Node.js metrics
-collectDefaultMetrics({ register });
+// Create a Registry
+const register = new client.Registry();
+
+// Add default metrics (e.g., memory usage, CPU usage)
+client.collectDefaultMetrics({ register });
 
 // Create custom metrics
-const httpRequestDurationMicroseconds = new register.Histogram({
+const httpRequestDurationMicroseconds = new client.Histogram({
     name: 'http_request_duration_seconds',
     help: 'Duration of HTTP requests in seconds',
-    labelNames: ['method', 'route', 'status_code'],
-    buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10]
+    labelNames: ['method', 'route', 'code'],
+    buckets: [0.1, 0.5, 1, 2, 5]
 });
 
-const memoryUsageGauge = new register.Gauge({
-    name: 'nodejs_memory_usage_bytes',
-    help: 'Memory usage of the Node.js process in bytes',
-    labelNames: ['type']
-});
-
-// Update memory metrics every 15 seconds
-setInterval(() => {
-    const memoryUsage = process.memoryUsage();
-    memoryUsageGauge.set({ type: 'rss' }, memoryUsage.rss);
-    memoryUsageGauge.set({ type: 'heapTotal' }, memoryUsage.heapTotal);
-    memoryUsageGauge.set({ type: 'heapUsed' }, memoryUsage.heapUsed);
-    memoryUsageGauge.set({ type: 'external' }, memoryUsage.external);
-}, 15000);
+// Register the custom metrics
+register.registerMetric(httpRequestDurationMicroseconds);
 
 // Create middleware
-export const metricsMiddleware = promBundle({
+const metricsMiddleware = promBundle({
     includeMethod: true,
     includePath: true,
-    includeStatusCode: true,
-    includeUp: true,
-    customLabels: { project: 'construction-career-survey' },
-    promClient: { collectDefaultMetrics: {} }
+    promClient: client,
+    promRegistry: register
 });
 
-// Create health check endpoint data
-export const getHealthMetrics = () => {
+// Health metrics function
+const getHealthMetrics = () => {
     const memoryUsage = process.memoryUsage();
-    const totalMemoryMB = Math.round(memoryUsage.heapTotal / 1024 / 1024);
-    const usedMemoryMB = Math.round(memoryUsage.heapUsed / 1024 / 1024);
-    const memoryUsagePercent = Math.round((usedMemoryMB / totalMemoryMB) * 100);
-
+    const uptimeHours = process.uptime() / 3600;
+    
     return {
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        memory: {
-            total: `${totalMemoryMB}MB`,
-            used: `${usedMemoryMB}MB`,
-            percentage: `${memoryUsagePercent}%`
+        uptime: {
+            hours: uptimeHours.toFixed(2),
+            days: (uptimeHours / 24).toFixed(2)
         },
-        uptime: process.uptime(),
-        version: process.version
+        memory: {
+            heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024),
+            heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024),
+            rss: Math.round(memoryUsage.rss / 1024 / 1024),
+            external: Math.round(memoryUsage.external / 1024 / 1024)
+        },
+        node: {
+            version: process.version,
+            platform: process.platform,
+            pid: process.pid
+        }
     };
 };
+
+export { metricsMiddleware, getHealthMetrics, register };
