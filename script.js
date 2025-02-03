@@ -207,9 +207,15 @@ function calculateAge(birthYear, birthMonth) {
     return age;
 }
 
-function getTrainingRecommendations(result) {
-    const { role, experience } = result;
-    return getRecommendedTraining(role, experience);
+async function getTrainingRecommendations(result) {
+    try {
+        const { constructionExperience } = result;
+        const recommendations = await careerRecommendationService.getTrainingRecommendations('construction', constructionExperience);
+        return recommendations || [];
+    } catch (error) {
+        console.error('Error getting training recommendations:', error);
+        return [];
+    }
 }
 
 // Initialize form when DOM is loaded
@@ -561,41 +567,28 @@ function getNextSteps(result) {
     return steps;
 }
 
-function displayResults(result, recommendations) {
+async function displayResults(result, recommendations) {
     const resultsDiv = document.getElementById('results');
+    resultsDiv.style.display = 'block';
+
+    // Get training recommendations
+    const trainingRecs = await getTrainingRecommendations(result);
+
     resultsDiv.innerHTML = `
         <div class="card mb-4">
             <div class="card-body">
-                <h3 class="card-title">Your Profile</h3>
-                <p><strong>Name:</strong> ${result.firstName} ${result.lastName}</p>
-                <p><strong>Age:</strong> ${result.age}</p>
-                <p><strong>Construction Experience:</strong> ${result.constructionExperience}</p>
-                <p><strong>MBTI Type:</strong> ${result.mbtiType}</p>
-                <p><strong>Holland Code:</strong> ${result.hollandCode}</p>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3 class="card-title">Recommended Roles</h3>
-                <div class="mb-4">
-                    <h5>Based on Your Holland Code (${result.hollandCode})</h5>
-                    ${recommendations.hollandJobs ? `
-                        <p class="text-muted">${recommendations.hollandJobs.description}</p>
-                        <ul class="list-unstyled">
-                            ${recommendations.hollandJobs.jobs.map(job => `<li>• ${job}</li>`).join('')}
-                        </ul>
-                    ` : '<p>No specific recommendations available for this code combination.</p>'}
-                </div>
-                <div>
-                    <h5>Based on Your MBTI Type (${result.mbtiType})</h5>
-                    ${recommendations.mbtiJobs ? `
-                        <p class="text-muted">${recommendations.mbtiJobs.description}</p>
-                        <ul class="list-unstyled">
-                            ${recommendations.mbtiJobs.jobs.map(job => `<li>• ${job}</li>`).join('')}
-                        </ul>
-                    ` : '<p>No specific recommendations available for this personality type.</p>'}
-                </div>
+                <h3 class="card-title">Career Matches</h3>
+                <h4>Based on Holland Code (${result.hollandCode})</h4>
+                <ul class="list-unstyled">
+                    ${recommendations.hollandJobs.jobs.map(job => `<li>• ${job}</li>`).join('')}
+                </ul>
+                <p class="mt-3">${recommendations.hollandJobs.description}</p>
+                
+                <h4 class="mt-4">Based on MBTI Type (${result.mbtiType})</h4>
+                <ul class="list-unstyled">
+                    ${recommendations.mbtiJobs.jobs.map(job => `<li>• ${job}</li>`).join('')}
+                </ul>
+                <p class="mt-3">${recommendations.mbtiJobs.description}</p>
             </div>
         </div>
 
@@ -612,7 +605,7 @@ function displayResults(result, recommendations) {
             <div class="card-body">
                 <h3 class="card-title">Recommended Training</h3>
                 <ul class="list-unstyled">
-                    ${getTrainingRecommendations(result).map(rec => `<li>• ${rec}</li>`).join('')}
+                    ${trainingRecs.map(rec => `<li>• ${rec}</li>`).join('')}
                 </ul>
             </div>
         </div>
