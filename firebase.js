@@ -58,13 +58,29 @@ class CareerRecommendationService {
             
             if (!docSnap.exists()) {
                 console.warn(`No recommendations found for MBTI type: ${mbtiType}`);
-                return null;
+                
+                // Default recommendations based on first two letters
+                const defaultRecs = {
+                    'IN': ['Construction Planner', 'BIM Specialist', 'Quality Assurance Manager'],
+                    'IS': ['Building Inspector', 'Materials Specialist', 'Documentation Specialist'],
+                    'EN': ['Project Manager', 'Business Developer', 'Client Relations Manager'],
+                    'ES': ['Site Supervisor', 'Team Leader', 'Operations Manager']
+                };
+
+                const type = mbtiType.substring(0, 2);
+                return {
+                    jobs: defaultRecs[type] || ['Project Coordinator', 'Construction Manager', 'Quality Inspector'],
+                    description: `Based on your personality type (${mbtiType}), these roles match your work style and strengths in construction.`
+                };
             }
             
             return docSnap.data();
         } catch (error) {
             console.error('Error getting MBTI recommendations:', error);
-            throw error;
+            return {
+                jobs: ['Project Coordinator', 'Construction Manager', 'Quality Inspector'],
+                description: 'These versatile roles offer opportunities to leverage various personality strengths.'
+            };
         }
     }
 
@@ -75,15 +91,26 @@ class CareerRecommendationService {
      */
     async getHollandCodeRecommendations(hollandCode) {
         try {
-            // Code should already be normalized from the form
             const docRef = doc(this.db, 'holland_codes', hollandCode);
             const docSnap = await getDoc(docRef);
             
             if (!docSnap.exists()) {
                 console.warn(`No recommendations found for Holland Code: ${hollandCode}`);
+                
+                // Default recommendations based on first letter
+                const primaryType = hollandCode[0];
+                const defaultRecs = {
+                    'R': ['Construction Site Manager', 'Equipment Operator', 'Safety Inspector'],
+                    'I': ['Building Systems Engineer', 'Construction Estimator', 'Project Planner'],
+                    'A': ['Interior Designer', 'Architectural Drafter', 'Landscape Designer'],
+                    'S': ['Construction Trainer', 'Safety Coordinator', 'Team Supervisor'],
+                    'E': ['Construction Project Manager', 'Business Development Manager', 'General Contractor'],
+                    'C': ['Quality Control Inspector', 'Building Code Inspector', 'Construction Administrator']
+                };
+
                 return {
-                    jobs: [],
-                    description: `No specific recommendations found for Holland Code: ${hollandCode}. Please try a different combination.`
+                    jobs: defaultRecs[primaryType] || ['Project Manager', 'Site Supervisor', 'Safety Coordinator'],
+                    description: `Based on your primary interest type (${primaryType}), these roles align with your preferences while offering opportunities in construction.`
                 };
             }
             
@@ -91,8 +118,8 @@ class CareerRecommendationService {
         } catch (error) {
             console.error('Error getting Holland Code recommendations:', error);
             return {
-                jobs: [],
-                description: 'Unable to retrieve recommendations at this time. Please try again later.'
+                jobs: ['Project Manager', 'Site Supervisor', 'Safety Coordinator'],
+                description: 'These are general construction roles that offer various opportunities for growth.'
             };
         }
     }
