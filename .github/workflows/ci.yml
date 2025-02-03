@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, production ]
+    branches: [ main, production, gh-pages ]
   pull_request:
-    branches: [ main, production ]
+    branches: [ main, production, gh-pages ]
 
 jobs:
   test:
@@ -24,27 +24,41 @@ jobs:
         cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm install
+      
+    - name: Create empty .env file
+      run: touch .env
     
     - name: Run linting
-      run: npm run lint || true # Make optional for now
+      run: npm run lint || true
     
     - name: Run tests
-      run: npm run test || true # Make optional for now
+      run: npm run test || true
 
   deploy-gh-pages:
     needs: test
     if: github.ref == 'refs/heads/gh-pages'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        
+    - name: Install dependencies
+      run: npm install
     
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: .
+        force_orphan: true
 
   deploy-render:
     needs: test
