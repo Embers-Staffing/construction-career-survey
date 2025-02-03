@@ -160,7 +160,7 @@ class CareerRecommendationService {
      * Get training recommendations based on experience level
      * @param {string} role - Role or job title
      * @param {number} experience - Years of experience
-     * @returns {Promise<Array>} Training recommendations
+     * @returns {Promise<Array<string>>} Training recommendations
      */
     async getTrainingRecommendations(role, experience) {
         try {
@@ -169,21 +169,49 @@ class CareerRecommendationService {
             
             if (querySnapshot.empty) {
                 console.warn('No training resources found');
-                return [];
+                return [
+                    'OSHA Safety Training',
+                    'Basic Construction Methods',
+                    'Construction Math and Measurements',
+                    'Blueprint Reading Fundamentals',
+                    'Tool and Equipment Safety'
+                ];
             }
 
             const recommendations = [];
             querySnapshot.forEach(doc => {
                 const course = doc.data();
                 if (!course.level || course.level === skillLevel || course.level === 'all') {
-                    recommendations.push(course);
+                    // Format the recommendation nicely
+                    const rec = course.title || course.name;
+                    if (rec) {
+                        recommendations.push(rec);
+                    }
                 }
             });
+
+            // If no recommendations found, return default list
+            if (recommendations.length === 0) {
+                return [
+                    'OSHA Safety Training',
+                    'Basic Construction Methods',
+                    'Construction Math and Measurements',
+                    'Blueprint Reading Fundamentals',
+                    'Tool and Equipment Safety'
+                ];
+            }
 
             return recommendations;
         } catch (error) {
             console.error('Error getting training recommendations:', error);
-            return [];
+            // Return default recommendations on error
+            return [
+                'OSHA Safety Training',
+                'Basic Construction Methods',
+                'Construction Math and Measurements',
+                'Blueprint Reading Fundamentals',
+                'Tool and Equipment Safety'
+            ];
         }
     }
 }
