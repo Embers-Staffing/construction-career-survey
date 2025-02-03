@@ -251,14 +251,14 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 // Get Holland Code
                 const selectedHollandCodes = Array.from(document.querySelectorAll('.holland-code:checked'))
-                    .map(cb => cb.value);
+                    .map(cb => cb.value[0].toUpperCase()); // Take just the first letter of each trait
 
                 if (selectedHollandCodes.length !== 3) {
                     showNotification('Please select exactly three Holland Code traits.', 'error');
                     return;
                 }
 
-                const hollandCode = selectedHollandCodes.join('');
+                const hollandCode = selectedHollandCodes.sort().join(''); // Sort and join the letters
                 DEBUG.debug('Holland Code:', hollandCode);
 
                 // Get MBTI type

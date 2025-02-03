@@ -75,21 +75,15 @@ class CareerRecommendationService {
      */
     async getHollandCodeRecommendations(hollandCode) {
         try {
-            // Convert to uppercase and sort to match database format
-            const normalizedCode = hollandCode
-                .match(/.{1,1}/g) // Split into single characters
-                .map(c => c[0].toUpperCase()) // Take first letter and uppercase
-                .sort() // Sort alphabetically
-                .join(''); // Join back together
-
-            const docRef = doc(this.db, 'holland_codes', normalizedCode);
+            // Code should already be normalized from the form
+            const docRef = doc(this.db, 'holland_codes', hollandCode);
             const docSnap = await getDoc(docRef);
             
             if (!docSnap.exists()) {
-                console.warn(`No recommendations found for Holland Code: ${normalizedCode}`);
+                console.warn(`No recommendations found for Holland Code: ${hollandCode}`);
                 return {
                     jobs: [],
-                    description: `No specific recommendations found for Holland Code: ${normalizedCode}. Please try a different combination.`
+                    description: `No specific recommendations found for Holland Code: ${hollandCode}. Please try a different combination.`
                 };
             }
             
