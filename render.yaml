@@ -1,11 +1,18 @@
 services:
   - type: web
     name: construction-career-survey
-    env: node
-    buildCommand: npm install
-    startCommand: node server.js
+    env: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
     envVars:
       - key: FIREBASE_CONFIG
         sync: false
-    healthCheckPath: /
+      - key: NODE_ENV
+        value: production
+    scaling:
+      minInstances: 1
+      maxInstances: 3
+      targetMemoryPercent: 80
     autoDeploy: true
+    domains:
+      - construction-career-survey.onrender.com
