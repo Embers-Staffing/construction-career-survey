@@ -122,15 +122,27 @@ class CareerRecommendationService {
 
     /**
      * Store a survey response with recommendations
-     * @param {Object} surveyData - Survey response data
-     * @param {Object} recommendations - Generated recommendations
+     * @param {Object} data - Survey response data including recommendations
      * @returns {Promise<string>} ID of the stored survey response
      */
-    async storeSurveyResponse(surveyData, recommendations) {
+    async storeSurveyResponse(data) {
         try {
+            // Ensure all fields have valid values
             const response = {
-                ...surveyData,
-                recommendations,
+                firstName: data.firstName || '',
+                lastName: data.lastName || '',
+                birthYear: data.birthYear || 0,
+                birthMonth: data.birthMonth || 0,
+                age: data.age || 0,
+                constructionExperience: data.constructionExperience || 0,
+                hollandCode: data.hollandCode || '',
+                mbtiType: data.mbtiType || '',
+                recommendations: {
+                    hollandJobs: data.recommendations?.hollandJobs || [],
+                    mbtiJobs: data.recommendations?.mbtiJobs || [],
+                    hollandDescription: data.recommendations?.hollandDescription || '',
+                    mbtiDescription: data.recommendations?.mbtiDescription || ''
+                },
                 timestamp: new Date().toISOString(),
                 status: 'completed'
             };
