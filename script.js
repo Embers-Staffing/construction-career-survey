@@ -251,15 +251,20 @@ document.addEventListener('DOMContentLoaded', async function() {
 
                 // Get Holland Code
                 const selectedHollandCodes = Array.from(document.querySelectorAll('.holland-code:checked'))
-                    .map(cb => cb.value[0].toUpperCase()); // Take just the first letter of each trait
+                    .map(cb => {
+                        // Extract first letter and convert to uppercase
+                        const match = cb.value.match(/^[a-zA-Z]/);
+                        return match ? match[0].toUpperCase() : '';
+                    })
+                    .filter(code => code !== ''); // Remove any empty codes
 
                 if (selectedHollandCodes.length !== 3) {
                     showNotification('Please select exactly three Holland Code traits.', 'error');
                     return;
                 }
 
-                const hollandCode = selectedHollandCodes.sort().join(''); // Sort and join the letters
-                DEBUG.debug('Holland Code:', hollandCode);
+                const hollandCode = selectedHollandCodes.sort().join('');
+                DEBUG.debug('Holland Code:', { raw: selectedHollandCodes, normalized: hollandCode });
 
                 // Get MBTI type
                 const mbtiType = getMBTIType(formData);
