@@ -1,4 +1,6 @@
+import http from 'http';
 import express from 'express';
+import helmet from 'helmet';
 import { promises as fs } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join, extname } from 'path';
@@ -20,6 +22,25 @@ const MIME_TYPES = {
     '.gif': 'image/gif',
     '.ico': 'image/x-icon',
 };
+
+// Security middleware
+app.use(helmet());
+app.use(helmet.hsts({
+    maxAge: 31536000, // 1 year in seconds
+    includeSubDomains: true,
+    preload: true
+}));
+
+// Force HTTPS in production
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.header('x-forwarded-proto') !== 'https') {
+            res.redirect(`https://${req.header('host')}${req.url}`);
+        } else {
+            next();
+        }
+    });
+}
 
 // Add monitoring middleware
 app.use(metricsMiddleware);
