@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import { promises as fs } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join, extname } from 'path';
-import { metricsMiddleware, getHealthMetrics } from './monitoring.js';
+import { metricsMiddleware, getHealthMetrics, register } from './monitoring.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -46,9 +46,14 @@ if (process.env.NODE_ENV === 'production') {
 app.use(metricsMiddleware);
 
 // Serve metrics endpoint for Prometheus
-app.get('/metrics', (req, res) => {
-    res.set('Content-Type', register.contentType);
-    register.metrics().then(metrics => res.end(metrics));
+app.get('/metrics', async (req, res) => {
+    try {
+        res.set('Content-Type', register.contentType);
+        const metrics = await register.metrics();
+        res.end(metrics);
+    } catch (err) {
+        res.status(500).end(err.message);
+    }
 });
 
 // Enhanced health check endpoint
