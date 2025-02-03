@@ -12,19 +12,21 @@ const httpRequestDurationMicroseconds = new client.Histogram({
     name: 'http_request_duration_seconds',
     help: 'Duration of HTTP requests in seconds',
     labelNames: ['method', 'route', 'code'],
-    buckets: [0.1, 0.5, 1, 2, 5]
+    buckets: [0.1, 0.5, 1, 2, 5],
+    registers: [register] // Explicitly specify the register
+});
+
+// Create middleware with explicit configuration
+const metricsMiddleware = promBundle({
+    includeMethod: true,
+    includePath: true,
+    promClient: { collectDefaultMetrics: { register } }, // Properly configure default metrics
+    promRegistry: register,
+    autoregister: false // Don't auto-register metrics
 });
 
 // Register the custom metrics
 register.registerMetric(httpRequestDurationMicroseconds);
-
-// Create middleware
-const metricsMiddleware = promBundle({
-    includeMethod: true,
-    includePath: true,
-    promClient: client,
-    promRegistry: register
-});
 
 // Health metrics function
 const getHealthMetrics = () => {
