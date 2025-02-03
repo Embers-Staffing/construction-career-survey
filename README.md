@@ -94,6 +94,24 @@ streamlit run dashboard.py
 
 4. Access the dashboard at `http://localhost:1805`
 
+## Deployment
+
+This app is deployed on [Render](https://render.com).
+
+1. Create a new Static Site on Render:
+   - Connect your GitHub repository
+   - Build Command: `npm install`
+   - Publish Directory: `.`
+
+2. Add environment variables:
+   - Add your Firebase configuration as `FIREBASE_CONFIG`
+
+3. Deploy from local:
+```bash
+git remote add render https://github.com/Embers-Staffing/construction-career-survey.git
+npm run deploy
+```
+
 ## Development
 
 ### Project Structure
