@@ -3,7 +3,8 @@ services:
     name: construction-career-survey
     env: docker
     dockerfilePath: ./Dockerfile
-    healthCheckPath: /
+    branch: production
+    healthCheckPath: /health
     envVars:
       - key: FIREBASE_CONFIG
         sync: false
