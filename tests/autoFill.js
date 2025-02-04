@@ -38,6 +38,32 @@ function autoFillSurvey() {
             }
         });
 
+        // Select technical skills
+        const technicalSkills = [
+            'hand-power-tools',
+            'blueprint-reading',
+            'construction-math',
+            'safety-procedures',
+            'heavy-equipment',
+            'computer-software'
+        ];
+        technicalSkills.forEach(skill => {
+            const checkbox = document.querySelector(`input[name="technicalSkills"][value="${skill}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            } else {
+                DEBUG.error(`Technical skill checkbox not found: ${skill}`);
+            }
+        });
+
+        // Select certifications
+        const certificationSelect = document.querySelector('select[name="certifications"]');
+        if (certificationSelect) {
+            certificationSelect.value = 'osha-30';  // Example certification
+        } else {
+            DEBUG.error('Certifications select not found');
+        }
+
         // Select career interests (max 3)
         const careerInterests = ['trades', 'tech-specialist', 'project-management'];
         careerInterests.forEach(interest => {
