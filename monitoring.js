@@ -6,34 +6,25 @@ import client from 'prom-client';
 // Create a Registry
 const register = new client.Registry();
 
-// Create custom metrics
-const httpRequestDurationMicroseconds = new client.Histogram({
-    name: 'http_request_duration_seconds',
-    help: 'Duration of HTTP requests in seconds',
-    labelNames: ['method', 'route', 'code'],
-    buckets: [0.1, 0.5, 1, 2, 5],
-    registers: [register]
-});
-
 // Create middleware with explicit configuration
 const metricsMiddleware = promBundle({
     includeMethod: true,
     includePath: true,
     promRegistry: register,
+    buckets: [0.1, 0.5, 1, 2, 5], // Define histogram buckets
+    normalizePath: [
+        ['^/static/.*', '/static/#path'], // Normalize static paths
+        ['^/api/.*', '/api/#path']        // Normalize API paths
+    ],
+    formatStatusCode: (res) => res.status, // Use status directly
     autoregister: false, // Prevent auto-registration
     promClient: {
-        collectDefaultMetrics: false // Disable default metrics in the bundle
+        collectDefaultMetrics: {
+            prefix: 'app_',  // Add prefix to prevent conflicts
+            register
+        }
     }
 });
-
-// Add default metrics after middleware setup
-client.collectDefaultMetrics({
-    register,
-    prefix: 'app_'  // Add prefix to prevent conflicts
-});
-
-// Register the custom metrics
-register.registerMetric(httpRequestDurationMicroseconds);
 
 // Health metrics function
 const getHealthMetrics = () => {
