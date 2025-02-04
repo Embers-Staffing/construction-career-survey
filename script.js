@@ -342,6 +342,65 @@ async function displayResults(result, careerDetails) {
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
 }
 
+function displayRecommendations(recommendations) {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = `
+        <h2>Your Career Recommendations</h2>
+        ${recommendations.map(career => `
+            <div class="career-card">
+                <div class="career-card-header">
+                    <h3>${career.title}</h3>
+                    <div class="salary">Average Salary: ${career.salary || 'Varies by experience'}</div>
+                </div>
+                <div class="career-card-body">
+                    <div class="career-card-section">
+                        <h4>Role Overview</h4>
+                        <p>${career.description || 'A rewarding career in construction awaits!'}</p>
+                    </div>
+                    
+                    <div class="career-card-section">
+                        <h4>Key Responsibilities</h4>
+                        <ul>
+                            ${(career.responsibilities || [
+                                'Project planning and execution',
+                                'Team coordination',
+                                'Quality assurance',
+                                'Safety compliance'
+                            ]).map(resp => `<li>${resp}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div class="career-card-section">
+                        <h4>Required Skills</h4>
+                        <div class="skills-tags">
+                            ${(career.skills || [
+                                'Project Management',
+                                'Leadership',
+                                'Technical Knowledge',
+                                'Communication'
+                            ]).map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <div class="growth-indicator">
+                        Strong growth potential in this role
+                    </div>
+
+                    <div class="action-links">
+                        <a href="#" class="action-link" onclick="saveCareer('${career.title}')">
+                            Save for Later
+                        </a>
+                        <a href="#" class="action-link" onclick="applyForPosition('${career.title}')">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `).join('')}
+    `;
+    resultsDiv.style.display = 'block';
+}
+
 function initializeForm() {
     const form = document.getElementById('careerForm');
     const yearSelect = document.getElementById('birthYear');
@@ -436,7 +495,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     }));
 
                     // Display results
-                    displayResults(result, careerDetails);
+                    displayRecommendations(careerDetails);
                     
                     // Show success message
                     showNotification('Your career recommendations are ready!', 'success');
