@@ -343,9 +343,14 @@ async function displayResults(result, careerDetails) {
 }
 
 function displayCareerCard(career, mbtiType, hollandCodes) {
-    DEBUG.info('Displaying career card:', { career, mbtiType, hollandCodes });
+    if (!career) {
+        DEBUG.error('No career provided to displayCareerCard');
+        throw new Error('Career is required');
+    }
+
+    DEBUG.info('Displaying career card for:', { career, mbtiType, hollandCodes });
     const careerDetails = getCareerInfo(career);
-    DEBUG.info('Career details:', careerDetails);
+    DEBUG.info('Retrieved career details:', { hasDetails: !!careerDetails, career });
 
     const cardContent = document.createElement('div');
     cardContent.className = 'card-body';
