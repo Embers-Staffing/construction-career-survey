@@ -387,10 +387,10 @@ function displayRecommendations(recommendations) {
                     </div>
 
                     <div class="action-links">
-                        <a href="#" class="action-link" onclick="saveCareer('${career.title}')">
+                        <a href="#" class="action-link" onclick="saveCareer('${career.title}', event)">
                             Save for Later
                         </a>
-                        <a href="#" class="action-link" onclick="applyForPosition('${career.title}')">
+                        <a href="#" class="action-link" onclick="applyForPosition('${career.title}', event)">
                             Learn More
                         </a>
                     </div>
@@ -519,4 +519,23 @@ function getMBTIType(formData) {
            (formData.get('mbtiSN') || '') +
            (formData.get('mbtiTF') || '') +
            (formData.get('mbtiJP') || '');
+}
+
+function saveCareer(careerTitle, event) {
+    // Prevent default link behavior
+    event.preventDefault();
+    
+    // Show a success message
+    showNotification(`${careerTitle} has been saved to your profile`, 'success');
+}
+
+function applyForPosition(careerTitle, event) {
+    // Prevent default link behavior
+    event.preventDefault();
+    
+    // Open Embers Staffing career page in a new tab
+    window.open('https://www.embersstaffing.com/careers', '_blank');
+    
+    // Show a notification
+    showNotification(`Redirecting you to learn more about ${careerTitle}`, 'info');
 }
