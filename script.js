@@ -514,29 +514,29 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
 function getCareerDetails(title) {
     const careerDetails = {
         'Client Relations Director': {
-            description: 'A Client Relations Director in construction manages and develops key client relationships, ensures project satisfaction, and drives business growth through strong client partnerships.',
+            description: 'A Client Relations Director in construction manages and develops key client relationships across Canadian construction projects, ensuring client satisfaction and business growth.',
             education: {
                 degrees: [
                     'Bachelor\'s degree in Construction Management, Business Administration, or related field',
-                    'Master\'s degree preferred (MBA or Construction Management)',
+                    'Master\'s degree preferred (MBA or Construction Management)'
                 ],
                 schools: [
                     {
-                        name: 'University of Washington',
-                        program: 'Certificate in Construction Management',
-                        link: 'https://www.pce.uw.edu/certificates/construction-management'
+                        name: 'University of Calgary',
+                        program: 'Certificate in Professional Management - Construction Management',
+                        link: 'https://conted.ucalgary.ca/public/category/courseCategoryCertificateProfile.do?method=load&certificateId=1706219'
                     },
                     {
-                        name: 'UC Davis',
-                        program: 'Construction Management Certificate Program',
-                        link: 'https://continue.cpe.ucdavis.edu/certificate-program/construction-management-certificate-program'
+                        name: 'University of Alberta',
+                        program: 'Construction Management Certificate',
+                        link: 'https://coned.ualberta.ca/public/category/courseCategoryCertificateProfile.do?method=load&certificateId=1031825'
                     }
                 ]
             },
             certifications: [
-                'Certified Construction Manager (CCM)',
+                'Gold Seal Certified (GSC) Project Manager',
                 'Project Management Professional (PMP)',
-                'Client Relationship Management Certification'
+                'Construction Management Association of Canada (CMAC) Designation'
             ],
             skills: {
                 technical: [
@@ -555,17 +555,17 @@ function getCareerDetails(title) {
                 ]
             },
             salary: {
-                entry: '$85,000 - $110,000',
-                mid: '$110,000 - $160,000',
-                senior: '$160,000 - $200,000',
-                source: 'Based on Glassdoor data 2025'
+                entry: '$75,000 - $95,000 CAD',
+                mid: '$95,000 - $140,000 CAD',
+                senior: '$140,000 - $180,000 CAD',
+                source: 'Based on Canadian Job Bank data 2025'
             },
             responsibilities: [
-                'Develop and maintain strong relationships with key clients',
+                'Develop and maintain client relationships across Canadian provinces',
                 'Lead client communication strategy',
-                'Oversee project satisfaction and quality assurance',
-                'Drive business growth through client retention and expansion',
-                'Collaborate with project teams to ensure client expectations are met'
+                'Ensure project satisfaction and quality assurance',
+                'Drive business growth in Western Canada',
+                'Collaborate with project teams across provinces'
             ],
             industryTrends: [
                 'Growing emphasis on sustainable construction practices',
@@ -581,33 +581,33 @@ function getCareerDetails(title) {
             }
         },
         'Construction Project Manager': {
-            description: 'A Construction Project Manager oversees all aspects of construction projects from planning to completion, ensuring projects are delivered on time, within budget, and to quality standards.',
+            description: 'A Construction Project Manager in Canada oversees construction projects from planning to completion, ensuring compliance with provincial building codes and regulations.',
             education: {
                 degrees: [
                     'Bachelor\'s degree in Construction Management, Civil Engineering, or related field',
-                    'Master\'s degree in Construction Management or Business Administration (preferred)'
+                    'Diploma in Construction Management from recognized Canadian institution'
                 ],
                 schools: [
                     {
-                        name: 'Columbia University',
-                        program: 'Construction Management Certification',
-                        link: 'https://www.cvn.columbia.edu/program/columbia-university-civil-engineering-construction-management-certification-certificate'
+                        name: 'BCIT',
+                        program: 'Building Construction Technology Certificate',
+                        link: 'https://www.bcit.ca/programs/building-construction-technology-associate-certificate-part-time-515gacert/'
                     },
                     {
-                        name: 'Northeastern University',
-                        program: 'Graduate Certificate in Construction Management',
-                        link: 'https://graduate.northeastern.edu/programs/certg-construction-mgmt-cps/graduate-certificate-in-construction-management-online/'
+                        name: 'NAIT',
+                        program: 'Construction Engineering Technology',
+                        link: 'https://www.nait.ca/programs/construction-engineering-technology'
                     }
                 ]
             },
             certifications: [
-                'Project Management Professional (PMP)',
-                'Certified Construction Manager (CCM)',
+                'Gold Seal Certified (GSC) Project Manager',
+                'Professional Engineer (P.Eng)',
                 'LEED Accredited Professional'
             ],
             skills: {
                 technical: [
-                    'Project Planning and Scheduling',
+                    'Canadian Building Codes',
                     'Cost Estimation and Budgeting',
                     'Contract Management',
                     'Building Information Modeling (BIM)',
@@ -622,22 +622,22 @@ function getCareerDetails(title) {
                 ]
             },
             salary: {
-                entry: '$65,000 - $85,000',
-                mid: '$85,000 - $120,000',
-                senior: '$120,000 - $180,000',
-                source: 'Based on Indeed.com data 2025'
+                entry: '$65,000 - $85,000 CAD',
+                mid: '$85,000 - $120,000 CAD',
+                senior: '$120,000 - $155,000 CAD',
+                source: 'Based on WorkBC and Job Bank data 2025'
             },
             responsibilities: [
                 'Oversee project planning and execution',
+                'Ensure compliance with provincial regulations',
                 'Manage budgets and resources',
                 'Coordinate with stakeholders',
-                'Ensure compliance with regulations',
                 'Monitor project progress and quality'
             ],
             industryTrends: [
-                'Adoption of construction technology',
+                'Adoption of Canadian construction standards',
                 'Sustainable building practices',
-                'Modular construction methods',
+                'Cold climate construction techniques',
                 'Remote project management tools'
             ],
             careerPath: {
@@ -648,33 +648,33 @@ function getCareerDetails(title) {
             }
         },
         'Construction Superintendent': {
-            description: 'A Construction Superintendent directly supervises construction sites, coordinates workers and subcontractors, and ensures work is completed according to specifications and safety standards.',
+            description: 'A Construction Superintendent in Western Canada supervises construction sites, ensuring work meets provincial building codes and safety standards.',
             education: {
                 degrees: [
-                    'Associate\'s or Bachelor\'s degree in Construction Management or related field',
-                    'High school diploma with extensive construction experience'
+                    'Diploma in Construction Management',
+                    'Red Seal trade certification with extensive experience'
                 ],
                 schools: [
                     {
-                        name: 'Missouri University',
-                        program: 'Certificate in Construction Management',
-                        link: 'https://extension.missouri.edu/programs/mu-career-accelerator/noncredit-certificates/certificate-in-construction-management'
+                        name: 'Red River College',
+                        program: 'Construction Management Technology',
+                        link: 'https://www.rrc.ca/explore/program/construction-management-technology/'
                     },
                     {
-                        name: 'National University',
-                        program: 'Professional Certificate in Construction Management',
-                        link: 'https://www.nu.edu/degrees/construction-trades/programs/construction-management-professional-certificate/'
+                        name: 'SAIT',
+                        program: 'Bachelor of Science Construction Project Management',
+                        link: 'https://www.sait.ca/programs-and-courses/degrees/bachelor-of-science-construction-project-management'
                     }
                 ]
             },
             certifications: [
-                'OSHA 30-Hour Construction Safety',
-                'First Aid and CPR',
-                'Construction Superintendent Certificate'
+                'Gold Seal Certified (GSC) Superintendent',
+                'Provincial Safety Certification',
+                'First Aid and CPR'
             ],
             skills: {
                 technical: [
-                    'Blueprint Reading',
+                    'Canadian Building Codes',
                     'Construction Methods',
                     'Safety Protocols',
                     'Quality Control',
@@ -689,15 +689,15 @@ function getCareerDetails(title) {
                 ]
             },
             salary: {
-                entry: '$60,000 - $75,000',
-                mid: '$75,000 - $95,000',
-                senior: '$95,000 - $130,000',
-                source: 'Based on Indeed.com data 2025'
+                entry: '$70,000 - $85,000 CAD',
+                mid: '$85,000 - $110,000 CAD',
+                senior: '$110,000 - $145,000 CAD',
+                source: 'Based on Canadian Job Bank data 2025'
             },
             responsibilities: [
                 'Supervise construction sites',
+                'Ensure compliance with provincial regulations',
                 'Coordinate workers and subcontractors',
-                'Ensure safety compliance',
                 'Monitor project progress',
                 'Quality control'
             ],
@@ -705,7 +705,7 @@ function getCareerDetails(title) {
                 'Digital documentation tools',
                 'Real-time project tracking',
                 'Advanced safety protocols',
-                'Sustainable construction practices'
+                'Cold weather construction techniques'
             ],
             careerPath: {
                 entry: 'Assistant Superintendent',
@@ -715,33 +715,33 @@ function getCareerDetails(title) {
             }
         },
         'Safety Director': {
-            description: 'A Safety Director develops and implements safety programs, ensures OSHA compliance, and creates a culture of safety across construction projects.',
+            description: 'A Safety Director in Canadian construction develops and implements safety programs compliant with provincial OH&S regulations.',
             education: {
                 degrees: [
-                    'Bachelor\'s degree in Occupational Safety, Construction Management, or related field',
-                    'Master\'s degree in Safety Management (preferred)'
+                    'Bachelor\'s degree in Occupational Health and Safety or related field',
+                    'Diploma in Occupational Health and Safety'
                 ],
                 schools: [
                     {
-                        name: 'Columbia Southern University',
-                        program: 'B.S. in Occupational Safety and Health',
-                        link: 'https://www.columbiasouthern.edu/online-degree/safety-emer-services/occupational-safety-health-bs/'
+                        name: 'University of Alberta',
+                        program: 'Occupational Health & Safety Certificate',
+                        link: 'https://www.ualberta.ca/extension/continuing-education/programs/occupational-health-and-safety/index.html'
                     },
                     {
-                        name: 'Eastern Kentucky University',
-                        program: 'Master of Science in Safety, Security & Emergency Management',
-                        link: 'https://safetymanagement.eku.edu/'
+                        name: 'BCIT',
+                        program: 'Occupational Health and Safety Certificate',
+                        link: 'https://www.bcit.ca/programs/occupational-health-and-safety-certificate-part-time-5020cert/'
                     }
                 ]
             },
             certifications: [
-                'Certified Safety Professional (CSP)',
-                'OSHA 500 Trainer Course',
-                'Construction Health and Safety Technician (CHST)'
+                'Canadian Registered Safety Professional (CRSP)',
+                'National Construction Safety Officer (NCSO)',
+                'Provincial Safety Certification'
             ],
             skills: {
                 technical: [
-                    'OSHA Regulations',
+                    'Provincial OH&S Regulations',
                     'Safety Program Development',
                     'Accident Investigation',
                     'Risk Assessment',
@@ -756,22 +756,22 @@ function getCareerDetails(title) {
                 ]
             },
             salary: {
-                entry: '$75,000 - $95,000',
-                mid: '$95,000 - $130,000',
-                senior: '$130,000 - $180,000',
-                source: 'Based on Salary.com data 2025'
+                entry: '$80,000 - $95,000 CAD',
+                mid: '$95,000 - $120,000 CAD',
+                senior: '$120,000 - $150,000 CAD',
+                source: 'Based on BCRSP and Job Bank data 2025'
             },
             responsibilities: [
-                'Develop safety programs',
+                'Develop safety programs compliant with provincial regulations',
                 'Conduct safety training',
-                'Ensure OSHA compliance',
+                'Ensure OH&S compliance',
                 'Investigate incidents',
                 'Maintain safety documentation'
             ],
             industryTrends: [
                 'Digital safety management systems',
-                'Wearable safety technology',
-                'Predictive analytics for risk assessment',
+                'Cold weather safety protocols',
+                'Mental health and wellness programs',
                 'Virtual reality safety training'
             ],
             careerPath: {
@@ -782,33 +782,33 @@ function getCareerDetails(title) {
             }
         },
         'Construction Estimator': {
-            description: 'A Construction Estimator calculates the costs of construction projects, prepares detailed estimates, and helps companies win bids while maintaining profitability.',
+            description: 'A Construction Estimator in Canada calculates project costs considering regional factors, material availability, and provincial labor rates.',
             education: {
                 degrees: [
-                    'Bachelor\'s degree in Construction Management, Engineering, or related field',
-                    'Associate\'s degree with extensive experience'
+                    'Diploma in Construction Management or Estimating',
+                    'Bachelor\'s degree in Construction Management or Engineering'
                 ],
                 schools: [
                     {
-                        name: 'Purdue University',
-                        program: 'Building Construction Management Technology',
-                        link: 'https://polytechnic.purdue.edu/degrees/building-construction-management'
+                        name: 'NAIT',
+                        program: 'Construction Engineering Technology',
+                        link: 'https://www.nait.ca/programs/construction-engineering-technology'
                     },
                     {
-                        name: 'Arizona State University',
-                        program: 'Construction Management and Technology',
-                        link: 'https://asuonline.asu.edu/online-degree-programs/undergraduate/construction-management-bs/'
+                        name: 'Conestoga College',
+                        program: 'Construction Project Management',
+                        link: 'https://www.conestogac.on.ca/fulltime/construction-project-management'
                     }
                 ]
             },
             certifications: [
-                'Certified Professional Estimator (CPE)',
-                'Certified Cost Professional (CCP)',
-                'LEED Green Associate'
+                'Gold Seal Certified (GSC) Estimator',
+                'Professional Quantity Surveyor (PQS)',
+                'Canadian Institute of Quantity Surveyors (CIQS) Designation'
             ],
             skills: {
                 technical: [
-                    'Cost Estimation Software',
+                    'Canadian Construction Costs',
                     'Blueprint Reading',
                     'Quantity Takeoff',
                     'Construction Methods',
@@ -823,22 +823,22 @@ function getCareerDetails(title) {
                 ]
             },
             salary: {
-                entry: '$55,000 - $70,000',
-                mid: '$70,000 - $95,000',
-                senior: '$95,000 - $130,000',
-                source: 'Based on Indeed.com data 2025'
+                entry: '$60,000 - $75,000 CAD',
+                mid: '$75,000 - $95,000 CAD',
+                senior: '$95,000 - $120,000 CAD',
+                source: 'Based on Canadian Job Bank data 2025'
             },
             responsibilities: [
-                'Prepare cost estimates',
-                'Analyze project specifications',
+                'Prepare cost estimates for Canadian projects',
+                'Consider regional factors and requirements',
                 'Research material and labor costs',
                 'Prepare bid proposals',
                 'Review subcontractor quotes'
             ],
             industryTrends: [
-                'AI-powered estimation tools',
-                'BIM integration',
-                'Real-time cost databases',
+                'Canadian cost database integration',
+                'BIM estimation tools',
+                'Regional pricing analytics',
                 'Sustainable material costing'
             ],
             careerPath: {
@@ -848,7 +848,6 @@ function getCareerDetails(title) {
                 executive: 'Director of Preconstruction'
             }
         }
-        // More careers can be added here
     };
 
     return careerDetails[title] || null;
