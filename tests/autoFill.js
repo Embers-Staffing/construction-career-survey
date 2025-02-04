@@ -38,6 +38,28 @@ function autoFillSurvey() {
             }
         });
 
+        // Select career interests (max 3)
+        const careerInterests = ['trades', 'tech-specialist', 'project-management'];
+        careerInterests.forEach(interest => {
+            const checkbox = document.querySelector(`input[name="careerInterests"][value="${interest}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            } else {
+                DEBUG.error(`Career interest checkbox not found: ${interest}`);
+            }
+        });
+
+        // Select tech interests
+        const techInterests = ['drones', 'bim', 'ai'];
+        techInterests.forEach(tech => {
+            const checkbox = document.querySelector(`input[name="techInterests"][value="${tech}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            } else {
+                DEBUG.error(`Tech interest checkbox not found: ${tech}`);
+            }
+        });
+
         // Select work environment
         const envRadio = document.querySelector('input[name="environmentComfort"][value="outdoor"]');
         if (envRadio) {
@@ -46,40 +68,32 @@ function autoFillSurvey() {
             DEBUG.error('Environment comfort radio not found');
         }
 
-        // Select physical requirements
-        const physicalRadio = document.querySelector('input[name="physicalComfort"][value="moderate"]');
-        if (physicalRadio) {
-            physicalRadio.checked = true;
+        // Select travel willingness
+        const travelSelect = document.getElementById('travelWillingness');
+        if (travelSelect) {
+            travelSelect.value = 'occasional';
         } else {
-            DEBUG.error('Physical comfort radio not found');
+            DEBUG.error('Travel willingness select not found');
         }
 
-        // Select travel preferences
-        const travelRadio = document.querySelector('input[name="travelPreference"][value="occasional"]');
-        if (travelRadio) {
-            travelRadio.checked = true;
-        } else {
-            DEBUG.error('Travel preference radio not found');
-        }
-
-        // Fill out career goals
-        const goalsTextarea = document.getElementById('careerGoals');
-        if (goalsTextarea) {
-            goalsTextarea.value = 'Looking to advance in construction management and gain technical expertise.';
-        } else {
-            DEBUG.error('Career goals textarea not found');
-        }
-
-        // Select professional development preferences
-        const devPreferences = ['certification', 'mentorship', 'workshops'];
-        devPreferences.forEach(pref => {
-            const checkbox = document.getElementById(`development-${pref}`);
+        // Select career goals
+        const careerGoals = ['leadership', 'specialist', 'innovation'];
+        careerGoals.forEach(goal => {
+            const checkbox = document.querySelector(`input[name="careerGoals"][value="${goal}"]`);
             if (checkbox) {
                 checkbox.checked = true;
             } else {
-                DEBUG.error(`Development preference checkbox not found: ${pref}`);
+                DEBUG.error(`Career goal checkbox not found: ${goal}`);
             }
         });
+
+        // Select advancement preference
+        const advancementRadio = document.querySelector('input[name="advancementPreference"][value="education"]');
+        if (advancementRadio) {
+            advancementRadio.checked = true;
+        } else {
+            DEBUG.error('Advancement preference radio not found');
+        }
 
         // Submit the form
         const form = document.getElementById('careerForm');
