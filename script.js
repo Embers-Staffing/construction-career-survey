@@ -343,49 +343,94 @@ async function displayResults(result, careerDetails) {
 }
 
 function displayRecommendations(recommendations) {
+    DEBUG.info('Displaying recommendations:', JSON.stringify(recommendations, null, 2));
+    
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = `
         <h2>Your Career Recommendations</h2>
         ${recommendations.map(career => {
-            const title = career.title || 'Construction Professional';
+            DEBUG.info('Processing career:', JSON.stringify(career, null, 2));
+            
+            // Ensure we have a valid career object with default values
+            const safeCareer = {
+                title: 'Construction Professional',
+                salaryRange: {
+                    entry: '$45,000 - $55,000',
+                    experienced: '$65,000 - $95,000'
+                },
+                description: 'A rewarding career in construction awaits!',
+                responsibilities: [
+                    'Project planning and execution',
+                    'Team coordination',
+                    'Quality assurance',
+                    'Safety compliance'
+                ],
+                skills: [
+                    'Project Management',
+                    'Leadership',
+                    'Technical Knowledge',
+                    'Communication'
+                ],
+                education: [
+                    'High School Diploma or equivalent',
+                    'Technical certification preferred'
+                ],
+                training: [
+                    'OSHA Safety Training',
+                    'Equipment Operation Certification',
+                    'Industry-specific skills training'
+                ],
+                certifications: [
+                    'Industry-relevant certifications',
+                    'Safety certifications'
+                ],
+                careerPath: [
+                    'Entry Level Position',
+                    'Mid-Level Management',
+                    'Senior Management',
+                    'Executive Level'
+                ],
+                timeline: [
+                    '0-2 years: Entry level position',
+                    '2-5 years: Mid-level role',
+                    '5-10 years: Senior position',
+                    '10+ years: Leadership role'
+                ],
+                ...career // Merge with provided career data
+            };
+            
+            const title = safeCareer.title;
             const urlSafeTitle = title.toLowerCase().replace(/\s+/g, '-');
+            
+            DEBUG.info('Processed title:', title);
+            DEBUG.info('URL safe title:', urlSafeTitle);
             
             return `
             <div class="career-card">
                 <div class="career-card-header">
                     <h3>${title}</h3>
                     <div class="salary">
-                        <div>Starting Salary: ${career.salaryRange?.entry || '$45,000 - $55,000'}</div>
-                        <div>Experienced Salary: ${career.salaryRange?.experienced || '$65,000 - $95,000'}</div>
+                        <div>Starting Salary: ${safeCareer.salaryRange?.entry}</div>
+                        <div>Experienced Salary: ${safeCareer.salaryRange?.experienced}</div>
                     </div>
                 </div>
                 <div class="career-card-body">
                     <div class="career-card-section">
                         <h4>Role Overview</h4>
-                        <p>${career.description || 'A rewarding career in construction awaits!'}</p>
+                        <p>${safeCareer.description}</p>
                     </div>
                     
                     <div class="career-card-section">
                         <h4>Key Responsibilities</h4>
                         <ul>
-                            ${(career.responsibilities || [
-                                'Project planning and execution',
-                                'Team coordination',
-                                'Quality assurance',
-                                'Safety compliance'
-                            ]).map(resp => `<li>${resp}</li>`).join('')}
+                            ${safeCareer.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
                         </ul>
                     </div>
 
                     <div class="career-card-section">
                         <h4>Required Skills</h4>
                         <div class="skills-tags">
-                            ${(career.skills || [
-                                'Project Management',
-                                'Leadership',
-                                'Technical Knowledge',
-                                'Communication'
-                            ]).map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                            ${safeCareer.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
                         </div>
                     </div>
 
@@ -394,27 +439,17 @@ function displayRecommendations(recommendations) {
                         <div class="education-section">
                             <h5>Required Education</h5>
                             <ul>
-                                ${(career.education || [
-                                    'High School Diploma or equivalent',
-                                    'Technical certification preferred'
-                                ]).map(edu => `<li>${edu}</li>`).join('')}
+                                ${safeCareer.education.map(edu => `<li>${edu}</li>`).join('')}
                             </ul>
                             
                             <h5>Recommended Training Programs</h5>
                             <ul>
-                                ${(career.training || [
-                                    'OSHA Safety Training',
-                                    'Equipment Operation Certification',
-                                    'Industry-specific skills training'
-                                ]).map(training => `<li>${training}</li>`).join('')}
+                                ${safeCareer.training.map(training => `<li>${training}</li>`).join('')}
                             </ul>
                             
                             <h5>Professional Certifications</h5>
                             <ul>
-                                ${(career.certifications || [
-                                    'Industry-relevant certifications',
-                                    'Safety certifications'
-                                ]).map(cert => `<li>${cert}</li>`).join('')}
+                                ${safeCareer.certifications.map(cert => `<li>${cert}</li>`).join('')}
                             </ul>
                         </div>
                     </div>
@@ -424,22 +459,12 @@ function displayRecommendations(recommendations) {
                         <div class="growth-path">
                             <h5>Career Progression</h5>
                             <ul>
-                                ${(career.careerPath || [
-                                    'Entry Level Position',
-                                    'Mid-Level Management',
-                                    'Senior Management',
-                                    'Executive Level'
-                                ]).map(path => `<li>${path}</li>`).join('')}
+                                ${safeCareer.careerPath.map(path => `<li>${path}</li>`).join('')}
                             </ul>
                             
                             <h5>Timeline</h5>
                             <ul>
-                                ${(career.timeline || [
-                                    '0-2 years: Entry level position',
-                                    '2-5 years: Mid-level role',
-                                    '5-10 years: Senior position',
-                                    '10+ years: Leadership role'
-                                ]).map(time => `<li>${time}</li>`).join('')}
+                                ${safeCareer.timeline.map(time => `<li>${time}</li>`).join('')}
                             </ul>
                         </div>
                     </div>
