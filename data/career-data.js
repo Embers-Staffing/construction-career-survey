@@ -16,9 +16,9 @@ const DEBUG = {
  */
 export const careerData = {
     recommendations: {
-        'ISTJ': ['Project Manager', 'Construction Superintendent', 'Building Inspector'],
+        'ISTJ': ['Construction Superintendent', 'Construction Estimator', 'Building Inspector'],
         'ISFJ': ['Safety Manager', 'Quality Control Inspector', 'Construction Administrator'],
-        'INFJ': ['Sustainability Consultant', 'Architecture Designer', 'Environmental Specialist'],
+        'INFJ': ['Sustainability Consultant', 'BIM Specialist', 'Environmental Specialist'],
         'INTJ': ['Civil Engineer', 'Construction Technology Specialist', 'Project Controls Manager'],
         'ISTP': ['Heavy Equipment Operator', 'Electrician', 'Mechanical Technician'],
         'ISFP': ['Interior Designer', 'Landscape Designer', 'Architectural Drafter'],
@@ -30,7 +30,7 @@ export const careerData = {
         'ENTP': ['Innovation Manager', 'Construction Technology Director', 'Business Development Manager'],
         'ESTJ': ['Construction Project Manager', 'Operations Director', 'General Contractor'],
         'ESFJ': ['Construction Safety Officer', 'Human Resources Manager', 'Client Service Manager'],
-        'ENFJ': ['Training Manager', 'Team Development Lead', 'Community Relations Manager'],
+        'ENFJ': ['Training Director', 'Team Development Manager', 'Community Relations Manager'],
         'ENTJ': ['Executive Construction Manager', 'Company Owner', 'Strategic Planning Director']
     }
 };
@@ -55,6 +55,6 @@ export function getRecommendations(mbtiType) {
 export function getCareerDetails(careerPath) {
     DEBUG.info('Getting career details for:', careerPath);
     const details = getDetailedCareerInfo(careerPath);
-    DEBUG.info('Found career details:', details);
+    DEBUG.info('Found career details:', !!details);
     return details;
 }
