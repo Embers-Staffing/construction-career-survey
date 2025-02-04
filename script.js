@@ -385,7 +385,7 @@ function displayRecommendations(recommendations) {
                 const careerTitle = career.title ? String(career.title) : '';
                 DEBUG.info('Career title after conversion:', careerTitle, typeof careerTitle);
                 const careerPath = determineCareerPath(careerTitle);
-                const training = getTrainingRecommendations(experienceLevel, careerPath);
+                const training = getTrainingRecommendations(careerTitle, hollandCodes, formData);
 
                 return `
                     <div class="career-recommendation mb-5">
@@ -484,7 +484,7 @@ function displayRecommendations(recommendations) {
                 const careerTitle = firstCareer.title ? String(firstCareer.title) : '';
                 DEBUG.info('First career title for training:', careerTitle, typeof careerTitle);
                 const careerPath = determineCareerPath(careerTitle);
-                const training = getTrainingRecommendations(experienceLevel, careerPath);
+                const training = getTrainingRecommendations(careerTitle, hollandCodes, formData);
                 displayTrainingRecommendations(training);
             } catch (error) {
                 DEBUG.error('Error displaying training recommendations:', error);
@@ -1129,23 +1129,99 @@ const trainingRecommendations = {
 };
 
 /**
- * Get training recommendations based on experience level and career path
- * @param {string} experienceLevel - User's experience level (entry, intermediate, experienced)
- * @param {string} careerPath - Career path (project_management, skilled_trades, engineering, supervision)
+ * Get training recommendations based on MBTI, Holland codes, and experience
+ * @param {string} mbtiType - MBTI personality type
+ * @param {Array} hollandCodes - Selected Holland codes
+ * @param {FormData} formData - Form data
  * @returns {Object} Training recommendations object with general and specific recommendations
  */
-function getTrainingRecommendations(experienceLevel, careerPath) {
-    try {
-        const recommendations = {
-            general: trainingRecommendations[experienceLevel]?.general || [],
-            specific: trainingRecommendations[experienceLevel]?.specific?.[careerPath] || []
-        };
-        DEBUG.info('Generated training recommendations:', { experienceLevel, careerPath, recommendations });
-        return recommendations;
-    } catch (error) {
-        DEBUG.error('Error getting training recommendations:', error);
-        return { general: [], specific: [] };
+function getTrainingRecommendations(mbtiType, hollandCodes, formData) {
+    DEBUG.info('Getting training recommendations for:', { mbtiType, hollandCodes });
+    
+    const recommendations = {
+        general: [
+            'OSHA 30-Hour Construction Safety Course',
+            'Advanced Blueprint Reading',
+            'Construction Quality Control',
+            'Risk Management Basics',
+            'Construction Contract Fundamentals'
+        ],
+        specific: []
+    };
+
+    // MBTI-based recommendations
+    const mbtiRecommendations = {
+        // Analysts (NT)
+        'INTJ': ['BIM Software Certification', 'Advanced Project Planning', 'Strategic Management'],
+        'INTP': ['Construction Technology Integration', 'Data Analytics for Construction', 'Innovation Management'],
+        'ENTJ': ['Executive Leadership Program', 'Strategic Business Development', 'Advanced Negotiation Skills'],
+        'ENTP': ['Innovation in Construction Methods', 'Creative Problem-Solving', 'Emerging Technologies'],
+        
+        // Diplomats (NF)
+        'INFJ': ['Sustainable Construction Practices', 'Team Development', 'Conflict Resolution'],
+        'INFP': ['Environmental Impact Assessment', 'Green Building Certification', 'Workplace Wellness'],
+        'ENFJ': ['Leadership Development', 'Team Building', 'Communication Skills'],
+        'ENFP': ['Client Relations Management', 'Creative Design Solutions', 'Stakeholder Engagement'],
+        
+        // Sentinels (SJ)
+        'ISTJ': ['Quality Management Systems', 'Construction Law', 'Technical Documentation'],
+        'ISFJ': ['Safety Management Systems', 'Risk Assessment', 'Quality Assurance'],
+        'ESTJ': ['Project Management Professional (PMP)', 'Contract Administration', 'Operations Management'],
+        'ESFJ': ['Team Coordination', 'Client Service Excellence', 'HR Management'],
+        
+        // Explorers (SP)
+        'ISTP': ['Advanced Equipment Operation', 'Technical Specialization', 'Hands-on Skills Development'],
+        'ISFP': ['Design Implementation', 'Aesthetic Planning', 'Material Selection'],
+        'ESTP': ['Site Management', 'Crisis Management', 'Dynamic Problem-Solving'],
+        'ESFP': ['On-site Coordination', 'Team Motivation', 'Public Relations']
+    };
+
+    // Holland Code based recommendations
+    const hollandRecommendations = {
+        'R': ['Equipment Operation Certification', 'Technical Skills Training', 'Hands-on Construction Methods'],
+        'I': ['Construction Research Methods', 'Advanced Technical Analysis', 'Problem-Solving Methodologies'],
+        'A': ['Design Software Certification', 'Creative Solutions Workshop', 'Architectural Visualization'],
+        'S': ['Team Leadership Training', 'Safety Training Certification', 'Communication Skills Development'],
+        'E': ['Business Development', 'Sales and Marketing in Construction', 'Entrepreneurship in Construction'],
+        'C': ['Project Controls', 'Quality Control Systems', 'Documentation Management']
+    };
+
+    // Add MBTI-specific recommendations
+    if (mbtiType && mbtiRecommendations[mbtiType]) {
+        recommendations.specific.push(...mbtiRecommendations[mbtiType]);
     }
+
+    // Add Holland Code specific recommendations
+    hollandCodes.forEach(code => {
+        if (hollandRecommendations[code]) {
+            recommendations.specific.push(...hollandRecommendations[code]);
+        }
+    });
+
+    // Add experience-based recommendations
+    const experience = formData.get('constructionExperience');
+    if (experience) {
+        const expLevel = parseInt(experience);
+        if (expLevel === 0) {
+            recommendations.specific.push(
+                'Construction Basics Training',
+                'Industry Terminology Workshop',
+                'Entry-level Safety Certification'
+            );
+        } else if (expLevel >= 5) {
+            recommendations.specific.push(
+                'Advanced Project Management',
+                'Leadership and Team Management',
+                'Strategic Planning in Construction'
+            );
+        }
+    }
+
+    // Remove duplicates and limit to most relevant
+    recommendations.specific = [...new Set(recommendations.specific)].slice(0, 8);
+    
+    DEBUG.info('Generated training recommendations:', recommendations);
+    return recommendations;
 }
 
 /**
@@ -1153,36 +1229,26 @@ function getTrainingRecommendations(experienceLevel, careerPath) {
  * @param {Object} recommendations - Training recommendations object
  */
 function displayTrainingRecommendations(recommendations) {
-    try {
-        const container = document.getElementById('trainingResources');
-        if (!container) {
-            DEBUG.error('Training resources container not found');
-            return;
-        }
+    const trainingDiv = document.createElement('div');
+    trainingDiv.className = 'mb-5';
+    trainingDiv.innerHTML = `
+        <h3>Recommended Training & Certifications</h3>
+        
+        <div class="training-section mb-4">
+            <h4 class="h5 mb-3">Essential Training for All Construction Professionals</h4>
+            ${recommendations.general.map(item => `
+                <p><span class="text-primary me-2">🔷</span>${item}</p>
+            `).join('')}
+        </div>
 
-        const content = `
-            <h3 class="mb-4">Recommended Training & Certifications</h3>
-            
-            <div class="training-section mb-4">
-                <h4 class="h5">Essential Training for All Construction Professionals</h4>
-                ${(recommendations.general || []).map(item => `
-                    <p><i class="fas fa-certificate text-primary me-2"></i>${item}</p>
+        ${recommendations.specific.length > 0 ? `
+            <div class="training-section">
+                <h4 class="h5 mb-3">Personalized Training Path</h4>
+                ${recommendations.specific.map(item => `
+                    <p><span class="text-success me-2">🎯</span>${item}</p>
                 `).join('')}
             </div>
-
-            ${(recommendations.specific || []).length > 0 ? `
-                <div class="training-section">
-                    <h4 class="h5">Role-Specific Training</h4>
-                    ${(recommendations.specific || []).map(item => `
-                        <p><i class="fas fa-award text-success me-2"></i>${item}</p>
-                    `).join('')}
-                </div>
-            ` : ''}
-        `;
-
-        container.innerHTML = content;
-        DEBUG.info('Training recommendations displayed successfully');
-    } catch (error) {
-        DEBUG.error('Error displaying training recommendations:', error);
-    }
+        ` : ''}
+    `;
+    return trainingDiv;
 }
