@@ -2,6 +2,13 @@
 
 import { getCareerDetails as getDetailedCareerInfo } from './careers/index.js';
 
+// Debug utility (mirroring the main script's DEBUG)
+const DEBUG = {
+    info: (...args) => console.log('[INFO]', ...args),
+    error: (...args) => console.error('[ERROR]', ...args),
+    warn: (...args) => console.warn('[WARN]', ...args)
+};
+
 export const careerData = {
     recommendations: {
         'ISTJ': ['Project Manager', 'Construction Superintendent', 'Building Inspector'],
@@ -14,9 +21,9 @@ export const careerData = {
         'INTP': ['Structural Engineer', 'BIM Specialist', 'Construction Software Developer'],
         'ESTP': ['Construction Foreman', 'Site Supervisor', 'Equipment Manager'],
         'ESFP': ['Real Estate Developer', 'Sales Representative', 'Client Relations Manager'],
-        'ENFP': ['Business Development Manager', 'Marketing Coordinator', 'Sustainability Consultant'],
-        'ENTP': ['Construction Innovation Manager', 'Project Development Manager', 'Technology Consultant'],
-        'ESTJ': ['Construction Manager', 'Operations Director', 'Contracts Manager'],
+        'ENFP': ['Client Relations Director', 'Construction Business Developer', 'Project Development Manager'],
+        'ENTP': ['Innovation Manager', 'Construction Technology Director', 'Business Development Manager'],
+        'ESTJ': ['Construction Project Manager', 'Operations Director', 'General Contractor'],
         'ESFJ': ['Construction Safety Officer', 'Human Resources Manager', 'Client Service Manager'],
         'ENFJ': ['Training Manager', 'Team Development Lead', 'Community Relations Manager'],
         'ENTJ': ['Executive Construction Manager', 'Company Owner', 'Strategic Planning Director']
@@ -24,9 +31,15 @@ export const careerData = {
 };
 
 export function getRecommendations(mbtiType) {
-    return careerData.recommendations[mbtiType] || [];
+    DEBUG.info('Getting recommendations for MBTI:', mbtiType);
+    const recommendations = careerData.recommendations[mbtiType] || [];
+    DEBUG.info('Found recommendations:', recommendations);
+    return recommendations;
 }
 
 export function getCareerDetails(careerPath) {
-    return getDetailedCareerInfo(careerPath);
+    DEBUG.info('Getting career details for:', careerPath);
+    const details = getDetailedCareerInfo(careerPath);
+    DEBUG.info('Found career details:', details);
+    return details;
 }

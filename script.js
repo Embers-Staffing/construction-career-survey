@@ -343,7 +343,10 @@ async function displayResults(result, careerDetails) {
 }
 
 function displayCareerCard(career, mbtiType, hollandCodes) {
+    DEBUG.info('Displaying career card:', { career, mbtiType, hollandCodes });
     const careerDetails = getCareerInfo(career);
+    DEBUG.info('Career details:', careerDetails);
+
     const cardContent = document.createElement('div');
     cardContent.className = 'card-body';
 
@@ -505,7 +508,14 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
         hollandCodes,
         hasFormData: !!formData
     });
-    
+
+    // Create recommendations array with proper structure
+    const formattedRecommendations = recommendations.map(title => ({
+        title: title,
+        description: null  // Will be populated by getCareerInfo
+    }));
+    DEBUG.info('Formatted recommendations:', formattedRecommendations);
+
     const resultsDiv = document.getElementById('results');
     if (!resultsDiv) {
         DEBUG.error('Results div not found');
@@ -543,7 +553,7 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
     const cardContainer = document.createElement('div');
     cardContainer.className = 'row row-cols-1 row-cols-md-2 g-4';
     
-    recommendations.forEach((career, index) => {
+    formattedRecommendations.forEach((career, index) => {
         DEBUG.info(`Processing career ${index + 1}:`, career);
         
         try {
