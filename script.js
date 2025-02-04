@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 DEBUG.info('MBTI Type:', mbtiType);
 
                 // Get career recommendations
-                const recommendations = getRecommendations(mbtiType);
+                const recommendations = getCareerRecommendations(mbtiType);
                 DEBUG.info('Career recommendations:', recommendations);
 
                 if (recommendations && recommendations.length > 0) {
@@ -573,6 +573,64 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 });
 
+/**
+ * Get career recommendations based on MBTI type
+ * @param {string} mbtiType - The MBTI personality type
+ * @returns {Array} Array of career recommendations
+ */
+function getCareerRecommendations(mbtiType) {
+    // Default recommendations if MBTI type is not found
+    const defaultRecommendations = [{
+        title: 'Construction Professional',
+        salaryRange: {
+            entry: '$45,000 - $60,000',
+            experienced: '$70,000 - $100,000'
+        },
+        description: 'Join the exciting field of construction with opportunities for growth and development.',
+        responsibilities: [
+            'Contribute to construction projects',
+            'Learn industry best practices',
+            'Work with experienced professionals',
+            'Develop technical skills'
+        ],
+        skills: [
+            'Technical Knowledge',
+            'Teamwork',
+            'Communication',
+            'Problem Solving'
+        ],
+        education: [
+            'High School Diploma or equivalent',
+            'Trade school or technical training recommended'
+        ],
+        training: [
+            'OSHA Safety Training',
+            'Equipment Operation Certification',
+            'Industry-specific skills training'
+        ],
+        certifications: [
+            'Industry-relevant certifications',
+            'Safety certifications'
+        ],
+        careerPath: [
+            'Entry Level Position (0-2 years)',
+            'Skilled Professional (2-5 years)',
+            'Team Lead (5-8 years)',
+            'Supervisor (8+ years)'
+        ],
+        timeline: [
+            '0-2 years: Learn fundamentals and gain experience',
+            '2-5 years: Develop specialized skills',
+            '5-8 years: Take on leadership responsibilities',
+            '8+ years: Advanced career opportunities'
+        ]
+    }];
+
+    // Get specific recommendations for the MBTI type
+    const specificRecommendation = careerRecommendations[mbtiType];
+    return specificRecommendation ? [specificRecommendation] : defaultRecommendations;
+}
+
 function getMBTIType(formData) {
     return (formData.get('mbtiEI') || '') +
            (formData.get('mbtiSN') || '') +
@@ -598,3 +656,147 @@ function applyForPosition(careerTitle, event) {
     // Show a notification
     showNotification(`Redirecting you to learn more about ${careerTitle}`, 'info');
 }
+
+const careerRecommendations = {
+    'ISTJ': {
+        title: 'Construction Project Manager',
+        salaryRange: {
+            entry: '$55,000 - $70,000',
+            experienced: '$85,000 - $130,000'
+        },
+        description: 'Lead and oversee construction projects from inception to completion, ensuring all work is completed on time, within budget, and to quality standards.',
+        responsibilities: [
+            'Develop and manage project schedules and budgets',
+            'Coordinate with subcontractors and suppliers',
+            'Ensure compliance with safety regulations and building codes',
+            'Monitor project progress and report to stakeholders'
+        ],
+        skills: [
+            'Project Management',
+            'Budget Control',
+            'Technical Knowledge',
+            'Detail-Oriented',
+            'Leadership'
+        ],
+        education: [
+            'Bachelor\'s degree in Construction Management, Engineering, or related field',
+            'Project Management Professional (PMP) certification preferred'
+        ],
+        training: [
+            'OSHA 30-Hour Construction Safety Certification',
+            'Construction Project Management Certification',
+            'Building Information Modeling (BIM) Training'
+        ],
+        certifications: [
+            'Certified Construction Manager (CCM)',
+            'LEED Accredited Professional',
+            'Project Management Professional (PMP)'
+        ],
+        careerPath: [
+            'Assistant Project Manager (0-3 years)',
+            'Project Manager (3-7 years)',
+            'Senior Project Manager (7-12 years)',
+            'Construction Director (12+ years)'
+        ],
+        timeline: [
+            '0-3 years: Learn fundamentals and assist in project management',
+            '3-7 years: Manage medium-sized projects independently',
+            '7-12 years: Handle large-scale projects and mentor junior managers',
+            '12+ years: Strategic planning and organizational leadership'
+        ]
+    },
+    'ISFJ': {
+        title: 'Safety Manager',
+        salaryRange: {
+            entry: '$50,000 - $65,000',
+            experienced: '$75,000 - $110,000'
+        },
+        description: 'Ensure workplace safety by developing and implementing safety programs, conducting inspections, and training employees on safety procedures.',
+        responsibilities: [
+            'Develop and implement safety policies and procedures',
+            'Conduct safety training and inspections',
+            'Investigate incidents and maintain safety records',
+            'Ensure OSHA compliance and workplace safety'
+        ],
+        skills: [
+            'Safety Management',
+            'Risk Assessment',
+            'Training & Development',
+            'Documentation',
+            'Communication'
+        ],
+        education: [
+            'Bachelor\'s degree in Occupational Safety, Engineering, or related field',
+            'Advanced safety certifications required'
+        ],
+        training: [
+            'OSHA Safety Certifications',
+            'First Aid and CPR Training',
+            'Hazardous Materials Management'
+        ],
+        certifications: [
+            'Certified Safety Professional (CSP)',
+            'Construction Health and Safety Technician (CHST)',
+            'OSHA Authorized Trainer'
+        ],
+        careerPath: [
+            'Safety Coordinator (0-3 years)',
+            'Safety Manager (3-7 years)',
+            'Regional Safety Director (7-12 years)',
+            'Corporate Safety Director (12+ years)'
+        ],
+        timeline: [
+            '0-3 years: Learn safety regulations and assist in program implementation',
+            '3-7 years: Manage site safety programs independently',
+            '7-12 years: Oversee multiple site safety operations',
+            '12+ years: Develop company-wide safety strategies'
+        ]
+    },
+    'INFJ': {
+        title: 'Sustainability Consultant',
+        salaryRange: {
+            entry: '$45,000 - $65,000',
+            experienced: '$80,000 - $120,000'
+        },
+        description: 'Guide construction projects in implementing sustainable practices, ensuring environmental compliance, and achieving green building certifications.',
+        responsibilities: [
+            'Develop sustainable construction strategies',
+            'Conduct environmental impact assessments',
+            'Advise on green building certifications',
+            'Coordinate with stakeholders on sustainability goals'
+        ],
+        skills: [
+            'Sustainability Planning',
+            'Green Building Standards',
+            'Environmental Analysis',
+            'Stakeholder Management',
+            'Technical Writing'
+        ],
+        education: [
+            'Bachelor\'s degree in Environmental Science, Engineering, or related field',
+            'Master\'s degree preferred in Sustainable Development'
+        ],
+        training: [
+            'LEED Green Associate Training',
+            'Sustainable Construction Practices',
+            'Environmental Management Systems'
+        ],
+        certifications: [
+            'LEED Accredited Professional',
+            'WELL AP Certification',
+            'Green Globes Professional'
+        ],
+        careerPath: [
+            'Junior Sustainability Consultant (0-3 years)',
+            'Sustainability Consultant (3-7 years)',
+            'Senior Sustainability Manager (7-12 years)',
+            'Director of Sustainability (12+ years)'
+        ],
+        timeline: [
+            '0-3 years: Learn sustainable practices and assist in assessments',
+            '3-7 years: Lead sustainability projects independently',
+            '7-12 years: Manage complex sustainable development initiatives',
+            '12+ years: Shape organizational sustainability strategy'
+        ]
+    }
+};
