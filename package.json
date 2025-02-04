@@ -1,27 +1,27 @@
 {
   "name": "construction-career-survey",
   "version": "1.0.0",
-  "description": "Construction Career Explorer Survey - Static Demo Version",
+  "description": "A career recommendation survey for construction industry roles",
   "type": "module",
-  "main": "index.html",
+  "main": "script.js",
   "scripts": {
-    "start": "serve -s .",
-    "dev": "serve -s . -l 3000",
-    "deploy": "gh-pages -d ."
+    "start": "python3 -m http.server 8000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Embers-Staffing/construction-career-survey.git"
   },
   "keywords": [
     "construction",
     "career",
     "survey",
-    "mbti"
+    "mbti",
+    "recommendations"
   ],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bootstrap": "^5.3.3"
+  "author": "Embers Staffing",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Embers-Staffing/construction-career-survey/issues"
   },
-  "devDependencies": {
-    "gh-pages": "^6.3.0",
-    "serve": "^14.2.1"
-  }
+  "homepage": "https://github.com/Embers-Staffing/construction-career-survey#readme"
 }

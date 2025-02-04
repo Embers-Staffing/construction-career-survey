@@ -1,82 +1,57 @@
-# Sensitive files and credentials
-**/firebase-credentials.json
-**/serviceAccountKey.json
-**/firebase-config.js
-**/config.js
-**/deploy-rules.js
-config.py
-.env*
-*.pem
-*.key
-*.crt
-
-# Build artifacts and dependencies
+# Dependencies
 node_modules/
+package-lock.json
+
+# Build outputs
 dist/
 build/
 .cache/
+
+# Environment and config files
+.env
+.env.*
+config.js
+firebase-config.js
+*-credentials.json
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-develop-eggs/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+env/
+venv/
+.env/
+.venv/
+.python-version
 *.egg-info/
-.installed.cfg
+dist/
+build/
 *.egg
 
-# Virtual Environment
-venv/
-env/
-ENV/
-.venv/
-.env/
-.ENV/
-
-# IDE and Editor files
-.idea/
-.vscode/
-*.swp
-*.swo
-*.swn
+# Backup files
+*.backup
 *~
-.project
-.classpath
-.settings/
-*.sublime-workspace
-*.sublime-project
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-Desktop.ini
-
-# Logs and databases
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-*.sqlite
-*.db
-
-# Temporary files
-*.tmp
-*.temp
-.temp/
-.tmp/
-*.bak
-*.cache

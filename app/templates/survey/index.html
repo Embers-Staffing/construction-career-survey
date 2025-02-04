@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Construction Career Survey</h1>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome {{ current_user.email }}</h5>
+                    <p class="card-text">Choose an action below:</p>
+                    <div class="d-grid gap-2">
+                        <a href="https://embers-staffing.github.io/construction-career-survey/" target="_blank" class="btn btn-primary">Take Survey</a>
+                        {% if current_user.can_view_analytics() %}
+                        <a href="http://localhost:1805/" target="_blank" class="btn btn-secondary">View Analytics</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
