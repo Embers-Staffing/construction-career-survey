@@ -349,7 +349,7 @@ function displayRecommendations(recommendations) {
         ${recommendations.map(career => `
             <div class="career-card">
                 <div class="career-card-header">
-                    <h3>${career.title}</h3>
+                    <h3>${career.title || 'Construction Professional'}</h3>
                     <div class="salary">
                         <div>Starting Salary: ${career.salaryRange?.entry || '$45,000 - $55,000'}</div>
                         <div>Experienced Salary: ${career.salaryRange?.experienced || '$65,000 - $95,000'}</div>
@@ -408,8 +408,8 @@ function displayRecommendations(recommendations) {
                             <h5>Professional Certifications</h5>
                             <ul>
                                 ${(career.certifications || [
-                                    'Industry standard certifications',
-                                    'Professional association memberships'
+                                    'Industry-relevant certifications',
+                                    'Safety certifications'
                                 ]).map(cert => `<li>${cert}</li>`).join('')}
                             </ul>
                         </div>
@@ -458,9 +458,51 @@ function displayRecommendations(recommendations) {
                 </div>
             </div>
         `).join('')}
+        <div class="results-actions">
+            <button onclick="saveAsPDF()" class="btn btn-primary">
+                <i class="fas fa-file-pdf"></i> Save as PDF
+            </button>
+            <button onclick="printResults()" class="btn btn-outline-primary">
+                <i class="fas fa-print"></i> Print Results
+            </button>
+        </div>
     `;
     resultsDiv.style.display = 'block';
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
+}
+
+/**
+ * Generate and download results as PDF
+ */
+function saveAsPDF() {
+    // Show loading state
+    showNotification('Generating PDF...', 'info');
+    
+    const element = document.getElementById('results');
+    const opt = {
+        margin: 1,
+        filename: 'construction-career-recommendations.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Generate PDF
+    html2pdf().set(opt).from(element).save()
+        .then(() => {
+            showNotification('PDF downloaded successfully!', 'success');
+        })
+        .catch(error => {
+            console.error('PDF generation failed:', error);
+            showNotification('Failed to generate PDF. Please try again.', 'error');
+        });
+}
+
+/**
+ * Print the results
+ */
+function printResults() {
+    window.print();
 }
 
 function initializeForm() {

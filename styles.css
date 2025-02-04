@@ -262,6 +262,27 @@ body {
     transform: translateX(3px);
 }
 
+/* Results Actions */
+.results-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.results-actions button {
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.results-actions button i {
+    font-size: 1.1rem;
+}
+
 @media (max-width: 768px) {
     #results {
         padding: 1.5rem;
@@ -921,4 +942,49 @@ footer .bigfoot-link:hover {
     position: absolute;
     left: 0.5em;
     color: #666;
+}
+
+/* Print Styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #results, #results * {
+        visibility: visible;
+    }
+    
+    #results {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .results-actions, 
+    .action-links,
+    .btn,
+    .notification {
+        display: none !important;
+    }
+    
+    .career-card {
+        break-inside: avoid;
+        margin-bottom: 2rem;
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+    }
+    
+    .career-card-header {
+        background: #f8f9fa !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .skill-tag {
+        border: 1px solid #ddd;
+        background: none !important;
+    }
 }
