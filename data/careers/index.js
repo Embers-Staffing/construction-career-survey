@@ -1,5 +1,12 @@
 'use strict';
 
+// Debug utility
+const DEBUG = {
+    info: (...args) => console.log('[INFO]', ...args),
+    error: (...args) => console.error('[ERROR]', ...args),
+    warn: (...args) => console.warn('[WARN]', ...args)
+};
+
 import { managementCareers } from './management.js';
 import { fieldCareers } from './field.js';
 import { technicalCareers } from './technical.js';
@@ -22,5 +29,8 @@ const allCareers = {
  * @returns {Object|null} - Career details object or null if not found
  */
 export function getCareerDetails(title) {
-    return allCareers[title] || null;
+    DEBUG.info('Looking up career details for:', title);
+    const details = allCareers[title] || null;
+    DEBUG.info('Found career details:', details);
+    return details;
 }

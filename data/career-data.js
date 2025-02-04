@@ -9,6 +9,11 @@ const DEBUG = {
     warn: (...args) => console.warn('[WARN]', ...args)
 };
 
+/**
+ * Career data object containing recommendations for each MBTI type
+ * @typedef {Object} CareerData
+ * @property {Object} recommendations - Object mapping MBTI types to career title arrays
+ */
 export const careerData = {
     recommendations: {
         'ISTJ': ['Project Manager', 'Construction Superintendent', 'Building Inspector'],
@@ -30,6 +35,11 @@ export const careerData = {
     }
 };
 
+/**
+ * Get career recommendations based on MBTI type
+ * @param {string} mbtiType - The MBTI personality type
+ * @returns {string[]} Array of recommended career titles
+ */
 export function getRecommendations(mbtiType) {
     DEBUG.info('Getting recommendations for MBTI:', mbtiType);
     const recommendations = careerData.recommendations[mbtiType] || [];
@@ -37,6 +47,11 @@ export function getRecommendations(mbtiType) {
     return recommendations;
 }
 
+/**
+ * Get detailed information about a specific career
+ * @param {string} careerPath - The career title to look up
+ * @returns {Object|null} Career details object or null if not found
+ */
 export function getCareerDetails(careerPath) {
     DEBUG.info('Getting career details for:', careerPath);
     const details = getDetailedCareerInfo(careerPath);
