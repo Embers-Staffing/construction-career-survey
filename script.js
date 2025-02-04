@@ -1272,15 +1272,72 @@ function addActionButtons(resultsDiv) {
     DEBUG.info('Adding action buttons');
     
     const actionButtons = document.createElement('div');
-    actionButtons.className = 'action-buttons mt-4 mb-4 d-flex justify-content-center gap-3';
+    actionButtons.className = 'action-buttons mt-4 mb-4';
     actionButtons.innerHTML = `
-        <button onclick="saveAsPDF()" class="btn btn-primary">
-            <i class="fas fa-file-pdf"></i> Save as PDF
-        </button>
-        <button onclick="printResults()" class="btn btn-secondary">
-            <i class="fas fa-print"></i> Print Results
-        </button>
+        <div class="d-flex justify-content-center flex-wrap gap-4">
+            <div class="action-card text-center" onclick="saveAsPDF()">
+                <div class="action-icon mb-2">
+                    <i class="fas fa-file-pdf fa-2x text-danger"></i>
+                </div>
+                <h5 class="action-title">Save as PDF</h5>
+                <p class="action-description text-muted">Download your career recommendations</p>
+            </div>
+            <div class="action-card text-center" onclick="printResults()">
+                <div class="action-icon mb-2">
+                    <i class="fas fa-print fa-2x text-primary"></i>
+                </div>
+                <h5 class="action-title">Print Results</h5>
+                <p class="action-description text-muted">Print your career recommendations</p>
+            </div>
+        </div>
     `;
+    
+    // Add CSS for action cards
+    const style = document.createElement('style');
+    style.textContent = `
+        .action-card {
+            padding: 1.5rem;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            width: 200px;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .action-icon {
+            background: #f8f9fa;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        
+        .action-title {
+            margin: 0.5rem 0;
+            font-weight: 600;
+        }
+        
+        .action-description {
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+        
+        @media print {
+            .action-buttons {
+                display: none !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
     
     resultsDiv.appendChild(actionButtons);
     DEBUG.info('Action buttons added successfully');
