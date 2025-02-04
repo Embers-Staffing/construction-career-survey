@@ -346,10 +346,14 @@ function displayRecommendations(recommendations) {
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = `
         <h2>Your Career Recommendations</h2>
-        ${recommendations.map(career => `
+        ${recommendations.map(career => {
+            const title = career.title || 'Construction Professional';
+            const urlSafeTitle = title.toLowerCase().replace(/\s+/g, '-');
+            
+            return `
             <div class="career-card">
                 <div class="career-card-header">
-                    <h3>${career.title || 'Construction Professional'}</h3>
+                    <h3>${title}</h3>
                     <div class="salary">
                         <div>Starting Salary: ${career.salaryRange?.entry || '$45,000 - $55,000'}</div>
                         <div>Experienced Salary: ${career.salaryRange?.experienced || '$65,000 - $95,000'}</div>
@@ -399,9 +403,9 @@ function displayRecommendations(recommendations) {
                             <h5>Recommended Training Programs</h5>
                             <ul>
                                 ${(career.training || [
-                                    'OSHA Safety Certification',
-                                    'Project Management Certification',
-                                    'Industry-specific technical training'
+                                    'OSHA Safety Training',
+                                    'Equipment Operation Certification',
+                                    'Industry-specific skills training'
                                 ]).map(training => `<li>${training}</li>`).join('')}
                             </ul>
                             
@@ -445,10 +449,10 @@ function displayRecommendations(recommendations) {
                     </div>
 
                     <div class="action-links">
-                        <a href="#" class="action-link" onclick="saveCareer('${career.title}', event)">
+                        <a href="#" class="action-link" onclick="saveCareer('${title}', event)">
                             <i class="fas fa-bookmark"></i> Save for Later
                         </a>
-                        <a href="https://www.embersstaffing.com/careers/${career.title.toLowerCase().replace(/\s+/g, '-')}" 
+                        <a href="https://www.embersstaffing.com/careers/${urlSafeTitle}" 
                            class="action-link" 
                            target="_blank"
                            rel="noopener noreferrer">
@@ -457,7 +461,8 @@ function displayRecommendations(recommendations) {
                     </div>
                 </div>
             </div>
-        `).join('')}
+        `;
+        }).join('')}
         <div class="results-actions">
             <button onclick="saveAsPDF()" class="btn btn-primary">
                 <i class="fas fa-file-pdf"></i> Save as PDF
