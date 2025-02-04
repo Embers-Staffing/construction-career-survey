@@ -1,107 +1,108 @@
 'use strict';
 
+// Debug utility
+const DEBUG = {
+    info: (...args) => console.log('[INFO]', ...args),
+    error: (...args) => console.error('[ERROR]', ...args),
+    warn: (...args) => console.warn('[WARN]', ...args)
+};
+
 /**
- * Auto-fills the career survey form with test data and submits it
- * @returns {Promise<void>}
+ * Auto-fill the career survey form with test data
  */
-async function autoFillSurvey() {
-    console.log('Starting auto-fill test...');
+function autoFillSurvey() {
+    DEBUG.info('Starting auto-fill process');
 
     try {
-        // Personal Information
+        // Fill out personal information
         document.getElementById('firstName').value = 'Test';
         document.getElementById('lastName').value = 'User';
-        
-        // Birth Year and Month
-        const birthYear = document.getElementById('birthYear');
-        birthYear.value = '1990';
-        const birthMonth = document.getElementById('birthMonth');
-        birthMonth.value = '6';
+        document.getElementById('birthYear').value = '1990';
+        document.getElementById('birthMonth').value = '6';
+        document.getElementById('constructionExperience').value = '3';
 
-        // MBTI Assessment
-        const mbtiOptions = {
-            'ei': 'E', // Extraversion
-            'sn': 'S', // Sensing
-            'tf': 'T', // Thinking
-            'jp': 'J'  // Judging
-        };
+        // Select MBTI preferences
+        selectMBTIPreference('E', 'I');  // Extrovert
+        selectMBTIPreference('N', 'S');  // Intuitive
+        selectMBTIPreference('F', 'T');  // Feeling
+        selectMBTIPreference('J', 'P');  // Judging
 
-        Object.entries(mbtiOptions).forEach(([dimension, preference]) => {
-            const radio = document.querySelector(`input[name="mbti-${dimension}"][value="${preference}"]`);
-            if (radio) radio.checked = true;
-        });
-
-        // Holland Code Assessment (max 3)
-        const hollandCodes = ['realistic', 'investigative', 'conventional'];
+        // Select Holland Code interests (max 3)
+        const hollandCodes = ['realistic', 'investigative', 'social'];
         hollandCodes.forEach(code => {
-            const checkbox = document.getElementById(`hollandCode-${code}`);
-            if (checkbox) checkbox.checked = true;
+            const checkbox = document.querySelector(`input[name="hollandCode"][value="${code}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            } else {
+                DEBUG.error(`Holland code checkbox not found: ${code}`);
+            }
         });
 
-        // Skills Assessment
-        const skills = ['projectManagement', 'teamLeadership', 'technicalKnowledge'];
-        skills.forEach(skill => {
-            const radio = document.querySelector(`input[name="skill-${skill}"][value="4"]`); // Select "Advanced"
-            if (radio) radio.checked = true;
-        });
+        // Select work environment
+        document.querySelector('input[name="environmentComfort"][value="outdoor"]').checked = true;
 
-        // Experience Level
-        document.querySelector('input[name="experienceLevel"][value="intermediate"]').checked = true;
-
-        // Preferred Roles (max 3)
-        const roles = ['projectManager', 'superintendent', 'estimator'];
-        roles.forEach(role => {
-            const checkbox = document.getElementById(`role-${role}`);
-            if (checkbox) checkbox.checked = true;
-        });
-
-        // Work Environment
-        document.querySelector('input[name="environmentComfort"][value="both"]').checked = true;
-
-        // Physical Requirements
+        // Select physical requirements
         document.querySelector('input[name="physicalComfort"][value="moderate"]').checked = true;
 
-        // Travel Preferences
+        // Select travel preferences
         document.querySelector('input[name="travelPreference"][value="occasional"]').checked = true;
 
-        // Career Goals
+        // Fill out career goals
         const goalsTextarea = document.getElementById('careerGoals');
         if (goalsTextarea) {
             goalsTextarea.value = 'Looking to advance in construction management and gain technical expertise.';
         }
 
-        // Professional Development
+        // Select professional development preferences
         const devPreferences = ['certification', 'mentorship', 'workshops'];
         devPreferences.forEach(pref => {
             const checkbox = document.getElementById(`development-${pref}`);
-            if (checkbox) checkbox.checked = true;
+            if (checkbox) {
+                checkbox.checked = true;
+            }
         });
 
         // Submit the form
-        console.log('Form filled, submitting...');
         const form = document.getElementById('careerForm');
         if (form) {
-            const submitEvent = new Event('submit', { cancelable: true });
-            form.dispatchEvent(submitEvent);
-            console.log('Form submitted successfully');
+            DEBUG.info('Submitting form');
+            form.dispatchEvent(new Event('submit'));
         } else {
-            console.error('Form not found');
+            DEBUG.error('Form not found');
         }
 
     } catch (error) {
-        console.error('Error during auto-fill:', error);
+        DEBUG.error('Error during auto-fill:', error);
+    }
+}
+
+/**
+ * Helper function to select MBTI preference
+ * @param {string} preference - The preference to select (e.g., 'E' for Extrovert)
+ * @param {string} opposite - The opposite preference (e.g., 'I' for Introvert)
+ */
+function selectMBTIPreference(preference, opposite) {
+    const radio = document.querySelector(`input[name="mbti-${preference.toLowerCase()}${opposite.toLowerCase()}"][value="${preference}"]`);
+    if (radio) {
+        radio.checked = true;
+    } else {
+        DEBUG.error(`MBTI radio button not found: mbti-${preference.toLowerCase()}${opposite.toLowerCase()}`);
     }
 }
 
 // Add a button to trigger the auto-fill
 function addAutoFillButton() {
     const button = document.createElement('button');
-    button.textContent = 'Auto-Fill Test';
-    button.className = 'btn btn-secondary position-fixed top-0 end-0 m-3';
-    button.style.zIndex = '1000';
+    button.type = 'button';
+    button.className = 'btn btn-secondary mb-3';
+    button.innerHTML = '<i class="fas fa-robot me-2"></i>Auto-Fill Test Data';
     button.onclick = autoFillSurvey;
-    document.body.appendChild(button);
+
+    const form = document.getElementById('careerForm');
+    if (form) {
+        form.insertBefore(button, form.firstChild);
+    }
 }
 
-// Export functions
-export { autoFillSurvey, addAutoFillButton };
+// Initialize when the page loads
+document.addEventListener('DOMContentLoaded', addAutoFillButton);
