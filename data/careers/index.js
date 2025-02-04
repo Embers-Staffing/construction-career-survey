@@ -23,6 +23,8 @@ const allCareers = {
     ...safetyCareers
 };
 
+DEBUG.info('Loaded career details:', Object.keys(allCareers));
+
 /**
  * Get detailed information about a specific career
  * @param {string} title - The title of the career to look up
@@ -30,7 +32,23 @@ const allCareers = {
  */
 export function getCareerDetails(title) {
     DEBUG.info('Looking up career details for:', title);
-    const details = allCareers[title] || null;
-    DEBUG.info('Found career details:', details);
-    return details;
+    if (!title) {
+        DEBUG.error('No title provided to getCareerDetails');
+        return null;
+    }
+
+    // Try exact match first
+    let details = allCareers[title];
+    
+    // If no exact match, try case-insensitive match
+    if (!details) {
+        const titleLower = title.toLowerCase();
+        const key = Object.keys(allCareers).find(k => k.toLowerCase() === titleLower);
+        if (key) {
+            details = allCareers[key];
+        }
+    }
+
+    DEBUG.info('Found career details:', details ? 'yes' : 'no');
+    return details || null;
 }
