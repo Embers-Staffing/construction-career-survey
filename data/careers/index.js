@@ -11,6 +11,7 @@ import { managementCareers } from './management.js';
 import { fieldCareers } from './field.js';
 import { technicalCareers } from './technical.js';
 import { safetyCareers } from './safety.js';
+import { hrCareers } from './hr.js';
 
 /**
  * Combined career details from all categories
@@ -20,7 +21,8 @@ const allCareers = {
     ...managementCareers,
     ...fieldCareers,
     ...technicalCareers,
-    ...safetyCareers
+    ...safetyCareers,
+    ...hrCareers
 };
 
 DEBUG.info('Loaded career details:', Object.keys(allCareers));
@@ -32,8 +34,8 @@ DEBUG.info('Loaded career details:', Object.keys(allCareers));
  */
 export function getCareerDetails(title) {
     DEBUG.info('Looking up career details for:', title);
-    if (!title) {
-        DEBUG.error('No title provided to getCareerDetails');
+    if (!title || typeof title !== 'string') {
+        DEBUG.error('Invalid title provided to getCareerDetails:', title);
         return null;
     }
 
@@ -52,3 +54,6 @@ export function getCareerDetails(title) {
     DEBUG.info('Found career details:', details ? 'yes' : 'no');
     return details || null;
 }
+
+// Export all careers for reference
+export const careerDetails = allCareers;
