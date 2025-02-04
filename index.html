@@ -62,31 +62,36 @@
 
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <label class="form-label" for="birthYear">Birth Year</label>
-                        <div class="age-selector">
-                            <select class="form-select" name="birthYear" id="birthYear" required>
-                                <option value="">Select Year</option>
-                                <!-- Years will be populated by JavaScript -->
-                            </select>
-                            <label class="form-label mt-2" for="birthMonth">Birth Month</label>
-                            <select class="form-select" name="birthMonth" id="birthMonth" required>
-                                <option value="">Select Month</option>
-                                <option value="1">January</option>
-                                <option value="2">February</option>
-                                <option value="3">March</option>
-                                <option value="4">April</option>
-                                <option value="5">May</option>
-                                <option value="6">June</option>
-                                <option value="7">July</option>
-                                <option value="8">August</option>
-                                <option value="9">September</option>
-                                <option value="10">October</option>
-                                <option value="11">November</option>
-                                <option value="12">December</option>
-                            </select>
-                            <div class="invalid-feedback">Please select your birth month.</div>
-                            <div class="age-display" style="display: none;"></div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="form-label" for="birthYear">Birth Year</label>
+                                <select class="form-select" name="birthYear" id="birthYear" required>
+                                    <option value="">Select Year</option>
+                                    <!-- Years will be populated by JavaScript -->
+                                </select>
+                                <div class="invalid-feedback">Please select your birth year.</div>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label" for="birthMonth">Birth Month</label>
+                                <select class="form-select" name="birthMonth" id="birthMonth" required>
+                                    <option value="">Select Month</option>
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                                <div class="invalid-feedback">Please select your birth month.</div>
+                            </div>
                         </div>
+                        <div class="age-display mt-2" style="display: none;"></div>
                         <div class="invalid-feedback">Please select your birth date (must be 16-70 years old).</div>
                     </div>
                     
