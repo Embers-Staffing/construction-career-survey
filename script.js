@@ -650,33 +650,40 @@ document.addEventListener('DOMContentLoaded', async function() {
             try {
                 DEBUG.info('Form submitted, processing...');
                 const formData = new FormData(form);
-                
+
                 // Get MBTI type from form data
                 const mbtiType = getMBTIType(formData);
                 DEBUG.info('MBTI Type:', mbtiType);
 
+                // Get Holland codes from form data
+                const hollandCodes = getHollandCodes(formData);
+                DEBUG.info('Holland Codes:', hollandCodes);
+
+                if (!mbtiType || mbtiType.length !== 4) {
+                    showNotification('Please complete all MBTI questions.', 'warning');
+                    return;
+                }
+
+                if (!hollandCodes || hollandCodes.length === 0) {
+                    showNotification('Please select at least one Holland Code personality type.', 'warning');
+                    return;
+                }
+
                 // Get career recommendations
-                const recommendations = getCareerRecommendations(mbtiType);
+                const recommendations = getCareerRecommendations(mbtiType, hollandCodes);
                 DEBUG.info('Career recommendations:', recommendations);
 
                 if (recommendations && recommendations.length > 0) {
-                    const result = {
+                    // Store results for later use
+                    const results = {
                         mbtiType,
+                        hollandCodes,
                         recommendations,
                         selectedCareer: recommendations[0]
                     };
 
-                    // Get detailed information for the recommended careers
-                    const careerDetails = recommendations.map(career => ({
-                        title: career,
-                        ...getCareerDetails(career)
-                    }));
-
-                    // Display results
-                    displayRecommendations(careerDetails);
-                    
-                    // Show success message
-                    showNotification('Your career recommendations are ready!', 'success');
+                    // Display recommendations
+                    displayRecommendations(recommendations);
                 } else {
                     showNotification('No recommendations found for your personality type.', 'warning');
                 }
@@ -693,24 +700,100 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 /**
- * Get career recommendations based on MBTI type
+ * Get career recommendations based on personality assessments
  * @param {string} mbtiType - The MBTI personality type
+ * @param {Array} hollandCodes - Selected Holland codes
  * @returns {Array} Array of career recommendations
  */
-function getCareerRecommendations(mbtiType) {
-    DEBUG.info('Getting recommendations for MBTI type:', mbtiType);
+function getCareerRecommendations(mbtiType, hollandCodes) {
+    DEBUG.info('Getting recommendations for:', { mbtiType, hollandCodes });
     
-    // Get specific recommendations for the MBTI type
-    const specificRecommendation = careerRecommendations[mbtiType];
-    DEBUG.info('Found specific recommendation:', specificRecommendation);
-    
-    // Default recommendations if MBTI type is not found
+    // Career recommendations based on MBTI and Holland codes
+    const recommendations = {
+        'ISTJ': {
+            'R': ['Construction Project Manager', 'Site Supervisor', 'Safety Inspector'],
+            'I': ['Structural Engineer', 'Civil Engineer', 'Building Inspector'],
+            'C': ['Construction Estimator', 'Quality Control Manager', 'Building Code Inspector']
+        },
+        'ISFJ': {
+            'S': ['Construction Safety Manager', 'Environmental Compliance Officer', 'Site Safety Coordinator'],
+            'C': ['Construction Document Controller', 'Quality Assurance Specialist', 'Permit Coordinator'],
+            'R': ['Facilities Manager', 'Maintenance Supervisor', 'Building Systems Specialist']
+        },
+        'INFJ': {
+            'A': ['Sustainable Design Specialist', 'Green Building Consultant', 'Architecture Project Manager'],
+            'S': ['Construction Training Manager', 'Safety Program Developer', 'Environmental Impact Analyst'],
+            'I': ['Building Systems Designer', 'Urban Planning Specialist', 'Sustainability Consultant']
+        },
+        'INTJ': {
+            'I': ['Construction Technology Specialist', 'BIM Manager', 'Systems Integration Engineer'],
+            'E': ['Construction Innovation Manager', 'Process Improvement Specialist', 'Technical Director'],
+            'A': ['Design-Build Coordinator', 'Construction Solutions Architect', 'Project Innovation Lead']
+        },
+        'ISTP': {
+            'R': ['Heavy Equipment Operator', 'Crane Operator', 'Mechanical Systems Specialist'],
+            'I': ['Construction Equipment Technician', 'Robotics Specialist', 'Automation Technician'],
+            'E': ['Site Operations Manager', 'Equipment Fleet Manager', 'Technical Operations Lead']
+        },
+        'ISFP': {
+            'A': ['Interior Finishing Specialist', 'Architectural Detailer', 'Design Implementation Specialist'],
+            'R': ['Skilled Craftsperson', 'Custom Fabricator', 'Specialty Trade Contractor'],
+            'S': ['Site Beautification Specialist', 'Landscape Implementation Lead', 'Finishing Coordinator']
+        },
+        'INFP': {
+            'A': ['Sustainable Design Coordinator', 'Green Building Specialist', 'Environmental Design Consultant'],
+            'S': ['Community Relations Manager', 'Environmental Impact Coordinator', 'Sustainability Advocate'],
+            'I': ['Design Research Specialist', 'Building Performance Analyst', 'Innovation Consultant']
+        },
+        'INTP': {
+            'I': ['Construction Systems Analyst', 'Building Technology Specialist', 'Technical Solutions Architect'],
+            'A': ['Design Technology Specialist', 'Digital Construction Manager', 'Virtual Design Coordinator'],
+            'E': ['Construction Research Specialist', 'Building Science Expert', 'Technical Innovation Lead']
+        },
+        'ESTP': {
+            'E': ['Construction Operations Manager', 'Site Logistics Coordinator', 'Field Operations Director'],
+            'R': ['General Contractor', 'Construction Superintendent', 'Project Execution Manager'],
+            'C': ['Construction Procurement Manager', 'Contract Administrator', 'Project Controls Manager']
+        },
+        'ESFP': {
+            'S': ['Construction Client Relations Manager', 'Public Relations Coordinator', 'Community Outreach Specialist'],
+            'E': ['Site Team Leader', 'Construction Crew Supervisor', 'Field Operations Coordinator'],
+            'A': ['Interior Design Implementation Lead', 'Space Planning Coordinator', 'Design-Build Liaison']
+        },
+        'ENFP': {
+            'S': ['Construction Training Coordinator', 'Team Development Manager', 'Workforce Engagement Specialist'],
+            'E': ['Construction Business Developer', 'Client Relations Director', 'Project Development Manager'],
+            'A': ['Design Innovation Specialist', 'Creative Solutions Manager', 'Project Vision Coordinator']
+        },
+        'ENTP': {
+            'E': ['Construction Strategy Manager', 'Innovation Director', 'Business Development Lead'],
+            'I': ['Construction Technology Manager', 'Digital Solutions Architect', 'Technical Innovation Manager'],
+            'A': ['Design Integration Specialist', 'Solutions Architecture Manager', 'Innovation Consultant']
+        },
+        'ESTJ': {
+            'E': ['Construction Executive', 'Project Director', 'Operations Manager'],
+            'C': ['Construction Manager', 'Project Manager', 'Site Manager'],
+            'R': ['Production Manager', 'Field Operations Director', 'Implementation Manager']
+        },
+        'ESFJ': {
+            'S': ['Construction HR Manager', 'Team Relations Coordinator', 'Safety Culture Manager'],
+            'E': ['Construction Office Manager', 'Administrative Director', 'Support Services Manager'],
+            'C': ['Quality Assurance Manager', 'Compliance Coordinator', 'Standards Implementation Lead']
+        },
+        'ENFJ': {
+            'S': ['Construction Training Director', 'Workforce Development Manager', 'Team Building Specialist'],
+            'E': ['Project Leadership Manager', 'Strategic Relations Director', 'Development Coordinator'],
+            'A': ['Design Team Leader', 'Creative Director', 'Project Vision Manager']
+        },
+        'ENTJ': {
+            'E': ['Construction Company CEO', 'Executive Director', 'Strategic Operations Manager'],
+            'I': ['Technical Director', 'Innovation Strategy Manager', 'Systems Integration Director'],
+            'C': ['Program Director', 'Portfolio Manager', 'Enterprise Solutions Manager']
+        }
+    };
+
     const defaultRecommendations = [{
         title: 'Construction Professional',
-        salaryRange: {
-            entry: '$45,000 - $60,000',
-            experienced: '$70,000 - $100,000'
-        },
         description: 'Join the exciting field of construction with opportunities for growth and development.',
         responsibilities: [
             'Contribute to construction projects',
@@ -719,39 +802,62 @@ function getCareerRecommendations(mbtiType) {
             'Develop technical skills'
         ],
         skills: [
-            'Technical Knowledge',
-            'Teamwork',
-            'Communication',
-            'Problem Solving'
+            'Basic construction knowledge',
+            'Safety awareness',
+            'Team collaboration',
+            'Problem-solving'
         ],
-        education: [
-            'High School Diploma or equivalent',
-            'Trade school or technical training recommended'
-        ],
-        training: [
-            'OSHA Safety Training',
-            'Equipment Operation Certification',
-            'Industry-specific skills training'
-        ],
-        certifications: [
-            'Industry-relevant certifications',
-            'Safety certifications'
-        ],
-        careerPath: [
-            'Entry Level Position (0-2 years)',
-            'Skilled Professional (2-5 years)',
-            'Team Lead (5-8 years)',
-            'Supervisor (8+ years)'
-        ],
-        timeline: [
-            '0-2 years: Learn fundamentals and gain experience',
-            '2-5 years: Develop specialized skills',
-            '5-8 years: Take on leadership responsibilities',
-            '8+ years: Advanced career opportunities'
-        ]
+        education: 'High school diploma or equivalent',
+        yearsExperience: 0,
+        careerPath: 'Start in entry-level positions with opportunities to advance based on experience and certifications.',
+        salaryRange: {
+            starting: '$45,000 - $60,000',
+            experienced: '$70,000 - $100,000'
+        }
     }];
 
-    return specificRecommendation ? [specificRecommendation] : defaultRecommendations;
+    try {
+        // Get MBTI specific recommendations
+        const mbtiRecommendations = recommendations[mbtiType] || {};
+        DEBUG.info('MBTI recommendations:', mbtiRecommendations);
+
+        // Filter by Holland codes
+        const matchingCareers = [];
+        hollandCodes.forEach(code => {
+            if (mbtiRecommendations[code]) {
+                const careers = mbtiRecommendations[code].map(title => ({
+                    title,
+                    description: `Specialized role combining ${mbtiType} personality traits with ${code} interests.`,
+                    responsibilities: [
+                        'Lead and coordinate construction projects',
+                        'Implement industry best practices',
+                        'Manage teams and resources',
+                        'Drive project success'
+                    ],
+                    skills: [
+                        'Advanced technical knowledge',
+                        'Leadership abilities',
+                        'Project management',
+                        'Problem-solving'
+                    ],
+                    education: 'Relevant degree or certification preferred',
+                    yearsExperience: 2,
+                    careerPath: 'Opportunities for advancement to senior positions with experience.',
+                    salaryRange: {
+                        starting: '$60,000 - $80,000',
+                        experienced: '$90,000 - $120,000'
+                    }
+                }));
+                matchingCareers.push(...careers);
+            }
+        });
+
+        DEBUG.info('Matching careers:', matchingCareers);
+        return matchingCareers.length > 0 ? matchingCareers : defaultRecommendations;
+    } catch (error) {
+        DEBUG.error('Error getting career recommendations:', error);
+        return defaultRecommendations;
+    }
 }
 
 function getMBTIType(formData) {
@@ -759,6 +865,17 @@ function getMBTIType(formData) {
            (formData.get('mbtiSN') || '') +
            (formData.get('mbtiTF') || '') +
            (formData.get('mbtiJP') || '');
+}
+
+function getHollandCodes(formData) {
+    const hollandCodes = [];
+    if (formData.get('hollandR')) hollandCodes.push('R');
+    if (formData.get('hollandI')) hollandCodes.push('I');
+    if (formData.get('hollandA')) hollandCodes.push('A');
+    if (formData.get('hollandS')) hollandCodes.push('S');
+    if (formData.get('hollandE')) hollandCodes.push('E');
+    if (formData.get('hollandC')) hollandCodes.push('C');
+    return hollandCodes;
 }
 
 /**
@@ -807,145 +924,84 @@ function applyForPosition(careerTitle, event) {
 
 const careerRecommendations = {
     'ISTJ': {
-        title: 'Construction Project Manager',
-        salaryRange: {
-            entry: '$55,000 - $70,000',
-            experienced: '$85,000 - $130,000'
-        },
-        description: 'Lead and oversee construction projects from inception to completion, ensuring all work is completed on time, within budget, and to quality standards.',
-        responsibilities: [
-            'Develop and manage project schedules and budgets',
-            'Coordinate with subcontractors and suppliers',
-            'Ensure compliance with safety regulations and building codes',
-            'Monitor project progress and report to stakeholders'
-        ],
-        skills: [
-            'Project Management',
-            'Budget Control',
-            'Technical Knowledge',
-            'Detail-Oriented',
-            'Leadership'
-        ],
-        education: [
-            'Bachelor\'s degree in Construction Management, Engineering, or related field',
-            'Project Management Professional (PMP) certification preferred'
-        ],
-        training: [
-            'OSHA 30-Hour Construction Safety Certification',
-            'Construction Project Management Certification',
-            'Building Information Modeling (BIM) Training'
-        ],
-        certifications: [
-            'Certified Construction Manager (CCM)',
-            'LEED Accredited Professional',
-            'Project Management Professional (PMP)'
-        ],
-        careerPath: [
-            'Assistant Project Manager (0-3 years)',
-            'Project Manager (3-7 years)',
-            'Senior Project Manager (7-12 years)',
-            'Construction Director (12+ years)'
-        ],
-        timeline: [
-            '0-3 years: Learn fundamentals and assist in project management',
-            '3-7 years: Manage medium-sized projects independently',
-            '7-12 years: Handle large-scale projects and mentor junior managers',
-            '12+ years: Strategic planning and organizational leadership'
-        ]
+        'R': ['Construction Project Manager', 'Site Supervisor', 'Safety Inspector'],
+        'I': ['Structural Engineer', 'Civil Engineer', 'Building Inspector'],
+        'C': ['Construction Estimator', 'Quality Control Manager', 'Building Code Inspector']
     },
     'ISFJ': {
-        title: 'Safety Manager',
-        salaryRange: {
-            entry: '$50,000 - $65,000',
-            experienced: '$75,000 - $110,000'
-        },
-        description: 'Ensure workplace safety by developing and implementing safety programs, conducting inspections, and training employees on safety procedures.',
-        responsibilities: [
-            'Develop and implement safety policies and procedures',
-            'Conduct safety training and inspections',
-            'Investigate incidents and maintain safety records',
-            'Ensure OSHA compliance and workplace safety'
-        ],
-        skills: [
-            'Safety Management',
-            'Risk Assessment',
-            'Training & Development',
-            'Documentation',
-            'Communication'
-        ],
-        education: [
-            'Bachelor\'s degree in Occupational Safety, Engineering, or related field',
-            'Advanced safety certifications required'
-        ],
-        training: [
-            'OSHA Safety Certifications',
-            'First Aid and CPR Training',
-            'Hazardous Materials Management'
-        ],
-        certifications: [
-            'Certified Safety Professional (CSP)',
-            'Construction Health and Safety Technician (CHST)',
-            'OSHA Authorized Trainer'
-        ],
-        careerPath: [
-            'Safety Coordinator (0-3 years)',
-            'Safety Manager (3-7 years)',
-            'Regional Safety Director (7-12 years)',
-            'Corporate Safety Director (12+ years)'
-        ],
-        timeline: [
-            '0-3 years: Learn safety regulations and assist in program implementation',
-            '3-7 years: Manage site safety programs independently',
-            '7-12 years: Oversee multiple site safety operations',
-            '12+ years: Develop company-wide safety strategies'
-        ]
+        'S': ['Construction Safety Manager', 'Environmental Compliance Officer', 'Site Safety Coordinator'],
+        'C': ['Construction Document Controller', 'Quality Assurance Specialist', 'Permit Coordinator'],
+        'R': ['Facilities Manager', 'Maintenance Supervisor', 'Building Systems Specialist']
     },
     'INFJ': {
-        title: 'Sustainability Consultant',
-        salaryRange: {
-            entry: '$45,000 - $65,000',
-            experienced: '$80,000 - $120,000'
-        },
-        description: 'Guide construction projects in implementing sustainable practices, ensuring environmental compliance, and achieving green building certifications.',
-        responsibilities: [
-            'Develop sustainable construction strategies',
-            'Conduct environmental impact assessments',
-            'Advise on green building certifications',
-            'Coordinate with stakeholders on sustainability goals'
-        ],
-        skills: [
-            'Sustainability Planning',
-            'Green Building Standards',
-            'Environmental Analysis',
-            'Stakeholder Management',
-            'Technical Writing'
-        ],
-        education: [
-            'Bachelor\'s degree in Environmental Science, Engineering, or related field',
-            'Master\'s degree preferred in Sustainable Development'
-        ],
-        training: [
-            'LEED Green Associate Training',
-            'Sustainable Construction Practices',
-            'Environmental Management Systems'
-        ],
-        certifications: [
-            'LEED Accredited Professional',
-            'WELL AP Certification',
-            'Green Globes Professional'
-        ],
-        careerPath: [
-            'Junior Sustainability Consultant (0-3 years)',
-            'Sustainability Consultant (3-7 years)',
-            'Senior Sustainability Manager (7-12 years)',
-            'Director of Sustainability (12+ years)'
-        ],
-        timeline: [
-            '0-3 years: Learn sustainable practices and assist in assessments',
-            '3-7 years: Lead sustainability projects independently',
-            '7-12 years: Manage complex sustainable development initiatives',
-            '12+ years: Shape organizational sustainability strategy'
-        ]
+        'A': ['Sustainable Design Specialist', 'Green Building Consultant', 'Architecture Project Manager'],
+        'S': ['Construction Training Manager', 'Safety Program Developer', 'Environmental Impact Analyst'],
+        'I': ['Building Systems Designer', 'Urban Planning Specialist', 'Sustainability Consultant']
+    },
+    'INTJ': {
+        'I': ['Construction Technology Specialist', 'BIM Manager', 'Systems Integration Engineer'],
+        'E': ['Construction Innovation Manager', 'Process Improvement Specialist', 'Technical Director'],
+        'A': ['Design-Build Coordinator', 'Construction Solutions Architect', 'Project Innovation Lead']
+    },
+    'ISTP': {
+        'R': ['Heavy Equipment Operator', 'Crane Operator', 'Mechanical Systems Specialist'],
+        'I': ['Construction Equipment Technician', 'Robotics Specialist', 'Automation Technician'],
+        'E': ['Site Operations Manager', 'Equipment Fleet Manager', 'Technical Operations Lead']
+    },
+    'ISFP': {
+        'A': ['Interior Finishing Specialist', 'Architectural Detailer', 'Design Implementation Specialist'],
+        'R': ['Skilled Craftsperson', 'Custom Fabricator', 'Specialty Trade Contractor'],
+        'S': ['Site Beautification Specialist', 'Landscape Implementation Lead', 'Finishing Coordinator']
+    },
+    'INFP': {
+        'A': ['Sustainable Design Coordinator', 'Green Building Specialist', 'Environmental Design Consultant'],
+        'S': ['Community Relations Manager', 'Environmental Impact Coordinator', 'Sustainability Advocate'],
+        'I': ['Design Research Specialist', 'Building Performance Analyst', 'Innovation Consultant']
+    },
+    'INTP': {
+        'I': ['Construction Systems Analyst', 'Building Technology Specialist', 'Technical Solutions Architect'],
+        'A': ['Design Technology Specialist', 'Digital Construction Manager', 'Virtual Design Coordinator'],
+        'E': ['Construction Research Specialist', 'Building Science Expert', 'Technical Innovation Lead']
+    },
+    'ESTP': {
+        'E': ['Construction Operations Manager', 'Site Logistics Coordinator', 'Field Operations Director'],
+        'R': ['General Contractor', 'Construction Superintendent', 'Project Execution Manager'],
+        'C': ['Construction Procurement Manager', 'Contract Administrator', 'Project Controls Manager']
+    },
+    'ESFP': {
+        'S': ['Construction Client Relations Manager', 'Public Relations Coordinator', 'Community Outreach Specialist'],
+        'E': ['Site Team Leader', 'Construction Crew Supervisor', 'Field Operations Coordinator'],
+        'A': ['Interior Design Implementation Lead', 'Space Planning Coordinator', 'Design-Build Liaison']
+    },
+    'ENFP': {
+        'S': ['Construction Training Coordinator', 'Team Development Manager', 'Workforce Engagement Specialist'],
+        'E': ['Construction Business Developer', 'Client Relations Director', 'Project Development Manager'],
+        'A': ['Design Innovation Specialist', 'Creative Solutions Manager', 'Project Vision Coordinator']
+    },
+    'ENTP': {
+        'E': ['Construction Strategy Manager', 'Innovation Director', 'Business Development Lead'],
+        'I': ['Construction Technology Manager', 'Digital Solutions Architect', 'Technical Innovation Manager'],
+        'A': ['Design Integration Specialist', 'Solutions Architecture Manager', 'Innovation Consultant']
+    },
+    'ESTJ': {
+        'E': ['Construction Executive', 'Project Director', 'Operations Manager'],
+        'C': ['Construction Manager', 'Project Manager', 'Site Manager'],
+        'R': ['Production Manager', 'Field Operations Director', 'Implementation Manager']
+    },
+    'ESFJ': {
+        'S': ['Construction HR Manager', 'Team Relations Coordinator', 'Safety Culture Manager'],
+        'E': ['Construction Office Manager', 'Administrative Director', 'Support Services Manager'],
+        'C': ['Quality Assurance Manager', 'Compliance Coordinator', 'Standards Implementation Lead']
+    },
+    'ENFJ': {
+        'S': ['Construction Training Director', 'Workforce Development Manager', 'Team Building Specialist'],
+        'E': ['Project Leadership Manager', 'Strategic Relations Director', 'Development Coordinator'],
+        'A': ['Design Team Leader', 'Creative Director', 'Project Vision Manager']
+    },
+    'ENTJ': {
+        'E': ['Construction Company CEO', 'Executive Director', 'Strategic Operations Manager'],
+        'I': ['Technical Director', 'Innovation Strategy Manager', 'Systems Integration Director'],
+        'C': ['Program Director', 'Portfolio Manager', 'Enterprise Solutions Manager']
     }
 };
 
