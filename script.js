@@ -446,10 +446,13 @@ function displayRecommendations(recommendations) {
 
                     <div class="action-links">
                         <a href="#" class="action-link" onclick="saveCareer('${career.title}', event)">
-                            Save for Later
+                            <i class="fas fa-bookmark"></i> Save for Later
                         </a>
-                        <a href="#" class="action-link" onclick="applyForPosition('${career.title}', event)">
-                            Learn More
+                        <a href="https://www.embersstaffing.com/careers/${career.title.toLowerCase().replace(/\s+/g, '-')}" 
+                           class="action-link" 
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            <i class="fas fa-external-link-alt"></i> View Job Details
                         </a>
                     </div>
                 </div>
@@ -638,23 +641,48 @@ function getMBTIType(formData) {
            (formData.get('mbtiJP') || '');
 }
 
+/**
+ * Save a career for later reference
+ * @param {string} careerTitle - Title of the career to save
+ * @param {Event} event - Click event
+ */
 function saveCareer(careerTitle, event) {
-    // Prevent default link behavior
     event.preventDefault();
-    
-    // Show a success message
-    showNotification(`${careerTitle} has been saved to your profile`, 'success');
+    // Store in localStorage
+    const savedCareers = JSON.parse(localStorage.getItem('savedCareers') || '[]');
+    if (!savedCareers.includes(careerTitle)) {
+        savedCareers.push(careerTitle);
+        localStorage.setItem('savedCareers', JSON.stringify(savedCareers));
+        showNotification(`${careerTitle} has been saved to your profile`, 'success');
+    } else {
+        showNotification(`${careerTitle} is already saved`, 'info');
+    }
 }
 
+/**
+ * Handle learn more action for a career
+ * @param {string} careerTitle - Title of the career
+ * @param {Event} event - Click event
+ */
 function applyForPosition(careerTitle, event) {
-    // Prevent default link behavior
     event.preventDefault();
     
-    // Open Embers Staffing career page in a new tab
-    window.open('https://www.embersstaffing.com/careers', '_blank');
+    // Create career-specific URLs based on title
+    const careerUrls = {
+        'Construction Project Manager': 'https://www.embersstaffing.com/careers/construction-project-manager',
+        'Safety Manager': 'https://www.embersstaffing.com/careers/safety-manager',
+        'Sustainability Consultant': 'https://www.embersstaffing.com/careers/sustainability-consultant',
+        'Construction Professional': 'https://www.embersstaffing.com/careers/construction'
+    };
+
+    // Get the specific URL or use the default careers page
+    const careerUrl = careerUrls[careerTitle] || 'https://www.embersstaffing.com/careers';
     
-    // Show a notification
-    showNotification(`Redirecting you to learn more about ${careerTitle}`, 'info');
+    // Open in new tab
+    window.open(careerUrl, '_blank');
+    
+    // Show notification
+    showNotification(`Opening career details for ${careerTitle}`, 'info');
 }
 
 const careerRecommendations = {
