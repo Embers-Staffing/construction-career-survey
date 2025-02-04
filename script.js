@@ -355,150 +355,120 @@ function displayCareerCard(career, mbtiType, hollandCodes) {
     title.className = 'card-title d-flex align-items-center mb-3';
     title.innerHTML = `
         <i class="fas fa-hard-hat text-primary me-2"></i>
-        ${career.title}
+        ${career}
     `;
     cardContent.appendChild(title);
 
-    // Overview with icon
-    const overview = document.createElement('div');
-    overview.className = 'mb-4';
-    overview.innerHTML = `
-        <h4 class="d-flex align-items-center">
-            <i class="fas fa-info-circle text-info me-2"></i>
-            Overview
-        </h4>
-        <p>${careerDetails?.description || career.description || `Specialized role combining ${mbtiType} personality traits with ${hollandCodes.join('/')} interests.`}</p>
+    // Overview section
+    const overviewTitle = document.createElement('h4');
+    overviewTitle.className = 'd-flex align-items-center mb-2';
+    overviewTitle.innerHTML = `
+        <i class="fas fa-info-circle text-info me-2"></i>
+        Overview
     `;
-    cardContent.appendChild(overview);
+    cardContent.appendChild(overviewTitle);
 
-    // Education & Programs
-    if (careerDetails?.education) {
-        const education = document.createElement('div');
-        education.className = 'mb-4';
-        education.innerHTML = `
-            <h4 class="d-flex align-items-center">
-                <i class="fas fa-graduation-cap text-primary me-2"></i>
-                Education & Programs
-            </h4>
-            <div class="education-section">
-                <h5 class="h6 text-primary">Required Degrees</h5>
-                ${careerDetails.education.degrees.map(degree => 
-                    `<p><i class="fas fa-check text-success me-2"></i>${degree}</p>`
-                ).join('')}
-                
-                <h5 class="h6 text-primary mt-3">Featured Programs</h5>
-                ${careerDetails.education.schools.map(school => `
-                    <div class="program-card mb-2 p-2 border rounded">
-                        <h6 class="mb-1">${school.name}</h6>
-                        <p class="mb-1 small">${school.program}</p>
-                        <a href="${school.link}" target="_blank" class="btn btn-sm btn-outline-primary">
-                            Learn More <i class="fas fa-external-link-alt ms-1"></i>
-                        </a>
-                    </div>
-                `).join('')}
-            </div>
-        `;
-        cardContent.appendChild(education);
+    if (careerDetails) {
+        // Description
+        const description = document.createElement('p');
+        description.className = 'card-text mb-3';
+        description.textContent = careerDetails.description || 'Description not available';
+        cardContent.appendChild(description);
+
+        // Education
+        if (careerDetails.education) {
+            const educationTitle = document.createElement('h5');
+            educationTitle.className = 'mb-2';
+            educationTitle.innerHTML = '<i class="fas fa-graduation-cap me-2"></i>Education';
+            cardContent.appendChild(educationTitle);
+
+            const educationList = document.createElement('ul');
+            educationList.className = 'list-unstyled mb-3';
+            careerDetails.education.degrees.forEach(degree => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-check text-success me-2"></i>${degree}`;
+                educationList.appendChild(li);
+            });
+            cardContent.appendChild(educationList);
+        }
+
+        // Skills
+        if (careerDetails.skills) {
+            const skillsTitle = document.createElement('h5');
+            skillsTitle.className = 'mb-2';
+            skillsTitle.innerHTML = '<i class="fas fa-tools me-2"></i>Required Skills';
+            cardContent.appendChild(skillsTitle);
+
+            const skillsList = document.createElement('ul');
+            skillsList.className = 'list-unstyled mb-3';
+            careerDetails.skills.forEach(skill => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-check text-success me-2"></i>${skill}`;
+                skillsList.appendChild(li);
+            });
+            cardContent.appendChild(skillsList);
+        }
+
+        // Certifications
+        if (careerDetails.certifications) {
+            const certTitle = document.createElement('h5');
+            certTitle.className = 'mb-2';
+            certTitle.innerHTML = '<i class="fas fa-certificate me-2"></i>Certifications';
+            cardContent.appendChild(certTitle);
+
+            const certList = document.createElement('ul');
+            certList.className = 'list-unstyled mb-3';
+            careerDetails.certifications.forEach(cert => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-check text-success me-2"></i>${cert}`;
+                certList.appendChild(li);
+            });
+            cardContent.appendChild(certList);
+        }
+
+        // Salary Range
+        if (careerDetails.salary) {
+            const salaryTitle = document.createElement('h5');
+            salaryTitle.className = 'mb-2';
+            salaryTitle.innerHTML = '<i class="fas fa-dollar-sign me-2"></i>Salary Range';
+            cardContent.appendChild(salaryTitle);
+
+            const salary = document.createElement('p');
+            salary.className = 'card-text mb-3';
+            salary.textContent = careerDetails.salary;
+            cardContent.appendChild(salary);
+        }
+
+        // Career Growth
+        if (careerDetails.growth) {
+            const growthTitle = document.createElement('h5');
+            growthTitle.className = 'mb-2';
+            growthTitle.innerHTML = '<i class="fas fa-chart-line me-2"></i>Career Growth';
+            cardContent.appendChild(growthTitle);
+
+            const growth = document.createElement('p');
+            growth.className = 'card-text mb-3';
+            growth.textContent = careerDetails.growth;
+            cardContent.appendChild(growth);
+        }
+    } else {
+        const noDetails = document.createElement('p');
+        noDetails.className = 'card-text text-muted';
+        noDetails.textContent = 'Detailed information not available for this career path.';
+        cardContent.appendChild(noDetails);
     }
 
-    // Skills
-    if (careerDetails?.skills) {
-        const skills = document.createElement('div');
-        skills.className = 'mb-4';
-        skills.innerHTML = `
-            <h4 class="d-flex align-items-center">
-                <i class="fas fa-star text-warning me-2"></i>
-                Required Skills
-            </h4>
-            <div class="row">
-                <div class="col-md-6">
-                    <h5 class="h6 text-primary">Technical Skills</h5>
-                    ${careerDetails.skills.technical.map(skill => 
-                        `<p><i class="fas fa-check text-success me-2"></i>${skill}</p>`
-                    ).join('')}
-                </div>
-                <div class="col-md-6">
-                    <h5 class="h6 text-primary">Soft Skills</h5>
-                    ${careerDetails.skills.soft.map(skill => 
-                        `<p><i class="fas fa-check text-success me-2"></i>${skill}</p>`
-                    ).join('')}
-                </div>
-            </div>
-        `;
-        cardContent.appendChild(skills);
-    }
+    // Create the card container
+    const card = document.createElement('div');
+    card.className = 'card h-100 shadow-sm';
+    card.appendChild(cardContent);
 
-    // Salary Information
-    if (careerDetails?.salary) {
-        const salary = document.createElement('div');
-        salary.className = 'mb-4';
-        salary.innerHTML = `
-            <h4 class="d-flex align-items-center">
-                <i class="fas fa-money-bill-wave text-success me-2"></i>
-                Salary Range
-            </h4>
-            <div class="salary-ranges">
-                <p><i class="fas fa-level-up-alt text-primary me-2"></i>Entry Level: ${careerDetails.salary.entry}</p>
-                <p><i class="fas fa-level-up-alt text-primary me-2"></i>Mid-Career: ${careerDetails.salary.mid}</p>
-                <p><i class="fas fa-level-up-alt text-primary me-2"></i>Senior Level: ${careerDetails.salary.senior}</p>
-                <p class="text-muted small mt-2"><i class="fas fa-info-circle me-1"></i>${careerDetails.salary.source}</p>
-            </div>
-        `;
-        cardContent.appendChild(salary);
-    }
+    // Create the column container
+    const col = document.createElement('div');
+    col.className = 'col';
+    col.appendChild(card);
 
-    // Career Path
-    if (careerDetails?.careerPath) {
-        const careerPath = document.createElement('div');
-        careerPath.className = 'mb-4';
-        careerPath.innerHTML = `
-            <h4 class="d-flex align-items-center">
-                <i class="fas fa-road text-info me-2"></i>
-                Career Progression
-            </h4>
-            <div class="career-path">
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-arrow-right text-success me-2"></i>
-                    <span class="text-muted">Entry:</span>
-                    <span class="ms-2">${careerDetails.careerPath.entry}</span>
-                </div>
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-arrow-right text-success me-2"></i>
-                    <span class="text-muted">Mid-Level:</span>
-                    <span class="ms-2">${careerDetails.careerPath.mid}</span>
-                </div>
-                <div class="d-flex align-items-center mb-2">
-                    <i class="fas fa-arrow-right text-success me-2"></i>
-                    <span class="text-muted">Senior:</span>
-                    <span class="ms-2">${careerDetails.careerPath.senior}</span>
-                </div>
-                <div class="d-flex align-items-center">
-                    <i class="fas fa-arrow-right text-success me-2"></i>
-                    <span class="text-muted">Executive:</span>
-                    <span class="ms-2">${careerDetails.careerPath.executive}</span>
-                </div>
-            </div>
-        `;
-        cardContent.appendChild(careerPath);
-    }
-
-    // Industry Trends
-    if (careerDetails?.industryTrends) {
-        const trends = document.createElement('div');
-        trends.className = 'mb-4';
-        trends.innerHTML = `
-            <h4 class="d-flex align-items-center">
-                <i class="fas fa-chart-line text-primary me-2"></i>
-                Industry Trends
-            </h4>
-            ${careerDetails.industryTrends.map(trend => 
-                `<p><i class="fas fa-trending-up text-success me-2"></i>${trend}</p>`
-            ).join('')}
-        `;
-        cardContent.appendChild(trends);
-    }
-
-    return cardContent;
+    return col;
 }
 
 function displayRecommendations(recommendations, mbtiType, hollandCodes, formData) {
@@ -563,12 +533,8 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
             const cardCol = document.createElement('div');
             cardCol.className = 'col';
             
-            const card = document.createElement('div');
-            card.className = 'card h-100 shadow-sm';
+            const card = displayCareerCard(careerTitle, mbtiType, hollandCodes);
             
-            const cardBody = displayCareerCard(career, mbtiType, hollandCodes);
-            
-            card.appendChild(cardBody);
             cardCol.appendChild(card);
             cardContainer.appendChild(cardCol);
             
