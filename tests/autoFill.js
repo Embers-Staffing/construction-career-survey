@@ -88,11 +88,27 @@ function autoFillSurvey() {
         });
 
         // Select advancement preference
-        const advancementRadio = document.querySelector('input[name="advancementPreference"][value="education"]');
+        const advancementRadio = document.querySelector('input[name="advancementPreference"][value="both"]');
         if (advancementRadio) {
             advancementRadio.checked = true;
         } else {
             DEBUG.error('Advancement preference radio not found');
+        }
+
+        // Select mentorship type
+        const mentorshipSelect = document.getElementById('mentorshipType');
+        if (mentorshipSelect) {
+            mentorshipSelect.value = 'industry';
+        } else {
+            DEBUG.error('Mentorship type select not found');
+        }
+
+        // Select salary target
+        const salarySelect = document.getElementById('salaryTarget');
+        if (salarySelect) {
+            salarySelect.value = '80-100k';
+        } else {
+            DEBUG.error('Salary target select not found');
         }
 
         // Submit the form
