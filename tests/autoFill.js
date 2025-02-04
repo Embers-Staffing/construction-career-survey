@@ -40,12 +40,12 @@ function autoFillSurvey() {
 
         // Select technical skills
         const technicalSkills = [
-            'hand-power-tools',
-            'blueprint-reading',
-            'construction-math',
-            'safety-procedures',
-            'heavy-equipment',
-            'computer-software'
+            'hand-tools',
+            'blueprint',
+            'math',
+            'safety',
+            'equipment',
+            'computer'
         ];
         technicalSkills.forEach(skill => {
             const checkbox = document.querySelector(`input[name="technicalSkills"][value="${skill}"]`);
@@ -56,16 +56,16 @@ function autoFillSurvey() {
             }
         });
 
-        // Select certifications
-        const certificationSelect = document.querySelector('select[name="certifications"]');
+        // Select certification awareness
+        const certificationSelect = document.getElementById('certificationAwareness');
         if (certificationSelect) {
-            certificationSelect.value = 'osha-30';  // Example certification
+            certificationSelect.value = 'yes';  // Has certifications
         } else {
-            DEBUG.error('Certifications select not found');
+            DEBUG.error('Certification awareness select not found');
         }
 
         // Select career interests (max 3)
-        const careerInterests = ['trades', 'tech-specialist', 'project-management'];
+        const careerInterests = ['trades', 'tech-specialist', 'heavy-machinery'];
         careerInterests.forEach(interest => {
             const checkbox = document.querySelector(`input[name="careerInterests"][value="${interest}"]`);
             if (checkbox) {
