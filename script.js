@@ -868,13 +868,31 @@ function getMBTIType(formData) {
 }
 
 function getHollandCodes(formData) {
+    DEBUG.info('Getting Holland codes from form data');
     const hollandCodes = [];
-    if (formData.get('hollandR')) hollandCodes.push('R');
-    if (formData.get('hollandI')) hollandCodes.push('I');
-    if (formData.get('hollandA')) hollandCodes.push('A');
-    if (formData.get('hollandS')) hollandCodes.push('S');
-    if (formData.get('hollandE')) hollandCodes.push('E');
-    if (formData.get('hollandC')) hollandCodes.push('C');
+    
+    // Get all selected Holland codes
+    const selectedCodes = formData.getAll('hollandCode');
+    DEBUG.info('Selected Holland codes from form:', selectedCodes);
+    
+    // Map the values to their corresponding codes
+    const codeMap = {
+        'realistic': 'R',
+        'investigative': 'I',
+        'artistic': 'A',
+        'social': 'S',
+        'enterprising': 'E',
+        'conventional': 'C'
+    };
+    
+    selectedCodes.forEach(value => {
+        const code = codeMap[value];
+        if (code) {
+            hollandCodes.push(code);
+        }
+    });
+    
+    DEBUG.info('Mapped Holland codes:', hollandCodes);
     return hollandCodes;
 }
 
