@@ -511,6 +511,318 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
     DEBUG.info('Finished displaying recommendations');
 }
 
+function getCareerDetails(title) {
+    const careerDetails = {
+        'Client Relations Director': {
+            description: 'A Client Relations Director in construction manages and develops key client relationships, ensures project satisfaction, and drives business growth through strong client partnerships.',
+            education: {
+                degrees: [
+                    'Bachelor\'s degree in Construction Management, Business Administration, or related field',
+                    'Master\'s degree preferred (MBA or Construction Management)',
+                ],
+                schools: [
+                    {
+                        name: 'University of Washington',
+                        program: 'Certificate in Construction Management',
+                        link: 'https://www.pce.uw.edu/certificates/construction-management'
+                    },
+                    {
+                        name: 'UC Davis',
+                        program: 'Construction Management Certificate Program',
+                        link: 'https://continue.cpe.ucdavis.edu/certificate-program/construction-management-certificate-program'
+                    }
+                ]
+            },
+            certifications: [
+                'Certified Construction Manager (CCM)',
+                'Project Management Professional (PMP)',
+                'Client Relationship Management Certification'
+            ],
+            skills: {
+                technical: [
+                    'Construction Project Management Software',
+                    'CRM Systems',
+                    'Contract Management',
+                    'Project Planning Tools',
+                    'Business Development Strategies'
+                ],
+                soft: [
+                    'Strategic Relationship Building',
+                    'Negotiation',
+                    'Communication',
+                    'Leadership',
+                    'Problem-solving'
+                ]
+            },
+            salary: {
+                entry: '$85,000 - $110,000',
+                mid: '$110,000 - $160,000',
+                senior: '$160,000 - $200,000',
+                source: 'Based on Glassdoor data 2025'
+            },
+            responsibilities: [
+                'Develop and maintain strong relationships with key clients',
+                'Lead client communication strategy',
+                'Oversee project satisfaction and quality assurance',
+                'Drive business growth through client retention and expansion',
+                'Collaborate with project teams to ensure client expectations are met'
+            ],
+            industryTrends: [
+                'Growing emphasis on sustainable construction practices',
+                'Increased use of digital collaboration tools',
+                'Focus on data-driven client satisfaction metrics',
+                'Integration of virtual reality for project visualization'
+            ],
+            careerPath: {
+                entry: 'Client Relations Manager',
+                mid: 'Senior Client Relations Manager',
+                senior: 'Client Relations Director',
+                executive: 'VP of Client Relations'
+            }
+        }
+        // Add more careers here
+    };
+
+    return careerDetails[title] || null;
+}
+
+function displayCareerCard(career, mbtiType, hollandCodes) {
+    const careerDetails = getCareerDetails(career.title);
+    const cardContent = document.createElement('div');
+    cardContent.className = 'card-body';
+
+    // Title with icon
+    const title = document.createElement('h3');
+    title.className = 'card-title d-flex align-items-center mb-3';
+    title.innerHTML = `
+        <i class="fas fa-hard-hat text-primary me-2"></i>
+        ${career.title}
+    `;
+    cardContent.appendChild(title);
+
+    // Overview with icon
+    const overview = document.createElement('div');
+    overview.className = 'mb-4';
+    overview.innerHTML = `
+        <h4 class="d-flex align-items-center">
+            <i class="fas fa-info-circle text-info me-2"></i>
+            Overview
+        </h4>
+        <p>${careerDetails?.description || career.description || `Specialized role combining ${mbtiType} personality traits with ${hollandCodes.join('/')} interests.`}</p>
+    `;
+    cardContent.appendChild(overview);
+
+    // Education & Programs
+    if (careerDetails?.education) {
+        const education = document.createElement('div');
+        education.className = 'mb-4';
+        education.innerHTML = `
+            <h4 class="d-flex align-items-center">
+                <i class="fas fa-graduation-cap text-primary me-2"></i>
+                Education & Programs
+            </h4>
+            <div class="education-section">
+                <h5 class="h6 text-primary">Required Degrees</h5>
+                ${careerDetails.education.degrees.map(degree => 
+                    `<p><i class="fas fa-check text-success me-2"></i>${degree}</p>`
+                ).join('')}
+                
+                <h5 class="h6 text-primary mt-3">Featured Programs</h5>
+                ${careerDetails.education.schools.map(school => `
+                    <div class="program-card mb-2 p-2 border rounded">
+                        <h6 class="mb-1">${school.name}</h6>
+                        <p class="mb-1 small">${school.program}</p>
+                        <a href="${school.link}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            Learn More <i class="fas fa-external-link-alt ms-1"></i>
+                        </a>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+        cardContent.appendChild(education);
+    }
+
+    // Skills
+    if (careerDetails?.skills) {
+        const skills = document.createElement('div');
+        skills.className = 'mb-4';
+        skills.innerHTML = `
+            <h4 class="d-flex align-items-center">
+                <i class="fas fa-star text-warning me-2"></i>
+                Required Skills
+            </h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="h6 text-primary">Technical Skills</h5>
+                    ${careerDetails.skills.technical.map(skill => 
+                        `<p><i class="fas fa-check text-success me-2"></i>${skill}</p>`
+                    ).join('')}
+                </div>
+                <div class="col-md-6">
+                    <h5 class="h6 text-primary">Soft Skills</h5>
+                    ${careerDetails.skills.soft.map(skill => 
+                        `<p><i class="fas fa-check text-success me-2"></i>${skill}</p>`
+                    ).join('')}
+                </div>
+            </div>
+        `;
+        cardContent.appendChild(skills);
+    }
+
+    // Salary Information
+    if (careerDetails?.salary) {
+        const salary = document.createElement('div');
+        salary.className = 'mb-4';
+        salary.innerHTML = `
+            <h4 class="d-flex align-items-center">
+                <i class="fas fa-money-bill-wave text-success me-2"></i>
+                Salary Range
+            </h4>
+            <div class="salary-ranges">
+                <p><i class="fas fa-level-up-alt text-primary me-2"></i>Entry Level: ${careerDetails.salary.entry}</p>
+                <p><i class="fas fa-level-up-alt text-primary me-2"></i>Mid-Career: ${careerDetails.salary.mid}</p>
+                <p><i class="fas fa-level-up-alt text-primary me-2"></i>Senior Level: ${careerDetails.salary.senior}</p>
+                <p class="text-muted small mt-2"><i class="fas fa-info-circle me-1"></i>${careerDetails.salary.source}</p>
+            </div>
+        `;
+        cardContent.appendChild(salary);
+    }
+
+    // Career Path
+    if (careerDetails?.careerPath) {
+        const careerPath = document.createElement('div');
+        careerPath.className = 'mb-4';
+        careerPath.innerHTML = `
+            <h4 class="d-flex align-items-center">
+                <i class="fas fa-road text-info me-2"></i>
+                Career Progression
+            </h4>
+            <div class="career-path">
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-arrow-right text-success me-2"></i>
+                    <span class="text-muted">Entry:</span>
+                    <span class="ms-2">${careerDetails.careerPath.entry}</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-arrow-right text-success me-2"></i>
+                    <span class="text-muted">Mid-Level:</span>
+                    <span class="ms-2">${careerDetails.careerPath.mid}</span>
+                </div>
+                <div class="d-flex align-items-center mb-2">
+                    <i class="fas fa-arrow-right text-success me-2"></i>
+                    <span class="text-muted">Senior:</span>
+                    <span class="ms-2">${careerDetails.careerPath.senior}</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-arrow-right text-success me-2"></i>
+                    <span class="text-muted">Executive:</span>
+                    <span class="ms-2">${careerDetails.careerPath.executive}</span>
+                </div>
+            </div>
+        `;
+        cardContent.appendChild(careerPath);
+    }
+
+    // Industry Trends
+    if (careerDetails?.industryTrends) {
+        const trends = document.createElement('div');
+        trends.className = 'mb-4';
+        trends.innerHTML = `
+            <h4 class="d-flex align-items-center">
+                <i class="fas fa-chart-line text-primary me-2"></i>
+                Industry Trends
+            </h4>
+            ${careerDetails.industryTrends.map(trend => 
+                `<p><i class="fas fa-trending-up text-success me-2"></i>${trend}</p>`
+            ).join('')}
+        `;
+        cardContent.appendChild(trends);
+    }
+
+    return cardContent;
+}
+
+function displayRecommendations(recommendations, mbtiType, hollandCodes, formData) {
+    DEBUG.info('Starting displayRecommendations with:', { 
+        recommendationsCount: recommendations?.length,
+        mbtiType,
+        hollandCodes,
+        hasFormData: !!formData
+    });
+    
+    const resultsDiv = document.getElementById('results');
+    if (!resultsDiv) {
+        DEBUG.error('Results div not found');
+        return;
+    }
+    
+    // Clear previous results
+    resultsDiv.innerHTML = '';
+    resultsDiv.style.display = 'block';
+    
+    if (!recommendations || !Array.isArray(recommendations) || recommendations.length === 0) {
+        DEBUG.error('Invalid or empty recommendations:', recommendations);
+        resultsDiv.innerHTML = `
+            <div class="alert alert-warning">
+                No career recommendations found for your profile. Please try different selections.
+            </div>
+        `;
+        return;
+    }
+    
+    // Add header with personality info
+    const header = document.createElement('div');
+    header.className = 'results-header text-center mb-4';
+    header.innerHTML = `
+        <h2 class="mb-3">Your Career Recommendations</h2>
+        <div class="personality-info mb-4">
+            <span class="badge bg-primary me-2">MBTI: ${mbtiType}</span>
+            <span class="badge bg-success">Holland Codes: ${hollandCodes.join(' / ')}</span>
+        </div>
+        <p class="lead">Based on your personality type and interests, here are your recommended career paths in construction:</p>
+    `;
+    resultsDiv.appendChild(header);
+    
+    // Create card container with grid layout
+    const cardContainer = document.createElement('div');
+    cardContainer.className = 'row row-cols-1 row-cols-md-2 g-4';
+    
+    recommendations.forEach((career, index) => {
+        DEBUG.info(`Processing career ${index + 1}:`, career);
+        
+        try {
+            const careerTitle = career.title ? String(career.title) : '';
+            DEBUG.info(`Creating card for career: ${careerTitle}`);
+            
+            const cardCol = document.createElement('div');
+            cardCol.className = 'col';
+            
+            const card = document.createElement('div');
+            card.className = 'card h-100 shadow-sm';
+            
+            const cardBody = displayCareerCard(career, mbtiType, hollandCodes);
+            
+            card.appendChild(cardBody);
+            cardCol.appendChild(card);
+            cardContainer.appendChild(cardCol);
+            
+            DEBUG.info(`Successfully added career card ${index + 1}`);
+        } catch (error) {
+            DEBUG.error(`Error processing career ${index + 1}:`, error);
+        }
+    });
+    
+    resultsDiv.appendChild(cardContainer);
+    
+    // Add action buttons for PDF and Print
+    addActionButtons(resultsDiv);
+    
+    // Ensure results are visible
+    resultsDiv.style.display = 'block';
+    resultsDiv.scrollIntoView({ behavior: 'smooth' });
+    DEBUG.info('Finished displaying recommendations');
+}
+
 // Update the form submission handler
 document.getElementById('careerForm').addEventListener('submit', async function(event) {
     event.preventDefault();
