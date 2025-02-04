@@ -406,11 +406,46 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
 
             const skillsList = document.createElement('ul');
             skillsList.className = 'list-unstyled mb-3';
-            careerDetails.skills.forEach(skill => {
-                const li = document.createElement('li');
-                li.innerHTML = `<i class="fas fa-check text-success me-2"></i>${skill}`;
-                skillsList.appendChild(li);
-            });
+
+            // Technical Skills
+            if (careerDetails.skills.technical && Array.isArray(careerDetails.skills.technical)) {
+                const technicalTitle = document.createElement('h6');
+                technicalTitle.className = 'mb-2 ms-2';
+                technicalTitle.innerHTML = '<i class="fas fa-cogs me-2"></i>Technical Skills';
+                skillsList.appendChild(technicalTitle);
+
+                careerDetails.skills.technical.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.className = 'ms-3';
+                    li.innerHTML = `<i class="fas fa-check text-success me-2"></i>${skill}`;
+                    skillsList.appendChild(li);
+                });
+            }
+
+            // Soft Skills
+            if (careerDetails.skills.soft && Array.isArray(careerDetails.skills.soft)) {
+                const softTitle = document.createElement('h6');
+                softTitle.className = 'mb-2 mt-2 ms-2';
+                softTitle.innerHTML = '<i class="fas fa-users me-2"></i>Soft Skills';
+                skillsList.appendChild(softTitle);
+
+                careerDetails.skills.soft.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.className = 'ms-3';
+                    li.innerHTML = `<i class="fas fa-check text-success me-2"></i>${skill}`;
+                    skillsList.appendChild(li);
+                });
+            }
+
+            // If we have a simple array of skills (fallback for old data format)
+            if (Array.isArray(careerDetails.skills)) {
+                careerDetails.skills.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<i class="fas fa-check text-success me-2"></i>${skill}`;
+                    skillsList.appendChild(li);
+                });
+            }
+
             cardContent.appendChild(skillsList);
         }
 
