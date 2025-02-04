@@ -92,6 +92,13 @@ function selectMBTIPreference(preference, opposite) {
 
 // Add a button to trigger the auto-fill
 function addAutoFillButton() {
+    // Only add the button in development or on GitHub Pages preview
+    if (!(window.location.hostname === 'localhost' || 
+          window.location.hostname === '127.0.0.1' ||
+          window.location.hostname === 'embers-staffing.github.io')) {
+        return;
+    }
+
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'btn btn-secondary mb-3';
@@ -106,3 +113,6 @@ function addAutoFillButton() {
 
 // Initialize when the page loads
 document.addEventListener('DOMContentLoaded', addAutoFillButton);
+
+// Export functions for use in other modules
+export { autoFillSurvey, addAutoFillButton };
