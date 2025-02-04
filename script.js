@@ -374,6 +374,29 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
         if (details) {
             // Overview section with icon
             cardBody.innerHTML = `
+                <style>
+                    .career-list {
+                        list-style: none;
+                        padding-left: 0;
+                    }
+                    .career-list li {
+                        display: flex;
+                        align-items: flex-start;
+                        margin-bottom: 0.5rem;
+                    }
+                    .career-list li:last-child {
+                        margin-bottom: 0;
+                    }
+                    .career-icon {
+                        flex-shrink: 0;
+                        margin-right: 0.75rem;
+                        width: 20px;
+                        text-align: center;
+                    }
+                    .career-text {
+                        flex-grow: 1;
+                    }
+                </style>
                 <div class="mb-4">
                     <h6 class="d-flex align-items-center">
                         <span class="info-icon me-2" style="color: #0dcaf0;">ℹ️</span>
@@ -387,11 +410,11 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                         <span class="education-icon me-2">🎓</span>
                         <span>Education</span>
                     </h6>
-                    <ul class="list-unstyled mb-0">
+                    <ul class="career-list">
                         ${details.education.degrees.map(degree => `
-                            <li class="mb-2 d-flex align-items-start">
-                                <span class="me-2">📚</span>
-                                <span class="text-muted">${degree}</span>
+                            <li>
+                                <span class="career-icon">📚</span>
+                                <span class="career-text text-muted">${degree}</span>
                             </li>
                         `).join('')}
                     </ul>
@@ -405,22 +428,22 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <p class="mb-1 fw-bold text-primary">Technical</p>
-                            <ul class="list-unstyled mb-3">
+                            <ul class="career-list">
                                 ${details.skills.technical.map(skill => `
-                                    <li class="mb-1 d-flex align-items-start">
-                                        <span class="me-2">⚡</span>
-                                        <span class="text-muted">${skill}</span>
+                                    <li>
+                                        <span class="career-icon">⚡</span>
+                                        <span class="career-text text-muted">${skill}</span>
                                     </li>
                                 `).join('')}
                             </ul>
                         </div>
                         <div class="col-12 col-md-6">
                             <p class="mb-1 fw-bold text-primary">Soft Skills</p>
-                            <ul class="list-unstyled mb-0">
+                            <ul class="career-list">
                                 ${details.skills.soft.map(skill => `
-                                    <li class="mb-1 d-flex align-items-start">
-                                        <span class="me-2">✨</span>
-                                        <span class="text-muted">${skill}</span>
+                                    <li>
+                                        <span class="career-icon">✨</span>
+                                        <span class="career-text text-muted">${skill}</span>
                                     </li>
                                 `).join('')}
                             </ul>
@@ -433,11 +456,11 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                         <span class="certification-icon me-2">📜</span>
                         <span>Certifications</span>
                     </h6>
-                    <ul class="list-unstyled mb-0">
+                    <ul class="career-list">
                         ${details.certifications.map(cert => `
-                            <li class="mb-2 d-flex align-items-start">
-                                <span class="me-2">🏆</span>
-                                <span class="text-muted">${cert}</span>
+                            <li>
+                                <span class="career-icon">🏆</span>
+                                <span class="career-text text-muted">${cert}</span>
                             </li>
                         `).join('')}
                     </ul>
@@ -448,25 +471,31 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                         <span class="salary-icon me-2">💰</span>
                         <span>Salary Range</span>
                     </h6>
-                    <div class="salary-ranges">
-                        <p class="mb-1 d-flex align-items-center">
-                            <span class="me-2">💼</span>
-                            <span class="fw-bold text-primary">Entry Level:</span>
-                            <span class="text-muted ms-2">${details.salary.entry}</span>
-                        </p>
-                        <p class="mb-1 d-flex align-items-center">
-                            <span class="me-2">📈</span>
-                            <span class="fw-bold text-primary">Mid Career:</span>
-                            <span class="text-muted ms-2">${details.salary.mid}</span>
-                        </p>
+                    <ul class="career-list">
+                        <li>
+                            <span class="career-icon">💼</span>
+                            <span class="career-text">
+                                <span class="fw-bold text-primary">Entry Level:</span>
+                                <span class="text-muted">${details.salary.entry}</span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="career-icon">📈</span>
+                            <span class="career-text">
+                                <span class="fw-bold text-primary">Mid Career:</span>
+                                <span class="text-muted">${details.salary.mid}</span>
+                            </span>
+                        </li>
                         ${details.salary.senior ? `
-                            <p class="mb-0 d-flex align-items-center">
-                                <span class="me-2">🌟</span>
-                                <span class="fw-bold text-primary">Senior Level:</span>
-                                <span class="text-muted ms-2">${details.salary.senior}</span>
-                            </p>
+                            <li>
+                                <span class="career-icon">🌟</span>
+                                <span class="career-text">
+                                    <span class="fw-bold text-primary">Senior Level:</span>
+                                    <span class="text-muted">${details.salary.senior}</span>
+                                </span>
+                            </li>
                         ` : ''}
-                    </div>
+                    </ul>
                 </div>
             `;
         } else {
@@ -534,9 +563,9 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
     header.textContent = 'Based on your personality type and interests, here are your recommended career paths in construction:';
     resultsDiv.appendChild(header);
 
-    // Create card container
+    // Create card container - changed to stack cards vertically
     const cardContainer = document.createElement('div');
-    cardContainer.className = 'row row-cols-1 row-cols-md-2 g-4';
+    cardContainer.className = 'row g-4'; // Removed row-cols classes to make cards full width
 
     // Process each recommendation
     recommendations.forEach((recommendation, index) => {
@@ -552,7 +581,7 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
             }
 
             const cardCol = document.createElement('div');
-            cardCol.className = 'col';
+            cardCol.className = 'col-12'; // Changed to full width
             
             const card = displayCareerCard(careerTitle, mbtiType, hollandCodes);
             if (card) {
