@@ -567,8 +567,20 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
         DEBUG.info(`Processing recommendation ${index + 1}:`, recommendation);
         
         try {
-            const cardCol = displayCareerCard(recommendation, mbtiType, hollandCodes);
-            if (cardCol) {
+            // Extract the title from the recommendation object or use the string directly
+            const careerTitle = typeof recommendation === 'object' ? recommendation.title : recommendation;
+            
+            if (!careerTitle) {
+                DEBUG.error('Invalid career recommendation:', recommendation);
+                return;
+            }
+
+            const cardCol = document.createElement('div');
+            cardCol.className = 'col';
+            
+            const card = displayCareerCard(careerTitle, mbtiType, hollandCodes);
+            if (card) {
+                cardCol.appendChild(card);
                 cardContainer.appendChild(cardCol);
             }
         } catch (error) {
