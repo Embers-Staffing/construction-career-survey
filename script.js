@@ -359,10 +359,17 @@ function displayRecommendations(recommendations) {
         // Create recommendations HTML
         const recommendationsHtml = recommendations.map(career => {
             try {
+                // Debug the career object
+                DEBUG.info('Processing career object:', career);
+                
                 // Ensure career is an object and has required properties
                 if (!career || typeof career !== 'object') {
+                    DEBUG.error('Invalid career object:', career);
                     throw new Error('Invalid career object');
                 }
+
+                // Debug the title specifically
+                DEBUG.info('Career title:', career.title, typeof career.title);
 
                 // Determine experience level based on years required
                 let experienceLevel = 'entry';
@@ -374,8 +381,10 @@ function displayRecommendations(recommendations) {
                     experienceLevel = 'intermediate';
                 }
 
-                // Get training recommendations
-                const careerPath = determineCareerPath(career.title);
+                // Get training recommendations - ensure title is a string
+                const careerTitle = career.title ? String(career.title) : '';
+                DEBUG.info('Career title after conversion:', careerTitle, typeof careerTitle);
+                const careerPath = determineCareerPath(careerTitle);
                 const training = getTrainingRecommendations(experienceLevel, careerPath);
 
                 return `
@@ -468,10 +477,17 @@ function displayRecommendations(recommendations) {
         const firstCareer = recommendations[0];
         if (firstCareer) {
             try {
+                // Debug the first career object
+                DEBUG.info('Processing first career for training:', firstCareer);
+                
                 const yearsExperience = Number(firstCareer.yearsExperience) || 0;
                 const experienceLevel = yearsExperience >= 5 ? 'experienced' : 
                                       yearsExperience >= 2 ? 'intermediate' : 'entry';
-                const careerPath = determineCareerPath(firstCareer.title);
+                                      
+                // Ensure title is a string for training recommendations
+                const careerTitle = firstCareer.title ? String(firstCareer.title) : '';
+                DEBUG.info('First career title for training:', careerTitle, typeof careerTitle);
+                const careerPath = determineCareerPath(careerTitle);
                 const training = getTrainingRecommendations(experienceLevel, careerPath);
                 displayTrainingRecommendations(training);
             } catch (error) {
@@ -492,9 +508,18 @@ function displayRecommendations(recommendations) {
  */
 function determineCareerPath(title) {
     try {
-        // Ensure title is a string and handle null/undefined
-        const safeTitle = String(title || '').toLowerCase();
-        DEBUG.info('Determining career path for:', safeTitle);
+        // Debug the input
+        DEBUG.info('determineCareerPath input:', title, typeof title);
+        
+        // Handle null/undefined/non-string input
+        if (!title || typeof title !== 'string') {
+            DEBUG.warn('Invalid title input:', title);
+            return 'skilled_trades';
+        }
+        
+        // Convert to string and lowercase
+        const safeTitle = title.toLowerCase();
+        DEBUG.info('Title after conversion:', safeTitle);
         
         if (safeTitle.includes('manager') || safeTitle.includes('coordinator')) {
             return 'project_management';
@@ -506,7 +531,7 @@ function determineCareerPath(title) {
             return 'skilled_trades';
         }
     } catch (error) {
-        DEBUG.error('Error determining career path:', error);
+        DEBUG.error('Error determining career path:', error, { title });
         return 'skilled_trades'; // Default to skilled trades if there's an error
     }
 }
