@@ -389,8 +389,9 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                     </h6>
                     <ul class="list-unstyled mb-0">
                         ${details.education.degrees.map(degree => `
-                            <li class="mb-2">
-                                <span class="text-muted">• ${degree}</span>
+                            <li class="mb-2 d-flex align-items-start">
+                                <span class="me-2">📚</span>
+                                <span class="text-muted">${degree}</span>
                             </li>
                         `).join('')}
                     </ul>
@@ -406,8 +407,9 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                             <p class="mb-1 fw-bold text-primary">Technical</p>
                             <ul class="list-unstyled mb-3">
                                 ${details.skills.technical.map(skill => `
-                                    <li class="mb-1">
-                                        <span class="text-muted">• ${skill}</span>
+                                    <li class="mb-1 d-flex align-items-start">
+                                        <span class="me-2">⚡</span>
+                                        <span class="text-muted">${skill}</span>
                                     </li>
                                 `).join('')}
                             </ul>
@@ -416,8 +418,9 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                             <p class="mb-1 fw-bold text-primary">Soft Skills</p>
                             <ul class="list-unstyled mb-0">
                                 ${details.skills.soft.map(skill => `
-                                    <li class="mb-1">
-                                        <span class="text-muted">• ${skill}</span>
+                                    <li class="mb-1 d-flex align-items-start">
+                                        <span class="me-2">✨</span>
+                                        <span class="text-muted">${skill}</span>
                                     </li>
                                 `).join('')}
                             </ul>
@@ -432,8 +435,9 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                     </h6>
                     <ul class="list-unstyled mb-0">
                         ${details.certifications.map(cert => `
-                            <li class="mb-2">
-                                <span class="text-muted">• ${cert}</span>
+                            <li class="mb-2 d-flex align-items-start">
+                                <span class="me-2">🏆</span>
+                                <span class="text-muted">${cert}</span>
                             </li>
                         `).join('')}
                     </ul>
@@ -445,18 +449,21 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                         <span>Salary Range</span>
                     </h6>
                     <div class="salary-ranges">
-                        <p class="mb-1">
+                        <p class="mb-1 d-flex align-items-center">
+                            <span class="me-2">💼</span>
                             <span class="fw-bold text-primary">Entry Level:</span>
-                            <span class="text-muted">${details.salary.entry}</span>
+                            <span class="text-muted ms-2">${details.salary.entry}</span>
                         </p>
-                        <p class="mb-1">
+                        <p class="mb-1 d-flex align-items-center">
+                            <span class="me-2">📈</span>
                             <span class="fw-bold text-primary">Mid Career:</span>
-                            <span class="text-muted">${details.salary.mid}</span>
+                            <span class="text-muted ms-2">${details.salary.mid}</span>
                         </p>
                         ${details.salary.senior ? `
-                            <p class="mb-0">
+                            <p class="mb-0 d-flex align-items-center">
+                                <span class="me-2">🌟</span>
                                 <span class="fw-bold text-primary">Senior Level:</span>
-                                <span class="text-muted">${details.salary.senior}</span>
+                                <span class="text-muted ms-2">${details.salary.senior}</span>
                             </p>
                         ` : ''}
                     </div>
