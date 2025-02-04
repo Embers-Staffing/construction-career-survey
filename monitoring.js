@@ -1,11 +1,10 @@
+'use strict';
+
 import promBundle from 'express-prom-bundle';
 import client from 'prom-client';
 
 // Create a Registry
 const register = new client.Registry();
-
-// Add default metrics (e.g., memory usage, CPU usage)
-client.collectDefaultMetrics({ register });
 
 // Create custom metrics
 const httpRequestDurationMicroseconds = new client.Histogram({
@@ -13,16 +12,24 @@ const httpRequestDurationMicroseconds = new client.Histogram({
     help: 'Duration of HTTP requests in seconds',
     labelNames: ['method', 'route', 'code'],
     buckets: [0.1, 0.5, 1, 2, 5],
-    registers: [register] // Explicitly specify the register
+    registers: [register]
 });
 
 // Create middleware with explicit configuration
 const metricsMiddleware = promBundle({
     includeMethod: true,
     includePath: true,
-    promClient: { collectDefaultMetrics: { register } }, // Properly configure default metrics
     promRegistry: register,
-    autoregister: false // Don't auto-register metrics
+    autoregister: false, // Prevent auto-registration
+    promClient: {
+        collectDefaultMetrics: false // Disable default metrics in the bundle
+    }
+});
+
+// Add default metrics after middleware setup
+client.collectDefaultMetrics({
+    register,
+    prefix: 'app_'  // Add prefix to prevent conflicts
 });
 
 // Register the custom metrics
