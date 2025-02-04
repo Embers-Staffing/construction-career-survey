@@ -1,6 +1,6 @@
 'use strict';
 
-import { getRecommendations, getCareerDetails } from './data/career-data.js';
+import { getRecommendations, getCareerDetails as getCareerInfo } from './data/career-data.js';
 
 // Debug utilities
 const DEBUG = {
@@ -342,12 +342,8 @@ async function displayResults(result, careerDetails) {
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
 }
 
-function getCareerDetails(title) {
-    return import('./data/career-data.js').then(data => data.getCareerDetails(title));
-}
-
 function displayCareerCard(career, mbtiType, hollandCodes) {
-    const careerDetails = getCareerDetails(career.title);
+    const careerDetails = getCareerInfo(career);
     const cardContent = document.createElement('div');
     cardContent.className = 'card-body';
 
