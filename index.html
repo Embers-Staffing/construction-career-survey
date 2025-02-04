@@ -496,9 +496,15 @@
     
     <!-- Test Scripts (only in development) -->
     <script type="module">
-        import { addAutoFillButton } from './tests/autoFill.js';
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            addAutoFillButton();
+        const hostname = window.location.hostname;
+        if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === 'embers-staffing.github.io') {
+            import('./tests/autoFill.js')
+                .then(module => {
+                    module.addAutoFillButton();
+                })
+                .catch(error => {
+                    console.error('Error loading auto-fill script:', error);
+                });
         }
     </script>
 </body>
