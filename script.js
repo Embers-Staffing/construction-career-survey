@@ -348,8 +348,8 @@ function displayRecommendations(recommendations) {
         const resultsDiv = document.getElementById('results');
         const resultsContent = document.getElementById('resultsContent');
         
-        if (!resultsDiv || !resultsContent || !recommendations || recommendations.length === 0) {
-            DEBUG.error('Missing elements or recommendations:', { resultsDiv, resultsContent, recommendations });
+        if (!resultsDiv || !resultsContent || !recommendations || !Array.isArray(recommendations) || recommendations.length === 0) {
+            DEBUG.error('Missing elements or invalid recommendations:', { resultsDiv, resultsContent, recommendations });
             return;
         }
 
@@ -358,82 +358,107 @@ function displayRecommendations(recommendations) {
 
         // Create recommendations HTML
         const recommendationsHtml = recommendations.map(career => {
-            // Determine experience level based on years required
-            let experienceLevel = 'entry';
-            if (career.yearsExperience >= 5) {
-                experienceLevel = 'experienced';
-            } else if (career.yearsExperience >= 2) {
-                experienceLevel = 'intermediate';
-            }
+            try {
+                // Ensure career is an object and has required properties
+                if (!career || typeof career !== 'object') {
+                    throw new Error('Invalid career object');
+                }
 
-            // Get training recommendations
-            const careerPath = determineCareerPath(career.title);
-            const training = getTrainingRecommendations(experienceLevel, careerPath);
+                // Determine experience level based on years required
+                let experienceLevel = 'entry';
+                const yearsExperience = Number(career.yearsExperience) || 0;
+                
+                if (yearsExperience >= 5) {
+                    experienceLevel = 'experienced';
+                } else if (yearsExperience >= 2) {
+                    experienceLevel = 'intermediate';
+                }
 
-            return `
-                <div class="career-recommendation mb-5">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h3 class="h4 mb-0">${career.title}</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <h4 class="h5 mb-3">Overview</h4>
-                                    <p>${career.description || 'No description available.'}</p>
+                // Get training recommendations
+                const careerPath = determineCareerPath(career.title);
+                const training = getTrainingRecommendations(experienceLevel, careerPath);
+
+                return `
+                    <div class="career-recommendation mb-5">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="h4 mb-0">${String(career.title || 'Construction Professional')}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h4 class="h5 mb-3">Overview</h4>
+                                        <p>${String(career.description || 'No description available.')}</p>
+                                        
+                                        <h4 class="h5 mb-3">Key Responsibilities</h4>
+                                        <ul class="list-unstyled">
+                                            ${(Array.isArray(career.responsibilities) ? career.responsibilities : [])
+                                                .map(resp => `
+                                                    <li><i class="fas fa-check text-success me-2"></i>${String(resp)}</li>
+                                                `).join('')}
+                                        </ul>
+                                    </div>
                                     
-                                    <h4 class="h5 mb-3">Key Responsibilities</h4>
-                                    <ul class="list-unstyled">
-                                        ${(career.responsibilities || []).map(resp => `
-                                            <li><i class="fas fa-check text-success me-2"></i>${resp}</li>
-                                        `).join('')}
-                                    </ul>
+                                    <div class="col-md-6">
+                                        <h4 class="h5 mb-3">Required Skills</h4>
+                                        <ul class="list-unstyled">
+                                            ${(Array.isArray(career.skills) ? career.skills : [])
+                                                .map(skill => `
+                                                    <li><i class="fas fa-star text-warning me-2"></i>${String(skill)}</li>
+                                                `).join('')}
+                                        </ul>
+                                        
+                                        <h4 class="h5 mb-3">Salary Range</h4>
+                                        <p>
+                                            <i class="fas fa-dollar-sign text-success me-2"></i>
+                                            Starting: ${String((career.salaryRange && career.salaryRange.starting) || 'Not specified')}<br>
+                                            <i class="fas fa-dollar-sign text-success me-2"></i>
+                                            Experienced: ${String((career.salaryRange && career.salaryRange.experienced) || 'Not specified')}
+                                        </p>
+                                    </div>
                                 </div>
-                                
-                                <div class="col-md-6">
-                                    <h4 class="h5 mb-3">Required Skills</h4>
-                                    <ul class="list-unstyled">
-                                        ${(career.skills || []).map(skill => `
-                                            <li><i class="fas fa-star text-warning me-2"></i>${skill}</li>
-                                        `).join('')}
-                                    </ul>
-                                    
-                                    <h4 class="h5 mb-3">Salary Range</h4>
-                                    <p>
-                                        <i class="fas fa-dollar-sign text-success me-2"></i>
-                                        Starting: ${career.salaryRange?.starting || 'Not specified'}<br>
-                                        <i class="fas fa-dollar-sign text-success me-2"></i>
-                                        Experienced: ${career.salaryRange?.experienced || 'Not specified'}
-                                    </p>
+
+                                <div class="mt-4">
+                                    <h4 class="h5 mb-3">Education & Training</h4>
+                                    <p><i class="fas fa-graduation-cap text-primary me-2"></i>${String(career.education || 'No specific education requirements.')}</p>
+                                    <p><i class="fas fa-clock text-info me-2"></i>Experience Required: ${yearsExperience} years</p>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h4 class="h5 mb-3">Career Growth</h4>
+                                    <p><i class="fas fa-chart-line text-success me-2"></i>${String(career.careerPath || 'Career progression information not available.')}</p>
                                 </div>
                             </div>
-
-                            <div class="mt-4">
-                                <h4 class="h5 mb-3">Education & Training</h4>
-                                <p><i class="fas fa-graduation-cap text-primary me-2"></i>${career.education || 'No specific education requirements.'}</p>
-                                <p><i class="fas fa-clock text-info me-2"></i>Experience Required: ${career.yearsExperience || 0} years</p>
-                            </div>
-
-                            <div class="mt-4">
-                                <h4 class="h5 mb-3">Career Growth</h4>
-                                <p><i class="fas fa-chart-line text-success me-2"></i>${career.careerPath || 'Career progression information not available.'}</p>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button class="btn btn-outline-primary" onclick="saveAsPDF()">
-                                        <i class="fas fa-file-pdf me-2"></i>Save as PDF
-                                    </button>
-                                    <button class="btn btn-outline-secondary" onclick="printResults()">
-                                        <i class="fas fa-print me-2"></i>Print
-                                    </button>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button class="btn btn-outline-primary" onclick="saveAsPDF()">
+                                            <i class="fas fa-file-pdf me-2"></i>Save as PDF
+                                        </button>
+                                        <button class="btn btn-outline-secondary" onclick="printResults()">
+                                            <i class="fas fa-print me-2"></i>Print
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            } catch (error) {
+                DEBUG.error('Error processing career:', error);
+                return `
+                    <div class="career-recommendation mb-5">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="h4 mb-0">Construction Professional</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-muted">An error occurred while loading this career recommendation.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         }).join('');
 
         // Update results content
@@ -442,11 +467,16 @@ function displayRecommendations(recommendations) {
         // Display training recommendations
         const firstCareer = recommendations[0];
         if (firstCareer) {
-            const experienceLevel = firstCareer.yearsExperience >= 5 ? 'experienced' : 
-                                  firstCareer.yearsExperience >= 2 ? 'intermediate' : 'entry';
-            const careerPath = determineCareerPath(firstCareer.title);
-            const training = getTrainingRecommendations(experienceLevel, careerPath);
-            displayTrainingRecommendations(training);
+            try {
+                const yearsExperience = Number(firstCareer.yearsExperience) || 0;
+                const experienceLevel = yearsExperience >= 5 ? 'experienced' : 
+                                      yearsExperience >= 2 ? 'intermediate' : 'entry';
+                const careerPath = determineCareerPath(firstCareer.title);
+                const training = getTrainingRecommendations(experienceLevel, careerPath);
+                displayTrainingRecommendations(training);
+            } catch (error) {
+                DEBUG.error('Error displaying training recommendations:', error);
+            }
         }
 
         DEBUG.info('Recommendations displayed successfully');
@@ -461,16 +491,23 @@ function displayRecommendations(recommendations) {
  * @returns {string} Career path category
  */
 function determineCareerPath(title) {
-    title = title.toLowerCase();
-    
-    if (title.includes('manager') || title.includes('coordinator')) {
-        return 'project_management';
-    } else if (title.includes('engineer') || title.includes('architect')) {
-        return 'engineering';
-    } else if (title.includes('supervisor') || title.includes('foreman')) {
-        return 'supervision';
-    } else {
-        return 'skilled_trades';
+    try {
+        // Ensure title is a string and handle null/undefined
+        const safeTitle = String(title || '').toLowerCase();
+        DEBUG.info('Determining career path for:', safeTitle);
+        
+        if (safeTitle.includes('manager') || safeTitle.includes('coordinator')) {
+            return 'project_management';
+        } else if (safeTitle.includes('engineer') || safeTitle.includes('architect')) {
+            return 'engineering';
+        } else if (safeTitle.includes('supervisor') || safeTitle.includes('foreman')) {
+            return 'supervision';
+        } else {
+            return 'skilled_trades';
+        }
+    } catch (error) {
+        DEBUG.error('Error determining career path:', error);
+        return 'skilled_trades'; // Default to skilled trades if there's an error
     }
 }
 
