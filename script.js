@@ -308,18 +308,18 @@ async function displayResults(result, careerDetails) {
         <div class="card mb-4">
             <div class="card-body">
                 <h3 class="card-title">Career Matches</h3>
-                <ul class="list-unstyled">
-                    ${careerDetails.map(career => `<li>${career.title}</li>`).join('')}
-                </ul>
+                <div class="list-unstyled">
+                    ${careerDetails.map(career => `<div>${career.title}</div>`).join('')}
+                </div>
             </div>
         </div>
 
         <div class="card mb-4">
             <div class="card-body">
                 <h3 class="card-title">Next Steps</h3>
-                <ul class="list-unstyled">
-                    ${getNextSteps(result).map(step => `<li>${step}</li>`).join('')}
-                </ul>
+                <div class="list-unstyled">
+                    ${getNextSteps(result).map(step => `<div>${step}</div>`).join('')}
+                </div>
             </div>
         </div>
 
@@ -332,9 +332,9 @@ async function displayResults(result, careerDetails) {
                     <p>Required Skills: ${getRequiredSkills(career.title).join(', ')}</p>
                     <p>Career Growth: ${getCareerGrowth(career.title)}</p>
                     <p>Progression Steps:</p>
-                    <ul class="list-unstyled">
-                        ${getProgressionSteps(career.title).map(step => `<li>${step.title} - ${step.salary} - ${step.timeframe}</li>`).join('')}
-                    </ul>
+                    <div class="list-unstyled">
+                        ${getProgressionSteps(career.title).map(step => `<div>${step.title} - ${step.salary} - ${step.timeframe}</div>`).join('')}
+                    </div>
                 `).join('')}
             </div>
         </div>
@@ -376,25 +376,33 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
             cardBody.innerHTML = `
                 <style>
                     .career-list {
-                        list-style: none;
-                        padding-left: 0;
+                        list-style: none !important;
+                        padding-left: 0 !important;
+                        margin-left: 0 !important;
                     }
-                    .career-list li {
-                        display: flex;
-                        align-items: flex-start;
-                        margin-bottom: 0.5rem;
+                    .career-list div {
+                        display: flex !important;
+                        align-items: flex-start !important;
+                        margin-bottom: 0.5rem !important;
+                        list-style-type: none !important;
                     }
-                    .career-list li:last-child {
-                        margin-bottom: 0;
+                    .career-list div:last-child {
+                        margin-bottom: 0 !important;
                     }
                     .career-icon {
-                        flex-shrink: 0;
-                        margin-right: 0.75rem;
-                        width: 20px;
-                        text-align: center;
+                        flex-shrink: 0 !important;
+                        margin-right: 0.75rem !important;
+                        width: 20px !important;
+                        text-align: center !important;
                     }
                     .career-text {
-                        flex-grow: 1;
+                        flex-grow: 1 !important;
+                    }
+                    /* Override any potential list styles */
+                    .career-list div::before,
+                    .career-list div::marker {
+                        display: none !important;
+                        content: none !important;
                     }
                 </style>
                 <div class="mb-4">
@@ -410,14 +418,14 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                         <span class="education-icon me-2">🎓</span>
                         <span>Education</span>
                     </h6>
-                    <ul class="career-list">
+                    <div class="career-list">
                         ${details.education.degrees.map(degree => `
-                            <li>
+                            <div class="d-flex align-items-start mb-2">
                                 <span class="career-icon">📚</span>
                                 <span class="career-text text-muted">${degree}</span>
-                            </li>
+                            </div>
                         `).join('')}
-                    </ul>
+                    </div>
                 </div>
 
                 <div class="mb-4">
@@ -428,25 +436,25 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <p class="mb-1 fw-bold text-primary">Technical</p>
-                            <ul class="career-list">
+                            <div class="career-list">
                                 ${details.skills.technical.map(skill => `
-                                    <li>
+                                    <div class="d-flex align-items-start mb-2">
                                         <span class="career-icon">⚡</span>
                                         <span class="career-text text-muted">${skill}</span>
-                                    </li>
+                                    </div>
                                 `).join('')}
-                            </ul>
+                            </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <p class="mb-1 fw-bold text-primary">Soft Skills</p>
-                            <ul class="career-list">
+                            <div class="career-list">
                                 ${details.skills.soft.map(skill => `
-                                    <li>
+                                    <div class="d-flex align-items-start mb-2">
                                         <span class="career-icon">✨</span>
                                         <span class="career-text text-muted">${skill}</span>
-                                    </li>
+                                    </div>
                                 `).join('')}
-                            </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -456,14 +464,14 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                         <span class="certification-icon me-2">📜</span>
                         <span>Certifications</span>
                     </h6>
-                    <ul class="career-list">
+                    <div class="career-list">
                         ${details.certifications.map(cert => `
-                            <li>
+                            <div class="d-flex align-items-start mb-2">
                                 <span class="career-icon">🏆</span>
                                 <span class="career-text text-muted">${cert}</span>
-                            </li>
+                            </div>
                         `).join('')}
-                    </ul>
+                    </div>
                 </div>
 
                 <div>
@@ -471,31 +479,31 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
                         <span class="salary-icon me-2">💰</span>
                         <span>Salary Range</span>
                     </h6>
-                    <ul class="career-list">
-                        <li>
+                    <div class="career-list">
+                        <div class="d-flex align-items-start mb-2">
                             <span class="career-icon">💼</span>
                             <span class="career-text">
                                 <span class="fw-bold text-primary">Entry Level:</span>
                                 <span class="text-muted">${details.salary.entry}</span>
                             </span>
-                        </li>
-                        <li>
+                        </div>
+                        <div class="d-flex align-items-start mb-2">
                             <span class="career-icon">📈</span>
                             <span class="career-text">
                                 <span class="fw-bold text-primary">Mid Career:</span>
                                 <span class="text-muted">${details.salary.mid}</span>
                             </span>
-                        </li>
+                        </div>
                         ${details.salary.senior ? `
-                            <li>
+                            <div class="d-flex align-items-start">
                                 <span class="career-icon">🌟</span>
                                 <span class="career-text">
                                     <span class="fw-bold text-primary">Senior Level:</span>
                                     <span class="text-muted">${details.salary.senior}</span>
                                 </span>
-                            </li>
+                            </div>
                         ` : ''}
-                    </ul>
+                    </div>
                 </div>
             `;
         } else {
@@ -563,9 +571,12 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
     header.textContent = 'Based on your personality type and interests, here are your recommended career paths in construction:';
     resultsDiv.appendChild(header);
 
-    // Create card container - changed to stack cards vertically
+    // Create container for cards
     const cardContainer = document.createElement('div');
-    cardContainer.className = 'row g-4'; // Removed row-cols classes to make cards full width
+    cardContainer.className = 'row g-4';
+
+    // Create a Set to track processed titles and avoid duplicates
+    const processedTitles = new Set();
 
     // Process each recommendation
     recommendations.forEach((recommendation, index) => {
@@ -575,13 +586,15 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
             // Extract the title from the recommendation object or use the string directly
             const careerTitle = typeof recommendation === 'object' ? recommendation.title : recommendation;
             
-            if (!careerTitle) {
-                DEBUG.error('Invalid career recommendation:', recommendation);
+            if (!careerTitle || processedTitles.has(careerTitle)) {
+                DEBUG.info('Skipping duplicate or invalid career title:', careerTitle);
                 return;
             }
 
+            processedTitles.add(careerTitle);
+            
             const cardCol = document.createElement('div');
-            cardCol.className = 'col-12'; // Changed to full width
+            cardCol.className = 'col-12';
             
             const card = displayCareerCard(careerTitle, mbtiType, hollandCodes);
             if (card) {
