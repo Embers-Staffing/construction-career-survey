@@ -579,8 +579,276 @@ function getCareerDetails(title) {
                 senior: 'Client Relations Director',
                 executive: 'VP of Client Relations'
             }
+        },
+        'Construction Project Manager': {
+            description: 'A Construction Project Manager oversees all aspects of construction projects from planning to completion, ensuring projects are delivered on time, within budget, and to quality standards.',
+            education: {
+                degrees: [
+                    'Bachelor\'s degree in Construction Management, Civil Engineering, or related field',
+                    'Master\'s degree in Construction Management or Business Administration (preferred)'
+                ],
+                schools: [
+                    {
+                        name: 'Columbia University',
+                        program: 'Construction Management Certification',
+                        link: 'https://www.cvn.columbia.edu/program/columbia-university-civil-engineering-construction-management-certification-certificate'
+                    },
+                    {
+                        name: 'Northeastern University',
+                        program: 'Graduate Certificate in Construction Management',
+                        link: 'https://graduate.northeastern.edu/programs/certg-construction-mgmt-cps/graduate-certificate-in-construction-management-online/'
+                    }
+                ]
+            },
+            certifications: [
+                'Project Management Professional (PMP)',
+                'Certified Construction Manager (CCM)',
+                'LEED Accredited Professional'
+            ],
+            skills: {
+                technical: [
+                    'Project Planning and Scheduling',
+                    'Cost Estimation and Budgeting',
+                    'Contract Management',
+                    'Building Information Modeling (BIM)',
+                    'Construction Management Software'
+                ],
+                soft: [
+                    'Leadership',
+                    'Problem-solving',
+                    'Communication',
+                    'Risk Management',
+                    'Team Coordination'
+                ]
+            },
+            salary: {
+                entry: '$65,000 - $85,000',
+                mid: '$85,000 - $120,000',
+                senior: '$120,000 - $180,000',
+                source: 'Based on Indeed.com data 2025'
+            },
+            responsibilities: [
+                'Oversee project planning and execution',
+                'Manage budgets and resources',
+                'Coordinate with stakeholders',
+                'Ensure compliance with regulations',
+                'Monitor project progress and quality'
+            ],
+            industryTrends: [
+                'Adoption of construction technology',
+                'Sustainable building practices',
+                'Modular construction methods',
+                'Remote project management tools'
+            ],
+            careerPath: {
+                entry: 'Assistant Project Manager',
+                mid: 'Project Manager',
+                senior: 'Senior Project Manager',
+                executive: 'Director of Construction'
+            }
+        },
+        'Construction Superintendent': {
+            description: 'A Construction Superintendent directly supervises construction sites, coordinates workers and subcontractors, and ensures work is completed according to specifications and safety standards.',
+            education: {
+                degrees: [
+                    'Associate\'s or Bachelor\'s degree in Construction Management or related field',
+                    'High school diploma with extensive construction experience'
+                ],
+                schools: [
+                    {
+                        name: 'Missouri University',
+                        program: 'Certificate in Construction Management',
+                        link: 'https://extension.missouri.edu/programs/mu-career-accelerator/noncredit-certificates/certificate-in-construction-management'
+                    },
+                    {
+                        name: 'National University',
+                        program: 'Professional Certificate in Construction Management',
+                        link: 'https://www.nu.edu/degrees/construction-trades/programs/construction-management-professional-certificate/'
+                    }
+                ]
+            },
+            certifications: [
+                'OSHA 30-Hour Construction Safety',
+                'First Aid and CPR',
+                'Construction Superintendent Certificate'
+            ],
+            skills: {
+                technical: [
+                    'Blueprint Reading',
+                    'Construction Methods',
+                    'Safety Protocols',
+                    'Quality Control',
+                    'Schedule Management'
+                ],
+                soft: [
+                    'Leadership',
+                    'Problem-solving',
+                    'Communication',
+                    'Decision Making',
+                    'Team Management'
+                ]
+            },
+            salary: {
+                entry: '$60,000 - $75,000',
+                mid: '$75,000 - $95,000',
+                senior: '$95,000 - $130,000',
+                source: 'Based on Indeed.com data 2025'
+            },
+            responsibilities: [
+                'Supervise construction sites',
+                'Coordinate workers and subcontractors',
+                'Ensure safety compliance',
+                'Monitor project progress',
+                'Quality control'
+            ],
+            industryTrends: [
+                'Digital documentation tools',
+                'Real-time project tracking',
+                'Advanced safety protocols',
+                'Sustainable construction practices'
+            ],
+            careerPath: {
+                entry: 'Assistant Superintendent',
+                mid: 'Superintendent',
+                senior: 'Senior Superintendent',
+                executive: 'General Superintendent'
+            }
+        },
+        'Safety Director': {
+            description: 'A Safety Director develops and implements safety programs, ensures OSHA compliance, and creates a culture of safety across construction projects.',
+            education: {
+                degrees: [
+                    'Bachelor\'s degree in Occupational Safety, Construction Management, or related field',
+                    'Master\'s degree in Safety Management (preferred)'
+                ],
+                schools: [
+                    {
+                        name: 'Columbia Southern University',
+                        program: 'B.S. in Occupational Safety and Health',
+                        link: 'https://www.columbiasouthern.edu/online-degree/safety-emer-services/occupational-safety-health-bs/'
+                    },
+                    {
+                        name: 'Eastern Kentucky University',
+                        program: 'Master of Science in Safety, Security & Emergency Management',
+                        link: 'https://safetymanagement.eku.edu/'
+                    }
+                ]
+            },
+            certifications: [
+                'Certified Safety Professional (CSP)',
+                'OSHA 500 Trainer Course',
+                'Construction Health and Safety Technician (CHST)'
+            ],
+            skills: {
+                technical: [
+                    'OSHA Regulations',
+                    'Safety Program Development',
+                    'Accident Investigation',
+                    'Risk Assessment',
+                    'Safety Training'
+                ],
+                soft: [
+                    'Leadership',
+                    'Communication',
+                    'Problem-solving',
+                    'Detail-oriented',
+                    'Training and Development'
+                ]
+            },
+            salary: {
+                entry: '$75,000 - $95,000',
+                mid: '$95,000 - $130,000',
+                senior: '$130,000 - $180,000',
+                source: 'Based on Salary.com data 2025'
+            },
+            responsibilities: [
+                'Develop safety programs',
+                'Conduct safety training',
+                'Ensure OSHA compliance',
+                'Investigate incidents',
+                'Maintain safety documentation'
+            ],
+            industryTrends: [
+                'Digital safety management systems',
+                'Wearable safety technology',
+                'Predictive analytics for risk assessment',
+                'Virtual reality safety training'
+            ],
+            careerPath: {
+                entry: 'Safety Coordinator',
+                mid: 'Safety Manager',
+                senior: 'Safety Director',
+                executive: 'VP of Safety'
+            }
+        },
+        'Construction Estimator': {
+            description: 'A Construction Estimator calculates the costs of construction projects, prepares detailed estimates, and helps companies win bids while maintaining profitability.',
+            education: {
+                degrees: [
+                    'Bachelor\'s degree in Construction Management, Engineering, or related field',
+                    'Associate\'s degree with extensive experience'
+                ],
+                schools: [
+                    {
+                        name: 'Purdue University',
+                        program: 'Building Construction Management Technology',
+                        link: 'https://polytechnic.purdue.edu/degrees/building-construction-management'
+                    },
+                    {
+                        name: 'Arizona State University',
+                        program: 'Construction Management and Technology',
+                        link: 'https://asuonline.asu.edu/online-degree-programs/undergraduate/construction-management-bs/'
+                    }
+                ]
+            },
+            certifications: [
+                'Certified Professional Estimator (CPE)',
+                'Certified Cost Professional (CCP)',
+                'LEED Green Associate'
+            ],
+            skills: {
+                technical: [
+                    'Cost Estimation Software',
+                    'Blueprint Reading',
+                    'Quantity Takeoff',
+                    'Construction Methods',
+                    'Material Pricing'
+                ],
+                soft: [
+                    'Analytical Thinking',
+                    'Attention to Detail',
+                    'Communication',
+                    'Time Management',
+                    'Negotiation'
+                ]
+            },
+            salary: {
+                entry: '$55,000 - $70,000',
+                mid: '$70,000 - $95,000',
+                senior: '$95,000 - $130,000',
+                source: 'Based on Indeed.com data 2025'
+            },
+            responsibilities: [
+                'Prepare cost estimates',
+                'Analyze project specifications',
+                'Research material and labor costs',
+                'Prepare bid proposals',
+                'Review subcontractor quotes'
+            ],
+            industryTrends: [
+                'AI-powered estimation tools',
+                'BIM integration',
+                'Real-time cost databases',
+                'Sustainable material costing'
+            ],
+            careerPath: {
+                entry: 'Junior Estimator',
+                mid: 'Senior Estimator',
+                senior: 'Chief Estimator',
+                executive: 'Director of Preconstruction'
+            }
         }
-        // Add more careers here
+        // More careers can be added here
     };
 
     return careerDetails[title] || null;
