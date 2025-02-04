@@ -370,6 +370,23 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
         return;
     }
     
+    // Add header with personality info
+    const header = document.createElement('div');
+    header.className = 'results-header text-center mb-4';
+    header.innerHTML = `
+        <h2 class="mb-3">Your Career Recommendations</h2>
+        <div class="personality-info mb-4">
+            <span class="badge bg-primary me-2">MBTI: ${mbtiType}</span>
+            <span class="badge bg-success">Holland Codes: ${hollandCodes.join(' / ')}</span>
+        </div>
+        <p class="lead">Based on your personality type and interests, here are your recommended career paths in construction:</p>
+    `;
+    resultsDiv.appendChild(header);
+    
+    // Create card container with grid layout
+    const cardContainer = document.createElement('div');
+    cardContainer.className = 'row row-cols-1 row-cols-md-2 g-4';
+    
     recommendations.forEach((career, index) => {
         DEBUG.info(`Processing career ${index + 1}:`, career);
         
@@ -377,62 +394,80 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
             const careerTitle = career.title ? String(career.title) : '';
             DEBUG.info(`Creating card for career: ${careerTitle}`);
             
+            const cardCol = document.createElement('div');
+            cardCol.className = 'col';
+            
             const card = document.createElement('div');
-            card.className = 'card mb-4';
+            card.className = 'card h-100 shadow-sm';
             
             const cardBody = document.createElement('div');
             cardBody.className = 'card-body';
             
-            // Title
+            // Title with icon
             const title = document.createElement('h3');
-            title.className = 'card-title';
-            title.textContent = careerTitle;
+            title.className = 'card-title d-flex align-items-center mb-3';
+            title.innerHTML = `
+                <i class="fas fa-hard-hat text-primary me-2"></i>
+                ${careerTitle}
+            `;
             cardBody.appendChild(title);
             
-            // Overview
+            // Overview with icon
             const overview = document.createElement('div');
             overview.className = 'mb-4';
             overview.innerHTML = `
-                <h4>Overview</h4>
+                <h4 class="d-flex align-items-center">
+                    <i class="fas fa-info-circle text-info me-2"></i>
+                    Overview
+                </h4>
                 <p>${career.description || `Specialized role combining ${mbtiType} personality traits with ${hollandCodes.join('/')} interests.`}</p>
             `;
             cardBody.appendChild(overview);
             
-            // Key Responsibilities
+            // Key Responsibilities with icon
             const responsibilities = document.createElement('div');
             responsibilities.className = 'mb-4';
             responsibilities.innerHTML = `
-                <h4>Key Responsibilities</h4>
+                <h4 class="d-flex align-items-center">
+                    <i class="fas fa-tasks text-success me-2"></i>
+                    Key Responsibilities
+                </h4>
                 ${(career.responsibilities || [
                     'Lead and coordinate construction projects',
                     'Implement industry best practices',
                     'Manage teams and resources',
                     'Drive project success'
-                ]).map(resp => `<p>✅ ${resp}</p>`).join('')}
+                ]).map(resp => `<p><i class="fas fa-check text-success me-2"></i>${resp}</p>`).join('')}
             `;
             cardBody.appendChild(responsibilities);
             
-            // Required Skills
+            // Required Skills with icon
             const skills = document.createElement('div');
             skills.className = 'mb-4';
             skills.innerHTML = `
-                <h4>Required Skills</h4>
+                <h4 class="d-flex align-items-center">
+                    <i class="fas fa-star text-warning me-2"></i>
+                    Required Skills
+                </h4>
                 ${(career.skills || [
                     'Advanced technical knowledge',
                     'Leadership abilities',
                     'Project management',
                     'Problem-solving'
-                ]).map(skill => `<p>⭐ ${skill}</p>`).join('')}
+                ]).map(skill => `<p><i class="fas fa-star text-warning me-2"></i>${skill}</p>`).join('')}
             `;
             cardBody.appendChild(skills);
             
-            // Education & Training
+            // Education & Training with icon
             const education = document.createElement('div');
             education.className = 'mb-4';
             education.innerHTML = `
-                <h4>Education & Training</h4>
-                <p>${career.education || 'Bachelor\'s degree in Construction Management or related field preferred'}</p>
-                ${career.certifications ? `<p>Recommended certifications: ${career.certifications}</p>` : ''}
+                <h4 class="d-flex align-items-center">
+                    <i class="fas fa-graduation-cap text-primary me-2"></i>
+                    Education & Training
+                </h4>
+                <p><i class="fas fa-book text-primary me-2"></i>${career.education || 'Bachelor\'s degree in Construction Management or related field preferred'}</p>
+                ${career.certifications ? `<p><i class="fas fa-certificate text-primary me-2"></i>Recommended certifications: ${career.certifications}</p>` : ''}
             `;
             cardBody.appendChild(education);
             
@@ -442,23 +477,33 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
             const trainingSection = displayTrainingRecommendations(training);
             cardBody.appendChild(trainingSection);
             
-            // Salary Range
+            // Salary Range with icon
             const salary = document.createElement('div');
+            salary.className = 'mb-4';
             salary.innerHTML = `
-                <h4>Salary Range</h4>
-                <p>💰 Starting: ${career.salaryRange?.starting || '$60,000 - $80,000'}</p>
-                <p>💰 Experienced: ${career.salaryRange?.experienced || '$90,000 - $120,000'}</p>
+                <h4 class="d-flex align-items-center">
+                    <i class="fas fa-money-bill-wave text-success me-2"></i>
+                    Salary Range
+                </h4>
+                <p><i class="fas fa-dollar-sign text-success me-2"></i>Starting: ${career.salaryRange?.starting || '$60,000 - $80,000'}</p>
+                <p><i class="fas fa-dollar-sign text-success me-2"></i>Experienced: ${career.salaryRange?.experienced || '$90,000 - $120,000'}</p>
             `;
             cardBody.appendChild(salary);
             
             card.appendChild(cardBody);
-            resultsDiv.appendChild(card);
+            cardCol.appendChild(card);
+            cardContainer.appendChild(cardCol);
             
             DEBUG.info(`Successfully added career card ${index + 1}`);
         } catch (error) {
             DEBUG.error(`Error processing career ${index + 1}:`, error);
         }
     });
+    
+    resultsDiv.appendChild(cardContainer);
+    
+    // Add action buttons for PDF and Print
+    addActionButtons(resultsDiv);
     
     // Ensure results are visible
     resultsDiv.style.display = 'block';
@@ -1116,4 +1161,127 @@ function displayTrainingRecommendations(recommendations) {
         ` : ''}
     `;
     return trainingDiv;
+}
+
+/**
+ * Generate and download results as PDF
+ */
+async function saveAsPDF() {
+    DEBUG.info('Starting PDF generation');
+    const element = document.getElementById('results');
+    
+    if (!element) {
+        DEBUG.error('Results element not found');
+        showNotification('Unable to generate PDF: Results not found', 'error');
+        return;
+    }
+    
+    const options = {
+        margin: 1,
+        filename: 'construction-career-recommendations.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    try {
+        // Add a temporary class for PDF styling
+        element.classList.add('pdf-mode');
+        
+        // Generate PDF
+        await html2pdf().set(options).from(element).save();
+        
+        // Remove the temporary class
+        element.classList.remove('pdf-mode');
+        
+        DEBUG.info('PDF generated successfully');
+        showNotification('PDF generated successfully!', 'success');
+    } catch (error) {
+        DEBUG.error('Error generating PDF:', error);
+        showNotification('Error generating PDF. Please try again.', 'error');
+    }
+}
+
+/**
+ * Print the results
+ */
+function printResults() {
+    DEBUG.info('Starting print process');
+    const resultsDiv = document.getElementById('results');
+    
+    if (!resultsDiv) {
+        DEBUG.error('Results element not found');
+        showNotification('Unable to print: Results not found', 'error');
+        return;
+    }
+
+    try {
+        // Add print-specific styling class
+        resultsDiv.classList.add('print-mode');
+        
+        // Create a new window for printing
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            throw new Error('Unable to open print window');
+        }
+        
+        // Add necessary styles
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Construction Career Recommendations</title>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+                <style>
+                    body { padding: 20px; }
+                    .card { margin-bottom: 20px; break-inside: avoid; }
+                    @media print {
+                        .card { page-break-inside: avoid; }
+                        .no-print { display: none; }
+                    }
+                </style>
+            </head>
+            <body>
+                ${resultsDiv.outerHTML}
+            </body>
+            </html>
+        `);
+        
+        // Wait for resources to load
+        printWindow.document.close();
+        printWindow.onload = function() {
+            printWindow.focus();
+            printWindow.print();
+            printWindow.onafterprint = function() {
+                printWindow.close();
+            };
+        };
+        
+        // Remove print-specific styling
+        resultsDiv.classList.remove('print-mode');
+        
+        DEBUG.info('Print dialog opened successfully');
+    } catch (error) {
+        DEBUG.error('Error opening print dialog:', error);
+        showNotification('Error opening print dialog. Please try again.', 'error');
+        resultsDiv.classList.remove('print-mode');
+    }
+}
+
+// Add the action buttons after displaying recommendations
+function addActionButtons(resultsDiv) {
+    DEBUG.info('Adding action buttons');
+    
+    const actionButtons = document.createElement('div');
+    actionButtons.className = 'action-buttons mt-4 mb-4 d-flex justify-content-center gap-3';
+    actionButtons.innerHTML = `
+        <button onclick="saveAsPDF()" class="btn btn-primary">
+            <i class="fas fa-file-pdf"></i> Save as PDF
+        </button>
+        <button onclick="printResults()" class="btn btn-secondary">
+            <i class="fas fa-print"></i> Print Results
+        </button>
+    `;
+    
+    resultsDiv.appendChild(actionButtons);
+    DEBUG.info('Action buttons added successfully');
 }
