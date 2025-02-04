@@ -342,15 +342,15 @@ async function displayResults(result, careerDetails) {
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
 }
 
-function displayCareerCard(career, mbtiType, hollandCodes) {
-    if (!career) {
-        DEBUG.error('No career provided to displayCareerCard');
-        throw new Error('Career is required');
+function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
+    if (!careerTitle || typeof careerTitle !== 'string') {
+        DEBUG.error('Invalid career title provided:', careerTitle);
+        throw new Error('Career title must be a string');
     }
 
-    DEBUG.info('Displaying career card for:', { career, mbtiType, hollandCodes });
-    const careerDetails = getCareerInfo(career);
-    DEBUG.info('Retrieved career details:', { hasDetails: !!careerDetails, career });
+    DEBUG.info('Displaying career card for:', { careerTitle, mbtiType, hollandCodes });
+    const careerDetails = getCareerInfo(careerTitle);
+    DEBUG.info('Retrieved career details:', { hasDetails: !!careerDetails, careerTitle });
 
     const cardContent = document.createElement('div');
     cardContent.className = 'card-body';
@@ -360,7 +360,7 @@ function displayCareerCard(career, mbtiType, hollandCodes) {
     title.className = 'card-title d-flex align-items-center mb-3';
     title.innerHTML = `
         <i class="fas fa-hard-hat text-primary me-2"></i>
-        ${career}
+        ${careerTitle}
     `;
     cardContent.appendChild(title);
 
@@ -517,18 +517,21 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
     cardContainer.className = 'row row-cols-1 row-cols-md-2 g-4';
 
     // Process each recommendation
-    recommendations.forEach((careerTitle, index) => {
-        DEBUG.info(`Processing recommendation ${index + 1}:`, { careerTitle });
+    recommendations.forEach((recommendation, index) => {
+        DEBUG.info(`Processing recommendation ${index + 1}:`, recommendation);
         
         try {
             const cardCol = document.createElement('div');
             cardCol.className = 'col';
             
+            // Extract the title from the recommendation object
+            const careerTitle = recommendation.title || recommendation;
+            
             const card = displayCareerCard(careerTitle, mbtiType, hollandCodes);
             cardCol.appendChild(card);
             cardContainer.appendChild(cardCol);
         } catch (error) {
-            DEBUG.error(`Error displaying career card for ${careerTitle}:`, error);
+            DEBUG.error(`Error displaying career card for ${JSON.stringify(recommendation)}:`, error);
         }
     });
 
