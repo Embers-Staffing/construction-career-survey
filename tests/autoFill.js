@@ -61,7 +61,7 @@ function autoFillSurvey() {
         });
 
         // Select work environment
-        const envRadio = document.querySelector('input[name="environmentComfort"][value="outdoor"]');
+        const envRadio = document.querySelector('input[name="environmentComfort"][value="mixed"]');
         if (envRadio) {
             envRadio.checked = true;
         } else {
@@ -115,7 +115,14 @@ function autoFillSurvey() {
         const form = document.getElementById('careerForm');
         if (form) {
             DEBUG.info('Submitting form');
-            form.dispatchEvent(new Event('submit'));
+            // Create and dispatch both events to ensure proper form validation
+            form.dispatchEvent(new Event('submit', { cancelable: true }));
+            
+            // Show the results section
+            const resultsDiv = document.getElementById('results');
+            if (resultsDiv) {
+                resultsDiv.style.display = 'block';
+            }
         } else {
             DEBUG.error('Form not found');
         }
