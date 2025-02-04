@@ -400,22 +400,18 @@ function displayRecommendations(recommendations) {
                                         <p>${String(career.description || 'No description available.')}</p>
                                         
                                         <h4 class="h5 mb-3">Key Responsibilities</h4>
-                                        <ul class="list-unstyled">
-                                            ${(Array.isArray(career.responsibilities) ? career.responsibilities : [])
-                                                .map(resp => `
-                                                    <li><i class="fas fa-check text-success me-2"></i>${String(resp)}</li>
-                                                `).join('')}
-                                        </ul>
+                                        ${(Array.isArray(career.responsibilities) ? career.responsibilities : [])
+                                            .map(resp => `
+                                                <p><i class="fas fa-check text-success me-2"></i>${String(resp)}</p>
+                                            `).join('')}
                                     </div>
                                     
                                     <div class="col-md-6">
                                         <h4 class="h5 mb-3">Required Skills</h4>
-                                        <ul class="list-unstyled">
-                                            ${(Array.isArray(career.skills) ? career.skills : [])
-                                                .map(skill => `
-                                                    <li><i class="fas fa-star text-warning me-2"></i>${String(skill)}</li>
-                                                `).join('')}
-                                        </ul>
+                                        ${(Array.isArray(career.skills) ? career.skills : [])
+                                            .map(skill => `
+                                                <p><i class="fas fa-star text-warning me-2"></i>${String(skill)}</p>
+                                            `).join('')}
                                         
                                         <h4 class="h5 mb-3">Salary Range</h4>
                                         <p>
@@ -1169,27 +1165,17 @@ function displayTrainingRecommendations(recommendations) {
             
             <div class="training-section mb-4">
                 <h4 class="h5">Essential Training for All Construction Professionals</h4>
-                <ul class="list-group">
-                    ${recommendations.general.map(item => `
-                        <li class="list-group-item">
-                            <i class="fas fa-certificate text-primary me-2"></i>
-                            ${item}
-                        </li>
-                    `).join('')}
-                </ul>
+                ${(recommendations.general || []).map(item => `
+                    <p><i class="fas fa-certificate text-primary me-2"></i>${item}</p>
+                `).join('')}
             </div>
 
-            ${recommendations.specific.length > 0 ? `
+            ${(recommendations.specific || []).length > 0 ? `
                 <div class="training-section">
                     <h4 class="h5">Role-Specific Training</h4>
-                    <ul class="list-group">
-                        ${recommendations.specific.map(item => `
-                            <li class="list-group-item">
-                                <i class="fas fa-award text-success me-2"></i>
-                                ${item}
-                            </li>
-                        `).join('')}
-                    </ul>
+                    ${(recommendations.specific || []).map(item => `
+                        <p><i class="fas fa-award text-success me-2"></i>${item}</p>
+                    `).join('')}
                 </div>
             ` : ''}
         `;
