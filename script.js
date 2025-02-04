@@ -350,7 +350,10 @@ function displayRecommendations(recommendations) {
             <div class="career-card">
                 <div class="career-card-header">
                     <h3>${career.title}</h3>
-                    <div class="salary">Average Salary: ${career.salary || 'Varies by experience'}</div>
+                    <div class="salary">
+                        <div>Starting Salary: ${career.salaryRange?.entry || '$45,000 - $55,000'}</div>
+                        <div>Experienced Salary: ${career.salaryRange?.experienced || '$65,000 - $95,000'}</div>
+                    </div>
                 </div>
                 <div class="career-card-body">
                     <div class="career-card-section">
@@ -382,6 +385,61 @@ function displayRecommendations(recommendations) {
                         </div>
                     </div>
 
+                    <div class="career-card-section">
+                        <h4>Education & Training</h4>
+                        <div class="education-section">
+                            <h5>Required Education</h5>
+                            <ul>
+                                ${(career.education || [
+                                    'High School Diploma or equivalent',
+                                    'Technical certification preferred'
+                                ]).map(edu => `<li>${edu}</li>`).join('')}
+                            </ul>
+                            
+                            <h5>Recommended Training Programs</h5>
+                            <ul>
+                                ${(career.training || [
+                                    'OSHA Safety Certification',
+                                    'Project Management Certification',
+                                    'Industry-specific technical training'
+                                ]).map(training => `<li>${training}</li>`).join('')}
+                            </ul>
+                            
+                            <h5>Professional Certifications</h5>
+                            <ul>
+                                ${(career.certifications || [
+                                    'Industry standard certifications',
+                                    'Professional association memberships'
+                                ]).map(cert => `<li>${cert}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="career-card-section">
+                        <h4>Career Growth</h4>
+                        <div class="growth-path">
+                            <h5>Career Progression</h5>
+                            <ul>
+                                ${(career.careerPath || [
+                                    'Entry Level Position',
+                                    'Mid-Level Management',
+                                    'Senior Management',
+                                    'Executive Level'
+                                ]).map(path => `<li>${path}</li>`).join('')}
+                            </ul>
+                            
+                            <h5>Timeline</h5>
+                            <ul>
+                                ${(career.timeline || [
+                                    '0-2 years: Entry level position',
+                                    '2-5 years: Mid-level role',
+                                    '5-10 years: Senior position',
+                                    '10+ years: Leadership role'
+                                ]).map(time => `<li>${time}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
                     <div class="growth-indicator">
                         Strong growth potential in this role
                     </div>
@@ -399,6 +457,7 @@ function displayRecommendations(recommendations) {
         `).join('')}
     `;
     resultsDiv.style.display = 'block';
+    resultsDiv.scrollIntoView({ behavior: 'smooth' });
 }
 
 function initializeForm() {

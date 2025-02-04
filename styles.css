@@ -360,6 +360,107 @@ body {
     align-items: center;
 }
 
+/* Education and Career Growth Sections */
+.education-section, .growth-path {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.education-section h5, .growth-path h5 {
+    color: #2C3E50;
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.5rem 0 1rem;
+}
+
+.education-section h5:first-child, .growth-path h5:first-child {
+    margin-top: 0;
+}
+
+.education-section ul, .growth-path ul {
+    margin-bottom: 1.5rem;
+}
+
+.education-section ul:last-child, .growth-path ul:last-child {
+    margin-bottom: 0;
+}
+
+/* Salary Information */
+.career-card-header .salary {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    opacity: 0.9;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.career-card-header .salary div {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    backdrop-filter: blur(5px);
+}
+
+/* Timeline Styling */
+.growth-path .timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.growth-path .timeline li {
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.growth-path .timeline li:before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: 0.5rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #00BCD4;
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px #00BCD4;
+}
+
+.growth-path .timeline li:after {
+    content: '';
+    position: absolute;
+    left: -1.6rem;
+    top: 1rem;
+    bottom: -0.5rem;
+    width: 2px;
+    background-color: #e9ecef;
+}
+
+.growth-path .timeline li:last-child {
+    padding-bottom: 0;
+}
+
+.growth-path .timeline li:last-child:after {
+    display: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .education-section, .growth-path {
+        padding: 1rem;
+    }
+
+    .career-card-header .salary {
+        flex-direction: column;
+    }
+
+    .career-card-header .salary div {
+        width: 100%;
+    }
+}
+
 /* Resources List */
 .resources-list {
     list-style: none;
