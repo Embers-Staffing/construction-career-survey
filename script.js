@@ -344,235 +344,142 @@ async function displayResults(result, careerDetails) {
 
 function displayRecommendations(recommendations) {
     try {
-        DEBUG.info('Displaying recommendations:', JSON.stringify(recommendations, null, 2));
-        
-        if (!Array.isArray(recommendations)) {
-            throw new Error('Recommendations must be an array');
-        }
-        
+        DEBUG.info('Displaying recommendations:', recommendations);
         const resultsDiv = document.getElementById('results');
-        resultsDiv.innerHTML = `
-            <h2>Your Career Recommendations</h2>
-            ${recommendations.map(career => {
-                try {
-                    DEBUG.info('Processing career:', JSON.stringify(career, null, 2));
-                    
-                    if (!career || typeof career !== 'object') {
-                        throw new Error('Invalid career object');
-                    }
-                    
-                    // Ensure we have a valid career object with default values
-                    const safeCareer = {
-                        title: 'Construction Professional',
-                        salaryRange: {
-                            entry: '$45,000 - $55,000',
-                            experienced: '$65,000 - $95,000'
-                        },
-                        description: 'A rewarding career in construction awaits!',
-                        responsibilities: [
-                            'Project planning and execution',
-                            'Team coordination',
-                            'Quality assurance',
-                            'Safety compliance'
-                        ],
-                        skills: [
-                            'Project Management',
-                            'Leadership',
-                            'Technical Knowledge',
-                            'Communication'
-                        ],
-                        education: [
-                            'High School Diploma or equivalent',
-                            'Technical certification preferred'
-                        ],
-                        training: [
-                            'OSHA Safety Training',
-                            'Equipment Operation Certification',
-                            'Industry-specific skills training'
-                        ],
-                        certifications: [
-                            'Industry-relevant certifications',
-                            'Safety certifications'
-                        ],
-                        careerPath: [
-                            'Entry Level Position',
-                            'Mid-Level Management',
-                            'Senior Management',
-                            'Executive Level'
-                        ],
-                        timeline: [
-                            '0-2 years: Entry level position',
-                            '2-5 years: Mid-level role',
-                            '5-10 years: Senior position',
-                            '10+ years: Leadership role'
-                        ]
-                    };
+        const resultsContent = document.getElementById('resultsContent');
+        
+        if (!resultsDiv || !resultsContent || !recommendations || recommendations.length === 0) {
+            DEBUG.error('Missing elements or recommendations:', { resultsDiv, resultsContent, recommendations });
+            return;
+        }
 
-                    // Carefully merge with provided career data
-                    if (career.title && typeof career.title === 'string') {
-                        safeCareer.title = career.title;
-                    }
-                    if (career.salaryRange && typeof career.salaryRange === 'object') {
-                        safeCareer.salaryRange = { ...safeCareer.salaryRange, ...career.salaryRange };
-                    }
-                    if (career.description && typeof career.description === 'string') {
-                        safeCareer.description = career.description;
-                    }
-                    if (Array.isArray(career.responsibilities)) {
-                        safeCareer.responsibilities = career.responsibilities;
-                    }
-                    if (Array.isArray(career.skills)) {
-                        safeCareer.skills = career.skills;
-                    }
-                    if (Array.isArray(career.education)) {
-                        safeCareer.education = career.education;
-                    }
-                    if (Array.isArray(career.training)) {
-                        safeCareer.training = career.training;
-                    }
-                    if (Array.isArray(career.certifications)) {
-                        safeCareer.certifications = career.certifications;
-                    }
-                    if (Array.isArray(career.careerPath)) {
-                        safeCareer.careerPath = career.careerPath;
-                    }
-                    if (Array.isArray(career.timeline)) {
-                        safeCareer.timeline = career.timeline;
-                    }
-                    
-                    const title = String(safeCareer.title);
-                    const urlSafeTitle = title.toLowerCase().replace(/\s+/g, '-');
-                    
-                    DEBUG.info('Processed title:', title);
-                    DEBUG.info('URL safe title:', urlSafeTitle);
-                    
-                    return `
-                    <div class="career-card">
-                        <div class="career-card-header">
-                            <h3>${title}</h3>
-                            <div class="salary">
-                                <div>Starting Salary: ${safeCareer.salaryRange.entry}</div>
-                                <div>Experienced Salary: ${safeCareer.salaryRange.experienced}</div>
-                            </div>
-                        </div>
-                        <div class="career-card-body">
-                            <div class="career-card-section">
-                                <h4>Role Overview</h4>
-                                <p>${safeCareer.description}</p>
-                            </div>
-                            
-                            <div class="career-card-section">
-                                <h4>Key Responsibilities</h4>
-                                <ul>
-                                    ${safeCareer.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
-                                </ul>
-                            </div>
-
-                            <div class="career-card-section">
-                                <h4>Required Skills</h4>
-                                <div class="skills-tags">
-                                    ${safeCareer.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
-                                </div>
-                            </div>
-
-                            <div class="career-card-section">
-                                <h4>Education & Training</h4>
-                                <div class="education-section">
-                                    <h5>Required Education</h5>
-                                    <ul>
-                                        ${safeCareer.education.map(edu => `<li>${edu}</li>`).join('')}
-                                    </ul>
-                                    
-                                    <h5>Recommended Training Programs</h5>
-                                    <ul>
-                                        ${safeCareer.training.map(training => `<li>${training}</li>`).join('')}
-                                    </ul>
-                                    
-                                    <h5>Professional Certifications</h5>
-                                    <ul>
-                                        ${safeCareer.certifications.map(cert => `<li>${cert}</li>`).join('')}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="career-card-section">
-                                <h4>Career Growth</h4>
-                                <div class="growth-path">
-                                    <h5>Career Progression</h5>
-                                    <ul>
-                                        ${safeCareer.careerPath.map(path => `<li>${path}</li>`).join('')}
-                                    </ul>
-                                    
-                                    <h5>Timeline</h5>
-                                    <ul>
-                                        ${safeCareer.timeline.map(time => `<li>${time}</li>`).join('')}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="growth-indicator">
-                                Strong growth potential in this role
-                            </div>
-
-                            <div class="action-links">
-                                <a href="#" class="action-link" onclick="saveCareer('${title}', event)">
-                                    <i class="fas fa-bookmark"></i> Save for Later
-                                </a>
-                                <a href="https://www.embersstaffing.com/careers/${urlSafeTitle}" 
-                                   class="action-link" 
-                                   target="_blank"
-                                   rel="noopener noreferrer">
-                                    <i class="fas fa-external-link-alt"></i> View Job Details
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                } catch (error) {
-                    DEBUG.error('Error processing career:', error);
-                    // Return a default career card if there's an error
-                    return `
-                    <div class="career-card">
-                        <div class="career-card-header">
-                            <h3>Construction Professional</h3>
-                            <div class="salary">
-                                <div>Starting Salary: $45,000 - $55,000</div>
-                                <div>Experienced Salary: $65,000 - $95,000</div>
-                            </div>
-                        </div>
-                        <div class="career-card-body">
-                            <p>An error occurred while loading this career recommendation. Please try again.</p>
-                        </div>
-                    </div>
-                    `;
-                }
-            }).join('')}
-            <div class="results-actions">
-                <button onclick="saveAsPDF()" class="btn btn-primary">
-                    <i class="fas fa-file-pdf"></i> Save as PDF
-                </button>
-                <button onclick="printResults()" class="btn btn-outline-primary">
-                    <i class="fas fa-print"></i> Print Results
-                </button>
-            </div>
-        `;
+        // Show results section
         resultsDiv.style.display = 'block';
-        resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+        // Create recommendations HTML
+        const recommendationsHtml = recommendations.map(career => {
+            // Determine experience level based on years required
+            let experienceLevel = 'entry';
+            if (career.yearsExperience >= 5) {
+                experienceLevel = 'experienced';
+            } else if (career.yearsExperience >= 2) {
+                experienceLevel = 'intermediate';
+            }
+
+            // Get training recommendations
+            const careerPath = determineCareerPath(career.title);
+            const training = getTrainingRecommendations(experienceLevel, careerPath);
+
+            return `
+                <div class="career-recommendation mb-5">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="h4 mb-0">${career.title}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h4 class="h5 mb-3">Overview</h4>
+                                    <p>${career.description || 'No description available.'}</p>
+                                    
+                                    <h4 class="h5 mb-3">Key Responsibilities</h4>
+                                    <ul class="list-unstyled">
+                                        ${(career.responsibilities || []).map(resp => `
+                                            <li><i class="fas fa-check text-success me-2"></i>${resp}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h4 class="h5 mb-3">Required Skills</h4>
+                                    <ul class="list-unstyled">
+                                        ${(career.skills || []).map(skill => `
+                                            <li><i class="fas fa-star text-warning me-2"></i>${skill}</li>
+                                        `).join('')}
+                                    </ul>
+                                    
+                                    <h4 class="h5 mb-3">Salary Range</h4>
+                                    <p>
+                                        <i class="fas fa-dollar-sign text-success me-2"></i>
+                                        Starting: ${career.salaryRange?.starting || 'Not specified'}<br>
+                                        <i class="fas fa-dollar-sign text-success me-2"></i>
+                                        Experienced: ${career.salaryRange?.experienced || 'Not specified'}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <h4 class="h5 mb-3">Education & Training</h4>
+                                <p><i class="fas fa-graduation-cap text-primary me-2"></i>${career.education || 'No specific education requirements.'}</p>
+                                <p><i class="fas fa-clock text-info me-2"></i>Experience Required: ${career.yearsExperience || 0} years</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <h4 class="h5 mb-3">Career Growth</h4>
+                                <p><i class="fas fa-chart-line text-success me-2"></i>${career.careerPath || 'Career progression information not available.'}</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group">
+                                    <button class="btn btn-outline-primary" onclick="saveAsPDF()">
+                                        <i class="fas fa-file-pdf me-2"></i>Save as PDF
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="printResults()">
+                                        <i class="fas fa-print me-2"></i>Print
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Update results content
+        resultsContent.innerHTML = recommendationsHtml;
+
+        // Display training recommendations
+        const firstCareer = recommendations[0];
+        if (firstCareer) {
+            const experienceLevel = firstCareer.yearsExperience >= 5 ? 'experienced' : 
+                                  firstCareer.yearsExperience >= 2 ? 'intermediate' : 'entry';
+            const careerPath = determineCareerPath(firstCareer.title);
+            const training = getTrainingRecommendations(experienceLevel, careerPath);
+            displayTrainingRecommendations(training);
+        }
+
+        DEBUG.info('Recommendations displayed successfully');
     } catch (error) {
         DEBUG.error('Error displaying recommendations:', error);
-        showNotification('An error occurred while displaying recommendations. Please try again.', 'error');
+    }
+}
+
+/**
+ * Determine the career path category based on job title
+ * @param {string} title - Job title
+ * @returns {string} Career path category
+ */
+function determineCareerPath(title) {
+    title = title.toLowerCase();
+    
+    if (title.includes('manager') || title.includes('coordinator')) {
+        return 'project_management';
+    } else if (title.includes('engineer') || title.includes('architect')) {
+        return 'engineering';
+    } else if (title.includes('supervisor') || title.includes('foreman')) {
+        return 'supervision';
+    } else {
+        return 'skilled_trades';
     }
 }
 
 /**
  * Generate and download results as PDF
  */
-function saveAsPDF() {
-    // Show loading state
-    showNotification('Generating PDF...', 'info');
-    
+async function saveAsPDF() {
     const element = document.getElementById('results');
-    const opt = {
+    const options = {
         margin: 1,
         filename: 'construction-career-recommendations.pdf',
         image: { type: 'jpeg', quality: 0.98 },
@@ -580,22 +487,34 @@ function saveAsPDF() {
         jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
-    // Generate PDF
-    html2pdf().set(opt).from(element).save()
-        .then(() => {
-            showNotification('PDF downloaded successfully!', 'success');
-        })
-        .catch(error => {
-            console.error('PDF generation failed:', error);
-            showNotification('Failed to generate PDF. Please try again.', 'error');
-        });
+    try {
+        // Add a temporary class for PDF styling
+        element.classList.add('pdf-mode');
+        
+        // Generate PDF
+        await html2pdf().set(options).from(element).save();
+        
+        // Remove the temporary class
+        element.classList.remove('pdf-mode');
+        
+        DEBUG.info('PDF generated successfully');
+    } catch (error) {
+        DEBUG.error('Error generating PDF:', error);
+        alert('There was an error generating the PDF. Please try again.');
+    }
 }
 
 /**
  * Print the results
  */
 function printResults() {
-    window.print();
+    try {
+        window.print();
+        DEBUG.info('Print dialog opened successfully');
+    } catch (error) {
+        DEBUG.error('Error opening print dialog:', error);
+        alert('There was an error opening the print dialog. Please try again.');
+    }
 }
 
 function initializeForm() {
@@ -967,3 +886,181 @@ const careerRecommendations = {
         ]
     }
 };
+
+// Training recommendations based on experience level
+const trainingRecommendations = {
+    'entry': {
+        'general': [
+            'OSHA 10-Hour Construction Safety Course',
+            'First Aid and CPR Certification',
+            'Basic Construction Math',
+            'Blueprint Reading Fundamentals',
+            'Construction Tools and Equipment Safety'
+        ],
+        'specific': {
+            'project_management': [
+                'Construction Project Management Basics',
+                'Microsoft Office Suite (Excel, Project)',
+                'Construction Scheduling Fundamentals',
+                'Basic Cost Estimation'
+            ],
+            'skilled_trades': [
+                'Trade-Specific Apprenticeship Programs',
+                'Hand and Power Tool Safety',
+                'Basic Welding Safety',
+                'Material Handling Training'
+            ],
+            'engineering': [
+                'AutoCAD Basics',
+                'Construction Materials Science',
+                'Basic Structural Principles',
+                'Site Survey Fundamentals'
+            ],
+            'supervision': [
+                'Leadership Skills for New Supervisors',
+                'Construction Communication Basics',
+                'Team Building Fundamentals',
+                'Basic Project Planning'
+            ]
+        }
+    },
+    'intermediate': {
+        'general': [
+            'OSHA 30-Hour Construction Safety Course',
+            'Advanced Blueprint Reading',
+            'Construction Quality Control',
+            'Risk Management Basics',
+            'Construction Contract Fundamentals'
+        ],
+        'specific': {
+            'project_management': [
+                'PMP Certification Prep',
+                'Advanced Construction Scheduling',
+                'Construction Cost Control',
+                'Construction Technology Solutions'
+            ],
+            'skilled_trades': [
+                'Advanced Trade Certifications',
+                'Equipment Operation Certification',
+                'Advanced Safety Training',
+                'Quality Control Inspection'
+            ],
+            'engineering': [
+                'BIM Software Training',
+                'Advanced Structural Analysis',
+                'Construction Methods and Materials',
+                'Environmental Compliance'
+            ],
+            'supervision': [
+                'Advanced Leadership Training',
+                'Project Team Management',
+                'Construction Law Basics',
+                'Resource Management'
+            ]
+        }
+    },
+    'experienced': {
+        'general': [
+            'Construction Risk Management',
+            'Advanced Contract Management',
+            'Construction Finance and Accounting',
+            'Sustainable Construction Practices',
+            'Construction Law and Ethics'
+        ],
+        'specific': {
+            'project_management': [
+                'Program Management Professional (PgMP)',
+                'Construction Executive Management',
+                'Strategic Project Management',
+                'Advanced Risk Management'
+            ],
+            'skilled_trades': [
+                'Master Trade Certifications',
+                'Train-the-Trainer Programs',
+                'Safety Management Systems',
+                'Quality Management Systems'
+            ],
+            'engineering': [
+                'Advanced BIM Management',
+                'Construction Innovation and Technology',
+                'Sustainable Design and Construction',
+                'Value Engineering'
+            ],
+            'supervision': [
+                'Executive Leadership Development',
+                'Strategic Planning',
+                'Change Management',
+                'Advanced Project Controls'
+            ]
+        }
+    }
+};
+
+/**
+ * Get training recommendations based on experience level and career path
+ * @param {string} experienceLevel - User's experience level (entry, intermediate, experienced)
+ * @param {string} careerPath - Career path (project_management, skilled_trades, engineering, supervision)
+ * @returns {Object} Training recommendations object with general and specific recommendations
+ */
+function getTrainingRecommendations(experienceLevel, careerPath) {
+    try {
+        const recommendations = {
+            general: trainingRecommendations[experienceLevel]?.general || [],
+            specific: trainingRecommendations[experienceLevel]?.specific?.[careerPath] || []
+        };
+        DEBUG.info('Generated training recommendations:', { experienceLevel, careerPath, recommendations });
+        return recommendations;
+    } catch (error) {
+        DEBUG.error('Error getting training recommendations:', error);
+        return { general: [], specific: [] };
+    }
+}
+
+/**
+ * Display training recommendations in the UI
+ * @param {Object} recommendations - Training recommendations object
+ */
+function displayTrainingRecommendations(recommendations) {
+    try {
+        const container = document.getElementById('trainingResources');
+        if (!container) {
+            DEBUG.error('Training resources container not found');
+            return;
+        }
+
+        const content = `
+            <h3 class="mb-4">Recommended Training & Certifications</h3>
+            
+            <div class="training-section mb-4">
+                <h4 class="h5">Essential Training for All Construction Professionals</h4>
+                <ul class="list-group">
+                    ${recommendations.general.map(item => `
+                        <li class="list-group-item">
+                            <i class="fas fa-certificate text-primary me-2"></i>
+                            ${item}
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+
+            ${recommendations.specific.length > 0 ? `
+                <div class="training-section">
+                    <h4 class="h5">Role-Specific Training</h4>
+                    <ul class="list-group">
+                        ${recommendations.specific.map(item => `
+                            <li class="list-group-item">
+                                <i class="fas fa-award text-success me-2"></i>
+                                ${item}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+        `;
+
+        container.innerHTML = content;
+        DEBUG.info('Training recommendations displayed successfully');
+    } catch (error) {
+        DEBUG.error('Error displaying training recommendations:', error);
+    }
+}

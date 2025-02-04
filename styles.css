@@ -988,3 +988,39 @@ footer .bigfoot-link:hover {
         background: none !important;
     }
 }
+
+/* Print and PDF styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    
+    #results, #results * {
+        visibility: visible;
+    }
+    
+    #results {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .btn, .action-buttons {
+        display: none !important;
+    }
+}
+
+/* PDF mode styles */
+.pdf-mode {
+    background: white;
+    padding: 20px;
+    max-width: 8.5in;
+    margin: 0 auto;
+}
+
+.pdf-mode .btn,
+.pdf-mode .action-buttons {
+    display: none !important;
+}
