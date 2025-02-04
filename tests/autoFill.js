@@ -22,10 +22,10 @@ function autoFillSurvey() {
         document.getElementById('constructionExperience').value = '3';
 
         // Select MBTI preferences
-        selectMBTIPreference('E', 'I');  // Extrovert
-        selectMBTIPreference('N', 'S');  // Intuitive
-        selectMBTIPreference('F', 'T');  // Feeling
-        selectMBTIPreference('J', 'P');  // Judging
+        selectMBTIPreference('mbtiEI', 'E');  // Extrovert
+        selectMBTIPreference('mbtiSN', 'N');  // Intuitive
+        selectMBTIPreference('mbtiTF', 'F');  // Feeling
+        selectMBTIPreference('mbtiJP', 'J');  // Judging
 
         // Select Holland Code interests (max 3)
         const hollandCodes = ['realistic', 'investigative', 'social'];
@@ -39,18 +39,35 @@ function autoFillSurvey() {
         });
 
         // Select work environment
-        document.querySelector('input[name="environmentComfort"][value="outdoor"]').checked = true;
+        const envRadio = document.querySelector('input[name="environmentComfort"][value="outdoor"]');
+        if (envRadio) {
+            envRadio.checked = true;
+        } else {
+            DEBUG.error('Environment comfort radio not found');
+        }
 
         // Select physical requirements
-        document.querySelector('input[name="physicalComfort"][value="moderate"]').checked = true;
+        const physicalRadio = document.querySelector('input[name="physicalComfort"][value="moderate"]');
+        if (physicalRadio) {
+            physicalRadio.checked = true;
+        } else {
+            DEBUG.error('Physical comfort radio not found');
+        }
 
         // Select travel preferences
-        document.querySelector('input[name="travelPreference"][value="occasional"]').checked = true;
+        const travelRadio = document.querySelector('input[name="travelPreference"][value="occasional"]');
+        if (travelRadio) {
+            travelRadio.checked = true;
+        } else {
+            DEBUG.error('Travel preference radio not found');
+        }
 
         // Fill out career goals
         const goalsTextarea = document.getElementById('careerGoals');
         if (goalsTextarea) {
             goalsTextarea.value = 'Looking to advance in construction management and gain technical expertise.';
+        } else {
+            DEBUG.error('Career goals textarea not found');
         }
 
         // Select professional development preferences
@@ -59,6 +76,8 @@ function autoFillSurvey() {
             const checkbox = document.getElementById(`development-${pref}`);
             if (checkbox) {
                 checkbox.checked = true;
+            } else {
+                DEBUG.error(`Development preference checkbox not found: ${pref}`);
             }
         });
 
@@ -78,15 +97,15 @@ function autoFillSurvey() {
 
 /**
  * Helper function to select MBTI preference
- * @param {string} preference - The preference to select (e.g., 'E' for Extrovert)
- * @param {string} opposite - The opposite preference (e.g., 'I' for Introvert)
+ * @param {string} name - The name of the MBTI radio group (e.g., 'mbtiEI')
+ * @param {string} value - The value to select (e.g., 'E')
  */
-function selectMBTIPreference(preference, opposite) {
-    const radio = document.querySelector(`input[name="mbti-${preference.toLowerCase()}${opposite.toLowerCase()}"][value="${preference}"]`);
+function selectMBTIPreference(name, value) {
+    const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
     if (radio) {
         radio.checked = true;
     } else {
-        DEBUG.error(`MBTI radio button not found: mbti-${preference.toLowerCase()}${opposite.toLowerCase()}`);
+        DEBUG.error(`MBTI radio button not found: ${name}-${value}`);
     }
 }
 
