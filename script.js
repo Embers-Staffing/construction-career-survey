@@ -1047,119 +1047,194 @@ const trainingRecommendations = {
  */
 function getTrainingRecommendations(mbtiType, hollandCodes, formData) {
     DEBUG.info('Getting training recommendations for:', { mbtiType, hollandCodes });
-    
-    const recommendations = {
-        general: [
-            'OSHA 30-Hour Construction Safety Course',
-            'Advanced Blueprint Reading',
-            'Construction Quality Control',
-            'Risk Management Basics',
-            'Construction Contract Fundamentals'
-        ],
-        specific: []
-    };
 
-    // MBTI-based recommendations
-    const mbtiRecommendations = {
+    // Role-specific training recommendations
+    const roleTraining = {
         // Analysts (NT)
-        'INTJ': ['BIM Software Certification', 'Advanced Project Planning', 'Strategic Management'],
-        'INTP': ['Construction Technology Integration', 'Data Analytics for Construction', 'Innovation Management'],
-        'ENTJ': ['Executive Leadership Program', 'Strategic Business Development', 'Advanced Negotiation Skills'],
-        'ENTP': ['Innovation in Construction Methods', 'Creative Problem-Solving', 'Emerging Technologies'],
-        
+        'INTJ': {
+            technical: ['Advanced BIM Software Certification', 'Construction Technology Management', 'Quality Management Systems'],
+            soft: ['Strategic Planning', 'Systems Thinking Workshop', 'Technical Leadership'],
+            certifications: ['PMP', 'Six Sigma Black Belt', 'Quality Management Professional']
+        },
+        'INTP': {
+            technical: ['Construction Data Analytics', 'Advanced Modeling Software', 'Systems Integration'],
+            soft: ['Problem-Solving Methodologies', 'Innovation Management', 'Technical Communication'],
+            certifications: ['Data Analytics Professional', 'Systems Engineering Professional', 'Technical Consultant Certification']
+        },
+        'ENTJ': {
+            technical: ['Enterprise Resource Planning', 'Program Management', 'Strategic Operations'],
+            soft: ['Executive Leadership', 'Change Management', 'Strategic Decision Making'],
+            certifications: ['Executive MBA', 'Program Management Professional', 'Construction Executive Certification']
+        },
+        'ENTP': {
+            technical: ['Innovation Management Systems', 'Business Development Strategies', 'Digital Transformation'],
+            soft: ['Creative Problem Solving', 'Strategic Innovation', 'Client Relations'],
+            certifications: ['Innovation Management Professional', 'Digital Strategy Certification', 'Business Development Professional']
+        },
+
         // Diplomats (NF)
-        'INFJ': ['Sustainable Construction Practices', 'Team Development', 'Conflict Resolution'],
-        'INFP': ['Environmental Impact Assessment', 'Green Building Certification', 'Workplace Wellness'],
-        'ENFJ': ['Leadership Development', 'Team Building', 'Communication Skills'],
-        'ENFP': ['Client Relations Management', 'Creative Design Solutions', 'Stakeholder Engagement'],
-        
+        'INFJ': {
+            technical: ['Sustainable Construction Practices', 'Environmental Management Systems', 'Safety Management'],
+            soft: ['Team Development', 'Conflict Resolution', 'Sustainability Leadership'],
+            certifications: ['LEED AP', 'Safety Management Specialist', 'Environmental Management Professional']
+        },
+        'INFP': {
+            technical: ['Green Building Technologies', 'Environmental Impact Assessment', 'Sustainable Design'],
+            soft: ['Environmental Communication', 'Stakeholder Engagement', 'Sustainability Planning'],
+            certifications: ['Green Building Professional', 'Environmental Assessment Specialist', 'Sustainability Consultant']
+        },
+        'ENFJ': {
+            technical: ['Training Program Development', 'HR Management Systems', 'Leadership Development'],
+            soft: ['Advanced Facilitation', 'Team Building', 'Organizational Development'],
+            certifications: ['Training & Development Professional', 'HR Management Professional', 'Leadership Coach Certification']
+        },
+        'ENFP': {
+            technical: ['Client Relations Management', 'Business Development', 'Project Development'],
+            soft: ['Relationship Building', 'Creative Leadership', 'Stakeholder Management'],
+            certifications: ['Business Development Professional', 'Client Relations Manager', 'Project Development Specialist']
+        },
+
         // Sentinels (SJ)
-        'ISTJ': ['Quality Management Systems', 'Construction Law', 'Technical Documentation'],
-        'ISFJ': ['Safety Management Systems', 'Risk Assessment', 'Quality Assurance'],
-        'ESTJ': ['Project Management Professional (PMP)', 'Contract Administration', 'Operations Management'],
-        'ESFJ': ['Team Coordination', 'Client Service Excellence', 'HR Management'],
-        
+        'ISTJ': {
+            technical: ['Quality Control Systems', 'Technical Documentation', 'Compliance Management'],
+            soft: ['Process Improvement', 'Technical Supervision', 'Standards Implementation'],
+            certifications: ['Quality Control Professional', 'Technical Manager Certification', 'Compliance Officer']
+        },
+        'ISFJ': {
+            technical: ['Safety Management Systems', 'Quality Assurance', 'Resource Management'],
+            soft: ['Team Coordination', 'Safety Leadership', 'Resource Optimization'],
+            certifications: ['Safety Professional', 'Quality Assurance Specialist', 'Resource Management Professional']
+        },
+        'ESTJ': {
+            technical: ['Project Management', 'Construction Operations', 'Site Management'],
+            soft: ['Leadership Skills', 'Team Management', 'Operational Excellence'],
+            certifications: ['PMP', 'Construction Manager', 'Operations Management Professional']
+        },
+        'ESFJ': {
+            technical: ['Client Service Management', 'Team Coordination', 'Community Relations'],
+            soft: ['People Management', 'Customer Service Excellence', 'Community Engagement'],
+            certifications: ['Customer Service Professional', 'Team Leader Certification', 'Community Relations Manager']
+        },
+
         // Explorers (SP)
-        'ISTP': ['Advanced Equipment Operation', 'Technical Specialization', 'Hands-on Skills Development'],
-        'ISFP': ['Design Implementation', 'Aesthetic Planning', 'Material Selection'],
-        'ESTP': ['Site Management', 'Crisis Management', 'Dynamic Problem-Solving'],
-        'ESFP': ['On-site Coordination', 'Team Motivation', 'Public Relations']
+        'ISTP': {
+            technical: ['Technical Systems', 'Equipment Management', 'Site Engineering'],
+            soft: ['Technical Problem Solving', 'Hands-on Leadership', 'Equipment Operations'],
+            certifications: ['Technical Specialist', 'Equipment Manager', 'Site Engineer Professional']
+        },
+        'ISFP': {
+            technical: ['Design Implementation', 'Interior Construction', 'Materials Management'],
+            soft: ['Design Thinking', 'Aesthetic Awareness', 'Materials Selection'],
+            certifications: ['Design Implementation Specialist', 'Interior Construction Professional', 'Materials Specialist']
+        },
+        'ESTP': {
+            technical: ['Site Operations', 'Field Management', 'Emergency Response'],
+            soft: ['Crisis Management', 'Operational Leadership', 'Quick Decision Making'],
+            certifications: ['Site Manager Professional', 'Field Operations Director', 'Emergency Response Coordinator']
+        },
+        'ESFP': {
+            technical: ['Site Safety Systems', 'Team Leadership', 'Public Relations'],
+            soft: ['Safety Communication', 'Team Motivation', 'Public Speaking'],
+            certifications: ['Site Safety Coordinator', 'Team Leader', 'Public Relations Professional']
+        }
     };
 
-    // Holland Code based recommendations
-    const hollandRecommendations = {
-        'R': ['Equipment Operation Certification', 'Technical Skills Training', 'Hands-on Construction Methods'],
-        'I': ['Construction Research Methods', 'Advanced Technical Analysis', 'Problem-Solving Methodologies'],
-        'A': ['Design Software Certification', 'Creative Solutions Workshop', 'Architectural Visualization'],
-        'S': ['Team Leadership Training', 'Safety Training Certification', 'Communication Skills Development'],
-        'E': ['Business Development', 'Sales and Marketing in Construction', 'Entrepreneurship in Construction'],
-        'C': ['Project Controls', 'Quality Control Systems', 'Documentation Management']
+    const hollandTraining = {
+        'R': {
+            technical: ['Technical Skills Development', 'Equipment Operation', 'Hands-on Construction Methods'],
+            soft: ['Technical Problem Solving', 'Spatial Awareness', 'Physical Coordination'],
+            certifications: ['Technical Specialist', 'Equipment Operator', 'Construction Technician']
+        },
+        'I': {
+            technical: ['Research Methods', 'Data Analysis', 'Technical Documentation'],
+            soft: ['Analytical Thinking', 'Research Skills', 'Technical Writing'],
+            certifications: ['Research Professional', 'Data Analyst', 'Technical Documentation Specialist']
+        },
+        'A': {
+            technical: ['Design Software', 'Creative Solutions', 'Aesthetic Planning'],
+            soft: ['Creative Thinking', 'Design Principles', 'Visual Communication'],
+            certifications: ['Design Professional', 'Creative Solutions Specialist', 'Visual Design Coordinator']
+        },
+        'S': {
+            technical: ['People Management', 'Training Development', 'Communication Systems'],
+            soft: ['Interpersonal Skills', 'Teaching Methods', 'Active Listening'],
+            certifications: ['Training Professional', 'Communication Specialist', 'People Management Coordinator']
+        },
+        'E': {
+            technical: ['Business Management', 'Leadership Development', 'Strategic Planning'],
+            soft: ['Leadership Skills', 'Persuasion', 'Decision Making'],
+            certifications: ['Business Management Professional', 'Leadership Development Specialist', 'Strategic Planning Coordinator']
+        },
+        'C': {
+            technical: ['Quality Control', 'Documentation Systems', 'Compliance Management'],
+            soft: ['Attention to Detail', 'Organization Skills', 'Process Management'],
+            certifications: ['Quality Control Professional', 'Documentation Specialist', 'Compliance Coordinator']
+        }
+    };
+
+    let recommendations = {
+        technical: new Set(),
+        soft: new Set(),
+        certifications: new Set()
     };
 
     // Add MBTI-specific recommendations
-    if (mbtiType && mbtiRecommendations[mbtiType]) {
-        recommendations.specific.push(...mbtiRecommendations[mbtiType]);
+    if (roleTraining[mbtiType]) {
+        roleTraining[mbtiType].technical.forEach(item => recommendations.technical.add(item));
+        roleTraining[mbtiType].soft.forEach(item => recommendations.soft.add(item));
+        roleTraining[mbtiType].certifications.forEach(item => recommendations.certifications.add(item));
     }
 
-    // Add Holland Code specific recommendations
+    // Add Holland code specific recommendations
     hollandCodes.forEach(code => {
-        if (hollandRecommendations[code]) {
-            recommendations.specific.push(...hollandRecommendations[code]);
+        if (hollandTraining[code]) {
+            hollandTraining[code].technical.forEach(item => recommendations.technical.add(item));
+            hollandTraining[code].soft.forEach(item => recommendations.soft.add(item));
+            hollandTraining[code].certifications.forEach(item => recommendations.certifications.add(item));
         }
     });
 
-    // Add experience-based recommendations
-    const experience = formData.get('constructionExperience');
-    if (experience) {
-        const expLevel = parseInt(experience);
-        if (expLevel === 0) {
-            recommendations.specific.push(
-                'Construction Basics Training',
-                'Industry Terminology Workshop',
-                'Entry-level Safety Certification'
-            );
-        } else if (expLevel >= 5) {
-            recommendations.specific.push(
-                'Advanced Project Management',
-                'Leadership and Team Management',
-                'Strategic Planning in Construction'
-            );
-        }
-    }
-
-    // Remove duplicates and limit to most relevant
-    recommendations.specific = [...new Set(recommendations.specific)].slice(0, 8);
-    
-    DEBUG.info('Generated training recommendations:', recommendations);
-    return recommendations;
+    return {
+        technical: Array.from(recommendations.technical).slice(0, 5),
+        soft: Array.from(recommendations.soft).slice(0, 5),
+        certifications: Array.from(recommendations.certifications).slice(0, 5)
+    };
 }
 
-/**
- * Display training recommendations in the UI
- * @param {Object} recommendations - Training recommendations object
- */
-function displayTrainingRecommendations(recommendations) {
+function displayTrainingRecommendations(training) {
+    DEBUG.info('Displaying training recommendations:', training);
+    
     const trainingDiv = document.createElement('div');
-    trainingDiv.className = 'mb-5';
+    trainingDiv.className = 'training-recommendations mb-4';
+    
     trainingDiv.innerHTML = `
-        <h3>Recommended Training & Certifications</h3>
+        <h4 class="d-flex align-items-center mb-3">
+            <i class="fas fa-certificate text-warning me-2"></i>
+            Recommended Training & Certifications
+        </h4>
         
-        <div class="training-section mb-4">
-            <h4 class="h5 mb-3">Essential Training for All Construction Professionals</h4>
-            ${recommendations.general.map(item => `
-                <p><span class="text-primary me-2">🔷</span>${item}</p>
-            `).join('')}
-        </div>
-
-        ${recommendations.specific.length > 0 ? `
-            <div class="training-section">
-                <h4 class="h5 mb-3">Personalized Training Path</h4>
-                ${recommendations.specific.map(item => `
-                    <p><span class="text-success me-2">🎯</span>${item}</p>
-                `).join('')}
+        ${training.technical.length > 0 ? `
+            <div class="mb-3">
+                <h5 class="text-primary"><i class="fas fa-tools me-2"></i>Technical Skills</h5>
+                ${training.technical.map(skill => `<p><i class="fas fa-check text-success me-2"></i>${skill}</p>`).join('')}
+            </div>
+        ` : ''}
+        
+        ${training.soft.length > 0 ? `
+            <div class="mb-3">
+                <h5 class="text-primary"><i class="fas fa-users me-2"></i>Soft Skills</h5>
+                ${training.soft.map(skill => `<p><i class="fas fa-check text-success me-2"></i>${skill}</p>`).join('')}
+            </div>
+        ` : ''}
+        
+        ${training.certifications.length > 0 ? `
+            <div class="mb-3">
+                <h5 class="text-primary"><i class="fas fa-award me-2"></i>Professional Certifications</h5>
+                ${training.certifications.map(cert => `<p><i class="fas fa-check text-success me-2"></i>${cert}</p>`).join('')}
             </div>
         ` : ''}
     `;
+    
     return trainingDiv;
 }
 
