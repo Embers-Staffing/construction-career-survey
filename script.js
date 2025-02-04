@@ -567,22 +567,21 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
         DEBUG.info(`Processing recommendation ${index + 1}:`, recommendation);
         
         try {
-            const cardCol = document.createElement('div');
-            cardCol.className = 'col';
-            
-            // Extract the title from the recommendation object
-            const careerTitle = recommendation.title || recommendation;
-            
-            const card = displayCareerCard(careerTitle, mbtiType, hollandCodes);
-            cardCol.appendChild(card);
-            cardContainer.appendChild(cardCol);
+            const cardCol = displayCareerCard(recommendation, mbtiType, hollandCodes);
+            if (cardCol) {
+                cardContainer.appendChild(cardCol);
+            }
         } catch (error) {
             DEBUG.error(`Error displaying career card for ${JSON.stringify(recommendation)}:`, error);
         }
     });
 
     resultsDiv.appendChild(cardContainer);
+    resultsDiv.style.display = 'block';
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+    // Add action buttons for saving/printing results
+    addActionButtons(resultsDiv);
 }
 
 // Update the form submission handler
@@ -611,23 +610,23 @@ document.getElementById('careerForm').addEventListener('submit', async function(
             showNotification('Please select at least one Holland code.', 'warning');
             return;
         }
-        
-        // Get recommendations
-        const recommendations = getCareerRecommendations(mbtiType, hollandCodes);
+
+        // Get recommendations based on MBTI type and Holland codes
+        const recommendations = getRecommendations(mbtiType);
         DEBUG.info('Career recommendations:', recommendations);
-        
-        if (!recommendations || recommendations.length === 0) {
-            showNotification('No recommendations found for your selections.', 'warning');
-            return;
-        }
-        
-        // Display recommendations
+
+        // Display the recommendations
         displayRecommendations(recommendations, mbtiType, hollandCodes, formData);
-        
-        DEBUG.info('Successfully processed form submission');
+
+        // Show the results section
+        const resultsDiv = document.getElementById('results');
+        if (resultsDiv) {
+            resultsDiv.style.display = 'block';
+        }
+
     } catch (error) {
-        DEBUG.error('Error processing form:', error);
-        showNotification('An error occurred while processing your responses.', 'error');
+        DEBUG.error('Error processing form submission:', error);
+        showNotification('An error occurred while processing your selections. Please try again.', 'error');
     }
 });
 
