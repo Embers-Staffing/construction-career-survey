@@ -17,7 +17,12 @@ function autoFillSurvey() {
         // Fill out personal information
         document.getElementById('firstName').value = 'Test';
         document.getElementById('lastName').value = 'User';
-        document.getElementById('birthYear').value = '1990';
+        
+        // Calculate a reasonable birth year (30 years ago from current year)
+        const currentYear = new Date().getFullYear();
+        const birthYear = currentYear - 30;
+        document.getElementById('birthYear').value = birthYear.toString();
+        
         document.getElementById('birthMonth').value = '6';
         document.getElementById('constructionExperience').value = '3';
 

@@ -4,25 +4,47 @@ import { getRecommendations, getCareerDetails as getCareerInfo } from './data/ca
 
 // Debug utilities
 const DEBUG = {
-    enabled: true,
-    level: 'info',
-    
-    log(message, level = 'info', data = null) {
-        if (!this.enabled) return;
-        console.log(`[${level.toUpperCase()}] ${message}`, data || '');
+    log: (message, level = 'info', data = null) => {
+        const timestamp = new Date().toISOString();
+        const dataStr = data ? JSON.stringify(data, null, 2) : '';
+        console.log(`[${timestamp}] [${level.toUpperCase()}] ${message} ${dataStr}`);
     },
-    
-    error(message, error = null) {
-        this.log(message, 'error', error);
+    error: (message, error = null) => {
+        const timestamp = new Date().toISOString();
+        console.error(`[${timestamp}] [ERROR] ${message}`);
+        if (error) {
+            console.error('Error details:', error);
+            if (error.stack) {
+                console.error('Stack trace:', error.stack);
+            }
+        }
     },
-    
-    info(message, data = null) {
-        this.log(message, 'info', data);
+    info: (message, data = null) => {
+        DEBUG.log(message, 'info', data);
     },
-    
-    debug(message, data = null) {
-        this.log(message, 'debug', data);
+    debug: (message, data = null) => {
+        DEBUG.log(message, 'debug', data);
+    },
+    warn: (message, data = null) => {
+        DEBUG.log(message, 'warn', data);
     }
+};
+
+// Add global error handler
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    DEBUG.error('Global error:', {
+        message: msg,
+        url: url,
+        line: lineNo,
+        column: columnNo,
+        error: error
+    });
+    return false;
+};
+
+// Add unhandled promise rejection handler
+window.onunhandledrejection = function(event) {
+    DEBUG.error('Unhandled promise rejection:', event.reason);
 };
 
 // Constants for configuration
@@ -343,191 +365,129 @@ async function displayResults(result, careerDetails) {
 }
 
 function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
-    DEBUG.info('Displaying career card for:', { careerTitle, mbtiType, hollandCodes });
-    
     try {
+        DEBUG.info('Creating career card for:', { careerTitle, mbtiType, hollandCodes });
+        
         // Get career details
-        const details = getCareerInfo(careerTitle);
-        DEBUG.info('Retrieved career details:', { hasDetails: !!details, careerTitle });
-
-        // Create card element
-        const card = document.createElement('div');
-        card.className = 'card h-100 shadow-sm';
-        card.style.border = '1px solid #dee2e6';
-
-        // Card header with icon and title
-        const cardHeader = document.createElement('div');
-        cardHeader.className = 'card-header bg-primary bg-gradient text-white py-3';
-        cardHeader.style.borderBottom = 'none';
-        cardHeader.innerHTML = `
-            <h5 class="card-title mb-0 d-flex align-items-center">
-                <span class="construction-icon me-2">👷</span>
-                ${careerTitle}
-            </h5>
-        `;
-        card.appendChild(cardHeader);
-
-        // Card body
-        const cardBody = document.createElement('div');
-        cardBody.className = 'card-body';
-
-        if (details) {
-            // Overview section with icon
-            cardBody.innerHTML = `
-                <style>
-                    .career-list {
-                        list-style: none !important;
-                        padding-left: 0 !important;
-                        margin-left: 0 !important;
-                    }
-                    .career-list div {
-                        display: flex !important;
-                        align-items: flex-start !important;
-                        margin-bottom: 0.5rem !important;
-                        list-style-type: none !important;
-                    }
-                    .career-list div:last-child {
-                        margin-bottom: 0 !important;
-                    }
-                    .career-icon {
-                        flex-shrink: 0 !important;
-                        margin-right: 0.75rem !important;
-                        width: 20px !important;
-                        text-align: center !important;
-                    }
-                    .career-text {
-                        flex-grow: 1 !important;
-                    }
-                    /* Override any potential list styles */
-                    .career-list div::before,
-                    .career-list div::marker {
-                        display: none !important;
-                        content: none !important;
-                    }
-                </style>
-                <div class="mb-4">
-                    <h6 class="d-flex align-items-center">
-                        <span class="info-icon me-2" style="color: #0dcaf0;">ℹ️</span>
-                        <span>Overview</span>
-                    </h6>
-                    <p class="text-muted">${details.description}</p>
+        const careerDetails = getCareerInfo(careerTitle);
+        if (!careerDetails) {
+            DEBUG.warn('No career details found for:', careerTitle);
+            // Return a simplified card
+            const card = document.createElement('div');
+            card.className = 'career-card';
+            card.innerHTML = `
+                <div class="career-card-header">
+                    <h3>${careerTitle}</h3>
                 </div>
-
-                <div class="mb-4">
-                    <h6 class="d-flex align-items-center">
-                        <span class="education-icon me-2">🎓</span>
-                        <span>Education</span>
-                    </h6>
-                    <div class="career-list">
-                        ${details.education.degrees.map(degree => `
-                            <div class="d-flex align-items-start mb-2">
-                                <span class="career-icon">📚</span>
-                                <span class="career-text text-muted">${degree}</span>
-                            </div>
-                        `).join('')}
+                <div class="career-card-body">
+                    <div class="career-card-section">
+                        <h4>Personality Match</h4>
+                        <ul>
+                            <li>MBTI Type: ${mbtiType}</li>
+                            <li>Holland Codes: ${hollandCodes.map(code => code.toUpperCase()).join(', ')}</li>
+                        </ul>
                     </div>
-                </div>
-
-                <div class="mb-4">
-                    <h6 class="d-flex align-items-center">
-                        <span class="skills-icon me-2">🛠️</span>
-                        <span>Key Skills</span>
-                    </h6>
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <p class="mb-1 fw-bold text-primary">Technical</p>
-                            <div class="career-list">
-                                ${details.skills.technical.map(skill => `
-                                    <div class="d-flex align-items-start mb-2">
-                                        <span class="career-icon">⚡</span>
-                                        <span class="career-text text-muted">${skill}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <p class="mb-1 fw-bold text-primary">Soft Skills</p>
-                            <div class="career-list">
-                                ${details.skills.soft.map(skill => `
-                                    <div class="d-flex align-items-start mb-2">
-                                        <span class="career-icon">✨</span>
-                                        <span class="career-text text-muted">${skill}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <h6 class="d-flex align-items-center">
-                        <span class="certification-icon me-2">📜</span>
-                        <span>Certifications</span>
-                    </h6>
-                    <div class="career-list">
-                        ${details.certifications.map(cert => `
-                            <div class="d-flex align-items-start mb-2">
-                                <span class="career-icon">🏆</span>
-                                <span class="career-text text-muted">${cert}</span>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <div>
-                    <h6 class="d-flex align-items-center">
-                        <span class="salary-icon me-2">💰</span>
-                        <span>Salary Range</span>
-                    </h6>
-                    <div class="career-list">
-                        <div class="d-flex align-items-start mb-2">
-                            <span class="career-icon">💼</span>
-                            <span class="career-text">
-                                <span class="fw-bold text-primary">Entry Level:</span>
-                                <span class="text-muted">${details.salary.entry}</span>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-start mb-2">
-                            <span class="career-icon">📈</span>
-                            <span class="career-text">
-                                <span class="fw-bold text-primary">Mid Career:</span>
-                                <span class="text-muted">${details.salary.mid}</span>
-                            </span>
-                        </div>
-                        ${details.salary.senior ? `
-                            <div class="d-flex align-items-start">
-                                <span class="career-icon">🌟</span>
-                                <span class="career-text">
-                                    <span class="fw-bold text-primary">Senior Level:</span>
-                                    <span class="text-muted">${details.salary.senior}</span>
-                                </span>
-                            </div>
-                        ` : ''}
+                    <div class="career-card-actions">
+                        <button class="btn btn-primary" onclick="applyForPosition('${careerTitle}', event)">
+                            Learn More
+                        </button>
                     </div>
                 </div>
             `;
-        } else {
-            cardBody.innerHTML = `
-                <div class="text-center text-muted">
-                    <span class="info-icon d-block mb-2" style="font-size: 1.5rem;">ℹ️</span>
-                    <p>Detailed information not available for this career path.</p>
-                </div>
-            `;
+            return card;
         }
 
-        card.appendChild(cardBody);
-
-        // Add hover effect
-        card.style.transition = 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out';
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-5px)';
-            card.style.boxShadow = '0 .5rem 1rem rgba(0,0,0,.15)';
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-            card.style.boxShadow = '';
-        });
-
+        // Create the full card with career details
+        const card = document.createElement('div');
+        card.className = 'career-card';
+        
+        // Create header
+        const header = document.createElement('div');
+        header.className = 'career-card-header';
+        header.innerHTML = `
+            <h3>${careerTitle}</h3>
+            <div class="description">${careerDetails.description || ''}</div>
+        `;
+        
+        // Create body
+        const body = document.createElement('div');
+        body.className = 'career-card-body';
+        
+        // Personality Match Section
+        const personalityMatch = document.createElement('div');
+        personalityMatch.className = 'career-card-section';
+        personalityMatch.innerHTML = `
+            <h4>Personality Match</h4>
+            <ul>
+                <li>MBTI Type: ${mbtiType}</li>
+                <li>Holland Codes: ${hollandCodes.map(code => code.toUpperCase()).join(', ')}</li>
+            </ul>
+        `;
+        
+        // Skills Section
+        const skillsSection = document.createElement('div');
+        skillsSection.className = 'career-card-section';
+        skillsSection.innerHTML = `
+            <h4>Required Skills</h4>
+            <div class="skills-container">
+                ${careerDetails.skills ? `
+                    <div class="technical-skills">
+                        <h5>Technical Skills</h5>
+                        <ul>
+                            ${careerDetails.skills.technical.map(skill => `<li>${skill}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="soft-skills">
+                        <h5>Soft Skills</h5>
+                        <ul>
+                            ${careerDetails.skills.soft.map(skill => `<li>${skill}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+        
+        // Education Section
+        const educationSection = document.createElement('div');
+        educationSection.className = 'career-card-section';
+        educationSection.innerHTML = `
+            <h4>Education & Certifications</h4>
+            ${careerDetails.education ? `
+                <div class="education-container">
+                    <h5>Recommended Education</h5>
+                    <ul>
+                        ${careerDetails.education.degrees.map(degree => `<li>${degree}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+            ${careerDetails.certifications ? `
+                <div class="certifications-container">
+                    <h5>Certifications</h5>
+                    <ul>
+                        ${careerDetails.certifications.map(cert => `<li>${cert}</li>`).join('')}
+                    </ul>
+                </div>
+            ` : ''}
+        `;
+        
+        // Action Button
+        const actions = document.createElement('div');
+        actions.className = 'career-card-actions';
+        actions.innerHTML = `
+            <button class="btn btn-primary" onclick="applyForPosition('${careerTitle}', event)">
+                Learn More
+            </button>
+        `;
+        
+        // Assemble the card
+        body.appendChild(personalityMatch);
+        body.appendChild(skillsSection);
+        body.appendChild(educationSection);
+        body.appendChild(actions);
+        
+        card.appendChild(header);
+        card.appendChild(body);
+        
         return card;
     } catch (error) {
         DEBUG.error('Error creating career card:', error);
@@ -537,25 +497,12 @@ function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
 
 function displayRecommendations(recommendations, mbtiType, hollandCodes, formData) {
     DEBUG.info('Starting displayRecommendations with:', { 
-        recommendations,
-        mbtiType,
-        hollandCodes,
-        hasFormData: !!formData
+        recommendations, 
+        mbtiType, 
+        hollandCodes 
     });
 
-    if (!recommendations || !Array.isArray(recommendations) || recommendations.length === 0) {
-        DEBUG.error('No recommendations found:', recommendations);
-        const resultsDiv = document.getElementById('results');
-        if (resultsDiv) {
-            resultsDiv.innerHTML = `
-                <div class="alert alert-warning">
-                    No career recommendations found for your profile. Please try different selections.
-                </div>
-            `;
-        }
-        return;
-    }
-
+    // Get the results div
     const resultsDiv = document.getElementById('results');
     if (!resultsDiv) {
         DEBUG.error('Results div not found');
@@ -565,38 +512,31 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
     // Clear previous results
     resultsDiv.innerHTML = '';
 
-    // Add header
-    const header = document.createElement('h2');
-    header.className = 'text-center mb-4';
-    header.textContent = 'Based on your personality type and interests, here are your recommended career paths in construction:';
+    // Create a container for the career cards
+    const cardContainer = document.createElement('div');
+    cardContainer.className = 'career-cards-container';
+
+    // Add a header for the results section
+    const header = document.createElement('div');
+    header.className = 'results-header';
+    header.innerHTML = `
+        <h2>Your Career Recommendations</h2>
+        <p>Based on your MBTI type (${mbtiType}) and Holland codes (${hollandCodes.map(code => code.toUpperCase()).join(', ')})</p>
+    `;
     resultsDiv.appendChild(header);
 
-    // Create container for cards
-    const cardContainer = document.createElement('div');
-    cardContainer.className = 'row g-4';
-
-    // Create a Set to track processed titles and avoid duplicates
-    const processedTitles = new Set();
-
-    // Process each recommendation
-    recommendations.forEach((recommendation, index) => {
-        DEBUG.info(`Processing recommendation ${index + 1}:`, recommendation);
-        
+    // Display each recommendation as a card
+    recommendations.forEach(recommendation => {
         try {
-            // Extract the title from the recommendation object or use the string directly
-            const careerTitle = typeof recommendation === 'object' ? recommendation.title : recommendation;
+            DEBUG.info('Creating card for:', recommendation);
             
-            if (!careerTitle || processedTitles.has(careerTitle)) {
-                DEBUG.info('Skipping duplicate or invalid career title:', careerTitle);
-                return;
-            }
-
-            processedTitles.add(careerTitle);
-            
+            // Create a column for the card
             const cardCol = document.createElement('div');
-            cardCol.className = 'col-12';
+            cardCol.className = 'career-card-col';
             
-            const card = displayCareerCard(careerTitle, mbtiType, hollandCodes);
+            // Create and append the career card
+            const card = displayCareerCard(recommendation.title, mbtiType, hollandCodes);
+            
             if (card) {
                 cardCol.appendChild(card);
                 cardContainer.appendChild(cardCol);
@@ -606,7 +546,10 @@ function displayRecommendations(recommendations, mbtiType, hollandCodes, formDat
         }
     });
 
+    // Add the card container to the results
     resultsDiv.appendChild(cardContainer);
+    
+    // Show the results section
     resultsDiv.style.display = 'block';
     resultsDiv.scrollIntoView({ behavior: 'smooth' });
 
@@ -642,18 +585,40 @@ document.getElementById('careerForm').addEventListener('submit', async function(
         }
 
         // Get recommendations based on MBTI type and Holland codes
-        const recommendations = getRecommendations(mbtiType);
-        DEBUG.info('Career recommendations:', recommendations);
-
-        // Display the recommendations
-        displayRecommendations(recommendations, mbtiType, hollandCodes, formData);
-
-        // Show the results section
-        const resultsDiv = document.getElementById('results');
-        if (resultsDiv) {
-            resultsDiv.style.display = 'block';
+        let recommendations;
+        try {
+            DEBUG.info('Getting recommendations with:', { mbtiType, hollandCodes });
+            recommendations = getRecommendations(mbtiType, hollandCodes);
+            DEBUG.info('Career recommendations:', recommendations);
+            
+            if (!recommendations || !Array.isArray(recommendations)) {
+                throw new Error(`Invalid recommendations format: ${JSON.stringify(recommendations)}`);
+            }
+        } catch (error) {
+            DEBUG.error('Error getting recommendations:', error);
+            showNotification('Error getting career recommendations. Please try again.', 'error');
+            return;
         }
 
+        // Display the recommendations
+        try {
+            DEBUG.info('Displaying recommendations:', { recommendations, mbtiType, hollandCodes });
+            displayRecommendations(recommendations, mbtiType, hollandCodes, formData);
+            
+            // Show the results section
+            const resultsDiv = document.getElementById('results');
+            if (resultsDiv) {
+                resultsDiv.style.display = 'block';
+                resultsDiv.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                throw new Error('Results div not found');
+            }
+        } catch (error) {
+            DEBUG.error('Error displaying recommendations:', error);
+            showNotification('Error displaying recommendations. Please try again.', 'error');
+            return;
+        }
+        
     } catch (error) {
         DEBUG.error('Error processing form submission:', error);
         showNotification('An error occurred while processing your selections. Please try again.', 'error');
@@ -792,34 +757,89 @@ function getCareerRecommendations(mbtiType, hollandCodes) {
     // MBTI-based career recommendations
     const mbtiRecommendations = {
         // Analysts (NT)
-        'INTJ': ['Construction Technology Director', 'Project Planning Manager', 'Quality Systems Manager'],
-        'INTP': ['Construction Research Engineer', 'Systems Integration Specialist', 'Technical Consultant'],
-        'ENTJ': ['Construction Executive', 'Program Director', 'Operations Manager'],
-        'ENTP': ['Innovation Manager', 'Business Development Director', 'Strategy Consultant'],
+        'INTJ': {
+            'R': ['Construction Project Manager', 'Site Supervisor', 'Safety Inspector'],
+            'I': ['Structural Engineer', 'Civil Engineer', 'Building Inspector'],
+            'C': ['Construction Estimator', 'Quality Control Manager', 'Building Code Inspector']
+        },
+        'INTP': {
+            technical: ['Construction Research Engineer', 'Systems Integration Specialist', 'Technical Consultant'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ENTJ': {
+            technical: ['Construction Executive', 'Program Director', 'Operations Manager'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ENTP': {
+            technical: ['Innovation Manager', 'Business Development Director', 'Strategy Consultant'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
         
         // Diplomats (NF)
-        'INFJ': ['Sustainability Manager', 'Environmental Compliance Officer', 'Safety Director'],
-        'INFP': ['Green Building Consultant', 'Environmental Impact Analyst', 'Workplace Safety Specialist'],
-        'ENFJ': ['Training Director', 'Team Development Manager', 'HR Director'],
-        'ENFP': ['Client Relations Director', 'Construction Business Developer', 'Project Development Manager'],
+        'INFJ': {
+            technical: ['Sustainability Manager', 'Environmental Compliance Officer', 'Safety Director'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'INFP': {
+            technical: ['Green Building Consultant', 'Environmental Impact Analyst', 'Workplace Safety Specialist'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ENFJ': {
+            technical: ['Training Director', 'Team Development Manager', 'HR Director'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ENFP': {
+            technical: ['Client Relations Director', 'Construction Business Developer', 'Project Development Manager'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
         
         // Sentinels (SJ)
-        'ISTJ': ['Quality Control Manager', 'Compliance Officer', 'Technical Director'],
-        'ISFJ': ['Safety Coordinator', 'Quality Assurance Specialist', 'Resource Manager'],
-        'ESTJ': ['Project Manager', 'Site Superintendent', 'Operations Director'],
-        'ESFJ': ['Client Services Manager', 'Team Coordinator', 'Community Relations Director'],
+        'ISTJ': {
+            technical: ['Quality Control Manager', 'Compliance Officer', 'Technical Director'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ISFJ': {
+            technical: ['Safety Coordinator', 'Quality Assurance Specialist', 'Resource Manager'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ESTJ': {
+            technical: ['Project Manager', 'Site Superintendent', 'Operations Director'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ESFJ': {
+            technical: ['Client Services Manager', 'Team Coordinator', 'Community Relations Director'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
         
         // Explorers (SP)
-        'ISTP': ['Technical Specialist', 'Equipment Manager', 'Site Engineer'],
-        'ISFP': ['Design Implementation Specialist', 'Interior Construction Coordinator', 'Materials Specialist'],
-        'ESTP': ['Site Manager', 'Field Operations Director', 'Emergency Response Coordinator'],
-        'ESFP': ['Site Safety Coordinator', 'Team Leader', 'Public Relations Manager']
+        'ISTP': {
+            technical: ['Technical Specialist', 'Equipment Manager', 'Site Engineer'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ISFP': {
+            technical: ['Design Implementation Specialist', 'Interior Construction Coordinator', 'Materials Specialist'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ESTP': {
+            technical: ['Site Manager', 'Field Operations Director', 'Emergency Response Coordinator'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        },
+        'ESFP': {
+            technical: ['Site Safety Coordinator', 'Team Leader', 'Public Relations Manager'],
+            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        }
     };
     
     // Get base recommendations from MBTI type
     let recommendations = [];
     if (mbtiRecommendations[mbtiType]) {
-        recommendations = mbtiRecommendations[mbtiType].map(title => ({
+        // Get all recommendations for this MBTI type across all categories/codes
+        const allRecommendations = Object.values(mbtiRecommendations[mbtiType])
+            .flat()
+            .filter(Boolean) // Remove any null/undefined values
+            .map(rec => typeof rec === 'string' ? rec : rec.title); // Ensure we always have strings
+        
+        recommendations = allRecommendations.map(title => ({
             title,
             description: `Specialized role combining ${mbtiType} personality traits with ${hollandCodes.join('/')} interests.`,
             responsibilities: [
@@ -859,12 +879,12 @@ function getCareerRecommendations(mbtiType, hollandCodes) {
 
 function getHollandCodeKeywords(code) {
     const keywords = {
-        'R': ['technical', 'engineer', 'specialist'],
-        'I': ['research', 'analyst', 'systems'],
-        'A': ['design', 'creative', 'innovation'],
-        'S': ['training', 'coordinator', 'relations'],
-        'E': ['manager', 'director', 'business'],
-        'C': ['compliance', 'quality', 'control']
+        'realistic': ['technical', 'engineer', 'specialist'],
+        'investigative': ['research', 'analyst', 'systems'],
+        'artistic': ['design', 'creative', 'innovation'],
+        'social': ['training', 'coordinator', 'relations'],
+        'enterprising': ['manager', 'director', 'business'],
+        'conventional': ['compliance', 'quality', 'control']
     };
     
     return keywords[code] || [];
@@ -885,24 +905,14 @@ function getHollandCodes(formData) {
     const selectedCodes = formData.getAll('hollandCode');
     DEBUG.info('Selected Holland codes from form:', selectedCodes);
     
-    // Map the values to their corresponding codes
-    const codeMap = {
-        'realistic': 'R',
-        'investigative': 'I',
-        'artistic': 'A',
-        'social': 'S',
-        'enterprising': 'E',
-        'conventional': 'C'
-    };
-    
+    // Use the full names for Holland codes
     selectedCodes.forEach(value => {
-        const code = codeMap[value];
-        if (code) {
-            hollandCodes.push(code);
+        if (value) {
+            hollandCodes.push(value.toLowerCase());
         }
     });
     
-    DEBUG.info('Mapped Holland codes:', hollandCodes);
+    DEBUG.info('Holland codes:', hollandCodes);
     return hollandCodes;
 }
 
@@ -950,6 +960,9 @@ function applyForPosition(careerTitle, event) {
     showNotification(`Opening career details for ${careerTitle}`, 'info');
 }
 
+// Make applyForPosition available globally
+window.applyForPosition = applyForPosition;
+
 const careerRecommendations = {
     'ISTJ': {
         'R': ['Construction Project Manager', 'Site Supervisor', 'Safety Inspector'],
@@ -958,7 +971,7 @@ const careerRecommendations = {
     },
     'ISFJ': {
         'S': ['Construction Safety Manager', 'Environmental Compliance Officer', 'Site Safety Coordinator'],
-        'C': ['Construction Document Controller', 'Quality Assurance Specialist', 'Permit Coordinator'],
+        'C': ['Construction Document Controller', 'Quality Assurance Specialist', 'Resource Manager'],
         'R': ['Facilities Manager', 'Maintenance Supervisor', 'Building Systems Specialist']
     },
     'INFJ': {
@@ -1151,125 +1164,53 @@ const trainingRecommendations = {
  */
 function getTrainingRecommendations(mbtiType, hollandCodes, formData) {
     DEBUG.info('Getting training recommendations for:', { mbtiType, hollandCodes });
-
-    // Role-specific training recommendations
-    const roleTraining = {
-        // Analysts (NT)
-        'INTJ': {
-            technical: ['Advanced BIM Software Certification', 'Construction Technology Management', 'Quality Management Systems'],
-            soft: ['Strategic Planning', 'Systems Thinking Workshop', 'Technical Leadership'],
-            certifications: ['PMP', 'Six Sigma Black Belt', 'Quality Management Professional']
-        },
-        'INTP': {
-            technical: ['Construction Data Analytics', 'Advanced Modeling Software', 'Systems Integration'],
-            soft: ['Problem-Solving Methodologies', 'Innovation Management', 'Technical Communication'],
-            certifications: ['Data Analytics Professional', 'Systems Engineering Professional', 'Technical Consultant Certification']
-        },
-        'ENTJ': {
-            technical: ['Enterprise Resource Planning', 'Program Management', 'Strategic Operations'],
-            soft: ['Executive Leadership', 'Change Management', 'Strategic Decision Making'],
-            certifications: ['Executive MBA', 'Program Management Professional', 'Construction Executive Certification']
-        },
-        'ENTP': {
-            technical: ['Innovation Management Systems', 'Business Development Strategies', 'Digital Transformation'],
-            soft: ['Creative Problem Solving', 'Strategic Innovation', 'Client Relations'],
-            certifications: ['Innovation Management Professional', 'Digital Strategy Certification', 'Business Development Professional']
-        },
-
-        // Diplomats (NF)
-        'INFJ': {
-            technical: ['Sustainable Construction Practices', 'Environmental Management Systems', 'Safety Management'],
-            soft: ['Team Development', 'Conflict Resolution', 'Sustainability Leadership'],
-            certifications: ['LEED AP', 'Safety Management Specialist', 'Environmental Management Professional']
-        },
-        'INFP': {
-            technical: ['Green Building Technologies', 'Environmental Impact Assessment', 'Sustainable Design'],
-            soft: ['Environmental Communication', 'Stakeholder Engagement', 'Sustainability Planning'],
-            certifications: ['Green Building Professional', 'Environmental Assessment Specialist', 'Sustainability Consultant']
-        },
-        'ENFJ': {
-            technical: ['Training Program Development', 'HR Management Systems', 'Leadership Development'],
-            soft: ['Advanced Facilitation', 'Team Building', 'Organizational Development'],
-            certifications: ['Training & Development Professional', 'HR Management Professional', 'Leadership Coach Certification']
-        },
-        'ENFP': {
-            technical: ['Client Relations Management', 'Business Development', 'Project Development'],
-            soft: ['Relationship Building', 'Creative Leadership', 'Stakeholder Management'],
-            certifications: ['Business Development Professional', 'Client Relations Manager', 'Project Development Specialist']
-        },
-
-        // Sentinels (SJ)
-        'ISTJ': {
-            technical: ['Quality Control Systems', 'Technical Documentation', 'Compliance Management'],
-            soft: ['Process Improvement', 'Technical Supervision', 'Standards Implementation'],
-            certifications: ['Quality Control Professional', 'Technical Manager Certification', 'Compliance Officer']
-        },
-        'ISFJ': {
-            technical: ['Safety Management Systems', 'Quality Assurance', 'Resource Management'],
-            soft: ['Team Coordination', 'Safety Leadership', 'Resource Optimization'],
-            certifications: ['Safety Professional', 'Quality Assurance Specialist', 'Resource Management Professional']
-        },
-        'ESTJ': {
-            technical: ['Project Management', 'Construction Operations', 'Site Management'],
-            soft: ['Leadership Skills', 'Team Management', 'Operational Excellence'],
-            certifications: ['PMP', 'Construction Manager', 'Operations Management Professional']
-        },
-        'ESFJ': {
-            technical: ['Client Service Management', 'Team Coordination', 'Community Relations'],
-            soft: ['People Management', 'Customer Service Excellence', 'Community Engagement'],
-            certifications: ['Customer Service Professional', 'Team Leader Certification', 'Community Relations Manager']
-        },
-
-        // Explorers (SP)
-        'ISTP': {
-            technical: ['Technical Systems', 'Equipment Management', 'Site Engineering'],
-            soft: ['Technical Problem Solving', 'Hands-on Leadership', 'Equipment Operations'],
-            certifications: ['Technical Specialist', 'Equipment Manager', 'Site Engineer Professional']
-        },
-        'ISFP': {
-            technical: ['Design Implementation', 'Interior Construction', 'Materials Management'],
-            soft: ['Design Thinking', 'Aesthetic Awareness', 'Materials Selection'],
-            certifications: ['Design Implementation Specialist', 'Interior Construction Professional', 'Materials Specialist']
-        },
-        'ESTP': {
-            technical: ['Site Operations', 'Field Management', 'Emergency Response'],
-            soft: ['Crisis Management', 'Operational Leadership', 'Quick Decision Making'],
-            certifications: ['Site Manager Professional', 'Field Operations Director', 'Emergency Response Coordinator']
-        },
-        'ESFP': {
-            technical: ['Site Safety Systems', 'Team Leadership', 'Public Relations'],
-            soft: ['Safety Communication', 'Team Motivation', 'Public Speaking'],
-            certifications: ['Site Safety Coordinator', 'Team Leader', 'Public Relations Professional']
-        }
+    
+    const generalTraining = {
+        'ISTJ': ['Project Management', 'Quality Control', 'Technical Documentation'],
+        'ISFJ': ['Safety Management', 'Quality Assurance', 'Resource Planning'],
+        'INFJ': ['Environmental Planning', 'Sustainability', 'Team Development'],
+        'INTJ': ['Systems Engineering', 'Project Planning', 'Technical Leadership'],
+        'ISTP': ['Technical Skills', 'Equipment Operation', 'Problem Solving'],
+        'ISFP': ['Design Implementation', 'Material Selection', 'Visual Planning'],
+        'INFP': ['Environmental Design', 'Sustainable Practices', 'Creative Solutions'],
+        'INTP': ['Technical Analysis', 'Systems Design', 'Research Methods'],
+        'ESTP': ['Site Management', 'Team Leadership', 'Emergency Response'],
+        'ESFP': ['Team Coordination', 'Client Relations', 'Safety Awareness'],
+        'ENFP': ['Business Development', 'Client Engagement', 'Innovation Management'],
+        'ENTP': ['Strategic Planning', 'Innovation Leadership', 'Business Strategy'],
+        'ESTJ': ['Project Leadership', 'Operations Management', 'Team Management'],
+        'ESFJ': ['Team Development', 'Client Service', 'Resource Management'],
+        'ENFJ': ['Leadership Development', 'Team Building', 'Communication'],
+        'ENTJ': ['Executive Leadership', 'Strategic Management', 'Business Operations']
     };
 
     const hollandTraining = {
-        'R': {
+        'realistic': {
             technical: ['Technical Skills Development', 'Equipment Operation', 'Hands-on Construction Methods'],
             soft: ['Technical Problem Solving', 'Spatial Awareness', 'Physical Coordination'],
             certifications: ['Technical Specialist', 'Equipment Operator', 'Construction Technician']
         },
-        'I': {
+        'investigative': {
             technical: ['Research Methods', 'Data Analysis', 'Technical Documentation'],
             soft: ['Analytical Thinking', 'Research Skills', 'Technical Writing'],
             certifications: ['Research Professional', 'Data Analyst', 'Technical Documentation Specialist']
         },
-        'A': {
+        'artistic': {
             technical: ['Design Software', 'Creative Solutions', 'Aesthetic Planning'],
             soft: ['Creative Thinking', 'Design Principles', 'Visual Communication'],
             certifications: ['Design Professional', 'Creative Solutions Specialist', 'Visual Design Coordinator']
         },
-        'S': {
+        'social': {
             technical: ['People Management', 'Training Development', 'Communication Systems'],
             soft: ['Interpersonal Skills', 'Teaching Methods', 'Active Listening'],
             certifications: ['Training Professional', 'Communication Specialist', 'People Management Coordinator']
         },
-        'E': {
+        'enterprising': {
             technical: ['Business Management', 'Leadership Development', 'Strategic Planning'],
             soft: ['Leadership Skills', 'Persuasion', 'Decision Making'],
             certifications: ['Business Management Professional', 'Leadership Development Specialist', 'Strategic Planning Coordinator']
         },
-        'C': {
+        'conventional': {
             technical: ['Quality Control', 'Documentation Systems', 'Compliance Management'],
             soft: ['Attention to Detail', 'Organization Skills', 'Process Management'],
             certifications: ['Quality Control Professional', 'Documentation Specialist', 'Compliance Coordinator']
@@ -1283,10 +1224,8 @@ function getTrainingRecommendations(mbtiType, hollandCodes, formData) {
     };
 
     // Add MBTI-specific recommendations
-    if (roleTraining[mbtiType]) {
-        roleTraining[mbtiType].technical.forEach(item => recommendations.technical.add(item));
-        roleTraining[mbtiType].soft.forEach(item => recommendations.soft.add(item));
-        roleTraining[mbtiType].certifications.forEach(item => recommendations.certifications.add(item));
+    if (generalTraining[mbtiType]) {
+        generalTraining[mbtiType].forEach(item => recommendations.technical.add(item));
     }
 
     // Add Holland code specific recommendations
