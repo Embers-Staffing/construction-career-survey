@@ -16,6 +16,8 @@ A modern, interactive career recommendation tool for the construction industry. 
 - Save recommendations as PDF
 - Print-friendly output
 - Mobile-friendly interface
+- Auto-fill mode for quick testing
+- Form validation and error handling
 
 ## Live Demo
 
@@ -45,6 +47,46 @@ Visit the live site at: [https://embers-staffing.github.io/construction-career-s
    ```
    http://localhost:8000
    ```
+
+## Testing
+
+The project includes comprehensive testing at multiple levels:
+
+### Unit Tests
+Run unit tests with:
+```bash
+npm test
+```
+
+### Regression Tests
+Run regression tests with:
+```bash
+npm run test:regression
+```
+
+### End-to-End Tests
+Run E2E tests with:
+```bash
+# Run tests in headless mode
+npm run test:e2e
+
+# Run tests with UI mode
+npm run test:e2e:ui
+```
+
+The E2E tests use Playwright and cover:
+- Form functionality
+- Auto-fill mode
+- Form validation
+- Keyboard accessibility
+- Responsive design
+- Error handling
+
+### Test Coverage
+Generate test coverage report with:
+```bash
+npm run test:coverage
+```
 
 ## Technology Stack
 
