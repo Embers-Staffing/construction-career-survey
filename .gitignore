@@ -7,6 +7,9 @@ dist/
 build/
 .cache/
 
+# Test coverage
+coverage/
+
 # Environment and config files
 .env
 .env.*
