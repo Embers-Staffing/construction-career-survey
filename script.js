@@ -2,629 +2,39 @@
 
 import { getRecommendations, getCareerDetails as getCareerInfo } from './data/career-data.js';
 
-// Debug utilities
+// Debug utility
 const DEBUG = {
-    log: (message, level = 'info', data = null) => {
-        const timestamp = new Date().toISOString();
-        const dataStr = data ? JSON.stringify(data, null, 2) : '';
-        console.log(`[${timestamp}] [${level.toUpperCase()}] ${message} ${dataStr}`);
-    },
-    error: (message, error = null) => {
-        const timestamp = new Date().toISOString();
-        console.error(`[${timestamp}] [ERROR] ${message}`);
-        if (error) {
-            console.error('Error details:', error);
-            if (error.stack) {
-                console.error('Stack trace:', error.stack);
-            }
-        }
-    },
-    info: (message, data = null) => {
-        DEBUG.log(message, 'info', data);
-    },
-    debug: (message, data = null) => {
-        DEBUG.log(message, 'debug', data);
-    },
-    warn: (message, data = null) => {
-        DEBUG.log(message, 'warn', data);
-    }
+    info: (...args) => console.log('[INFO]', ...args),
+    error: (...args) => console.error('[ERROR]', ...args),
+    warn: (...args) => console.warn('[WARN]', ...args)
 };
 
-// Add global error handler
-window.onerror = function(msg, url, lineNo, columnNo, error) {
-    DEBUG.error('Global error:', {
-        message: msg,
-        url: url,
-        line: lineNo,
-        column: columnNo,
-        error: error
-    });
-    return false;
-};
-
-// Add unhandled promise rejection handler
-window.onunhandledrejection = function(event) {
-    DEBUG.error('Unhandled promise rejection:', event.reason);
-};
-
-// Constants for configuration
+// Configuration
 const CONFIG = {
     MIN_AGE: 16,
-    MAX_AGE: 70,
-    MBTI_TYPES: ['E', 'I', 'S', 'N', 'T', 'F', 'J', 'P']
+    MAX_AGE: 65,
+    AUTO_FILL_MODE: false
 };
 
-// Career progression and salary data
-const CAREER_DATA = {
-    salaryRanges: {
-        entry: {
-            min: 45000,
-            max: 65000,
-            title: "Entry Level",
-            experience: "0-2 years"
-        },
-        mid: {
-            min: 65000,
-            max: 95000,
-            title: "Mid Level",
-            experience: "2-5 years"
-        },
-        senior: {
-            min: 95000,
-            max: 150000,
-            title: "Senior Level",
-            experience: "5-10 years"
-        },
-        expert: {
-            min: 150000,
-            max: 250000,
-            title: "Expert Level",
-            experience: "10+ years"
-        }
-    }
-};
+/**
+ * Show notification message to user
+ * @param {string} message - Message to display
+ * @param {string} type - Type of notification (info, warning, error)
+ */
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
 
-function getCareerProgression(role, experience) {
-    const progressionPaths = {
-        "Project Manager": [
-            { level: "Assistant Project Manager", years: "0-2", salary: CAREER_DATA.salaryRanges.entry },
-            { level: "Project Manager", years: "2-5", salary: CAREER_DATA.salaryRanges.mid },
-            { level: "Senior Project Manager", years: "5-10", salary: CAREER_DATA.salaryRanges.senior },
-            { level: "Program Director", years: "10+", salary: CAREER_DATA.salaryRanges.expert }
-        ],
-        "Site Supervisor": [
-            { level: "Assistant Supervisor", years: "0-2", salary: CAREER_DATA.salaryRanges.entry },
-            { level: "Site Supervisor", years: "2-5", salary: CAREER_DATA.salaryRanges.mid },
-            { level: "Senior Supervisor", years: "5-10", salary: CAREER_DATA.salaryRanges.senior },
-            { level: "Operations Director", years: "10+", salary: CAREER_DATA.salaryRanges.expert }
-        ],
-        // Add more career paths as needed
-    };
-
-    const defaultPath = [
-        { level: "Entry Level", years: "0-2", salary: CAREER_DATA.salaryRanges.entry },
-        { level: "Mid Level", years: "2-5", salary: CAREER_DATA.salaryRanges.mid },
-        { level: "Senior Level", years: "5-10", salary: CAREER_DATA.salaryRanges.senior },
-        { level: "Expert Level", years: "10+", salary: CAREER_DATA.salaryRanges.expert }
-    ];
-
-    return progressionPaths[role] || defaultPath;
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
 }
 
-function getSalaryRange(careerPath) {
-    const ranges = {
-        'trades': '$45,000 - $95,000',
-        'project-management': '$60,000 - $150,000',
-        'tech-specialist': '$55,000 - $120,000',
-        'estimator': '$50,000 - $110,000',
-        'heavy-machinery': '$45,000 - $85,000'
-    };
-    return ranges[careerPath] || '$40,000 - $100,000';
-}
-
-function getRequiredSkills(careerPath) {
-    const skills = {
-        'trades': ['Technical Skills', 'Safety Knowledge', 'Physical Stamina', 'Problem Solving'],
-        'project-management': ['Leadership', 'Communication', 'Planning', 'Budgeting'],
-        'tech-specialist': ['Technical Knowledge', 'Computer Skills', 'Problem Solving', 'Innovation'],
-        'estimator': ['Math Skills', 'Attention to Detail', 'Software Proficiency', 'Analysis'],
-        'heavy-machinery': ['Equipment Operation', 'Safety Awareness', 'Mechanical Knowledge', 'Precision']
-    };
-    return skills[careerPath] || ['Basic Construction Knowledge', 'Communication', 'Teamwork'];
-}
-
-function getCareerGrowth(careerPath) {
-    const growth = {
-        'trades': 'Apprentice → Journeyman → Master → Business Owner',
-        'project-management': 'Coordinator → Manager → Senior Manager → Director',
-        'tech-specialist': 'Technician → Specialist → Lead → Technology Director',
-        'estimator': 'Junior Estimator → Estimator → Senior Estimator → Chief Estimator',
-        'heavy-machinery': 'Operator → Lead Operator → Site Supervisor → Operations Manager'
-    };
-    return growth[careerPath] || 'Entry Level → Mid Level → Senior Level → Leadership';
-}
-
-function getProgressionSteps(careerPath) {
-    const progressions = {
-        'trades': [
-            {
-                title: 'Apprentice',
-                salary: '$35,000 - $45,000',
-                timeframe: '1-2 years'
-            },
-            {
-                title: 'Journeyman',
-                salary: '$45,000 - $65,000',
-                timeframe: '2-4 years'
-            },
-            {
-                title: 'Master Tradesperson',
-                salary: '$65,000 - $95,000',
-                timeframe: '4-6 years'
-            },
-            {
-                title: 'Trade Business Owner',
-                salary: '$95,000+',
-                timeframe: '6+ years'
-            }
-        ],
-        'project-management': [
-            {
-                title: 'Project Coordinator',
-                salary: '$45,000 - $60,000',
-                timeframe: '0-2 years'
-            },
-            {
-                title: 'Project Manager',
-                salary: '$60,000 - $90,000',
-                timeframe: '2-5 years'
-            },
-            {
-                title: 'Senior Project Manager',
-                salary: '$90,000 - $120,000',
-                timeframe: '5-8 years'
-            },
-            {
-                title: 'Construction Director',
-                salary: '$120,000+',
-                timeframe: '8+ years'
-            }
-        ],
-        'tech-specialist': [
-            {
-                title: 'Construction Technologist',
-                salary: '$45,000 - $60,000',
-                timeframe: '0-2 years'
-            },
-            {
-                title: 'BIM Specialist',
-                salary: '$60,000 - $85,000',
-                timeframe: '2-4 years'
-            },
-            {
-                title: 'Technology Manager',
-                salary: '$85,000 - $110,000',
-                timeframe: '4-6 years'
-            },
-            {
-                title: 'Digital Construction Director',
-                salary: '$110,000+',
-                timeframe: '6+ years'
-            }
-        ],
-        'estimator': [
-            {
-                title: 'Junior Estimator',
-                salary: '$45,000 - $65,000',
-                timeframe: '0-2 years'
-            },
-            {
-                title: 'Estimator',
-                salary: '$65,000 - $85,000',
-                timeframe: '2-4 years'
-            },
-            {
-                title: 'Senior Estimator',
-                salary: '$85,000 - $115,000',
-                timeframe: '4-6 years'
-            },
-            {
-                title: 'Chief Estimator',
-                salary: '$115,000+',
-                timeframe: '6+ years'
-            }
-        ],
-        'heavy-machinery': [
-            {
-                title: 'Equipment Operator Trainee',
-                salary: '$40,000 - $55,000',
-                timeframe: '0-1 years'
-            },
-            {
-                title: 'Equipment Operator',
-                salary: '$55,000 - $75,000',
-                timeframe: '1-3 years'
-            },
-            {
-                title: 'Senior Operator',
-                salary: '$75,000 - $95,000',
-                timeframe: '3-5 years'
-            },
-            {
-                title: 'Operations Supervisor',
-                salary: '$95,000+',
-                timeframe: '5+ years'
-            }
-        ]
-    };
-    
-    return progressions[careerPath] || [
-        {
-            title: 'Entry Level',
-            salary: '$40,000 - $50,000',
-            timeframe: '0-2 years'
-        },
-        {
-            title: 'Mid Level',
-            salary: '$50,000 - $70,000',
-            timeframe: '2-5 years'
-        },
-        {
-            title: 'Senior Level',
-            salary: '$70,000 - $100,000',
-            timeframe: '5-8 years'
-        },
-        {
-            title: 'Leadership',
-            salary: '$100,000+',
-            timeframe: '8+ years'
-        }
-    ];
-}
-
-function getNextSteps(result) {
-    const steps = [];
-    
-    // Add basic steps based on experience level
-    if (result.constructionExperience === 'none') {
-        steps.push(
-            "Research basic construction terminology and concepts",
-            "Consider entry-level construction training programs",
-            "Look into OSHA safety certifications",
-            "Explore apprenticeship opportunities"
-        );
-    } else if (result.constructionExperience === 'beginner') {
-        steps.push(
-            "Pursue relevant certifications in your area of interest",
-            "Join construction industry associations",
-            "Build your professional network",
-            "Consider specialized training programs"
-        );
-    } else {
-        steps.push(
-            "Look for leadership development opportunities",
-            "Consider advanced certifications",
-            "Explore mentorship opportunities",
-            "Stay updated with industry innovations"
-        );
-    }
-
-    // Add skill-based recommendations
-    if (result.technicalSkills && result.technicalSkills.length > 0) {
-        steps.push(`Build upon your existing skills: ${result.technicalSkills.join(', ')}`);
-    }
-
-    // Add technology-focused steps
-    if (result.techInterests && result.techInterests.length > 0) {
-        steps.push(`Explore training in: ${result.techInterests.join(', ')}`);
-    }
-
-    return steps;
-}
-
-async function displayResults(result, careerDetails) {
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.style.display = 'block';
-
-    resultsDiv.innerHTML = `
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3 class="card-title">Career Matches</h3>
-                <div class="list-unstyled">
-                    ${careerDetails.map(career => `<div>${career.title}</div>`).join('')}
-                </div>
-            </div>
-        </div>
-
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3 class="card-title">Next Steps</h3>
-                <div class="list-unstyled">
-                    ${getNextSteps(result).map(step => `<div>${step}</div>`).join('')}
-                </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">Career Details</h3>
-                ${careerDetails.map(career => `
-                    <h4>${career.title}</h4>
-                    <p>Salary Range: ${getSalaryRange(career.title)}</p>
-                    <p>Required Skills: ${getRequiredSkills(career.title).join(', ')}</p>
-                    <p>Career Growth: ${getCareerGrowth(career.title)}</p>
-                    <p>Progression Steps:</p>
-                    <div class="list-unstyled">
-                        ${getProgressionSteps(career.title).map(step => `<div>${step.title} - ${step.salary} - ${step.timeframe}</div>`).join('')}
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    resultsDiv.scrollIntoView({ behavior: 'smooth' });
-}
-
-function displayCareerCard(careerTitle, mbtiType, hollandCodes) {
-    try {
-        DEBUG.info('Creating career card for:', { careerTitle, mbtiType, hollandCodes });
-        
-        // Get career details
-        const careerDetails = getCareerInfo(careerTitle);
-        if (!careerDetails) {
-            DEBUG.warn('No career details found for:', careerTitle);
-            // Return a simplified card
-            const card = document.createElement('div');
-            card.className = 'career-card';
-            card.innerHTML = `
-                <div class="career-card-header">
-                    <h3>${careerTitle}</h3>
-                </div>
-                <div class="career-card-body">
-                    <div class="career-card-section">
-                        <h4>Personality Match</h4>
-                        <ul>
-                            <li>MBTI Type: ${mbtiType}</li>
-                            <li>Holland Codes: ${hollandCodes.map(code => code.toUpperCase()).join(', ')}</li>
-                        </ul>
-                    </div>
-                    <div class="career-card-actions">
-                        <button class="btn btn-primary" onclick="applyForPosition('${careerTitle}', event)">
-                            Learn More
-                        </button>
-                    </div>
-                </div>
-            `;
-            return card;
-        }
-
-        // Create the full card with career details
-        const card = document.createElement('div');
-        card.className = 'career-card';
-        
-        // Create header
-        const header = document.createElement('div');
-        header.className = 'career-card-header';
-        header.innerHTML = `
-            <h3>${careerTitle}</h3>
-            <div class="description">${careerDetails.description || ''}</div>
-        `;
-        
-        // Create body
-        const body = document.createElement('div');
-        body.className = 'career-card-body';
-        
-        // Personality Match Section
-        const personalityMatch = document.createElement('div');
-        personalityMatch.className = 'career-card-section';
-        personalityMatch.innerHTML = `
-            <h4>Personality Match</h4>
-            <ul>
-                <li>MBTI Type: ${mbtiType}</li>
-                <li>Holland Codes: ${hollandCodes.map(code => code.toUpperCase()).join(', ')}</li>
-            </ul>
-        `;
-        
-        // Skills Section
-        const skillsSection = document.createElement('div');
-        skillsSection.className = 'career-card-section';
-        skillsSection.innerHTML = `
-            <h4>Required Skills</h4>
-            <div class="skills-container">
-                ${careerDetails.skills ? `
-                    <div class="technical-skills">
-                        <h5>Technical Skills</h5>
-                        <ul>
-                            ${careerDetails.skills.technical.map(skill => `<li>${skill}</li>`).join('')}
-                        </ul>
-                    </div>
-                    <div class="soft-skills">
-                        <h5>Soft Skills</h5>
-                        <ul>
-                            ${careerDetails.skills.soft.map(skill => `<li>${skill}</li>`).join('')}
-                        </ul>
-                    </div>
-                ` : ''}
-            </div>
-        `;
-        
-        // Education Section
-        const educationSection = document.createElement('div');
-        educationSection.className = 'career-card-section';
-        educationSection.innerHTML = `
-            <h4>Education & Certifications</h4>
-            ${careerDetails.education ? `
-                <div class="education-container">
-                    <h5>Recommended Education</h5>
-                    <ul>
-                        ${careerDetails.education.degrees.map(degree => `<li>${degree}</li>`).join('')}
-                    </ul>
-                </div>
-            ` : ''}
-            ${careerDetails.certifications ? `
-                <div class="certifications-container">
-                    <h5>Certifications</h5>
-                    <ul>
-                        ${careerDetails.certifications.map(cert => `<li>${cert}</li>`).join('')}
-                    </ul>
-                </div>
-            ` : ''}
-        `;
-        
-        // Action Button
-        const actions = document.createElement('div');
-        actions.className = 'career-card-actions';
-        actions.innerHTML = `
-            <button class="btn btn-primary" onclick="applyForPosition('${careerTitle}', event)">
-                Learn More
-            </button>
-        `;
-        
-        // Assemble the card
-        body.appendChild(personalityMatch);
-        body.appendChild(skillsSection);
-        body.appendChild(educationSection);
-        body.appendChild(actions);
-        
-        card.appendChild(header);
-        card.appendChild(body);
-        
-        return card;
-    } catch (error) {
-        DEBUG.error('Error creating career card:', error);
-        return null;
-    }
-}
-
-function displayRecommendations(recommendations, mbtiType, hollandCodes, formData) {
-    DEBUG.info('Starting displayRecommendations with:', { 
-        recommendations, 
-        mbtiType, 
-        hollandCodes 
-    });
-
-    // Get the results div
-    const resultsDiv = document.getElementById('results');
-    if (!resultsDiv) {
-        DEBUG.error('Results div not found');
-        return;
-    }
-
-    // Clear previous results
-    resultsDiv.innerHTML = '';
-
-    // Create a container for the career cards
-    const cardContainer = document.createElement('div');
-    cardContainer.className = 'career-cards-container';
-
-    // Add a header for the results section
-    const header = document.createElement('div');
-    header.className = 'results-header';
-    header.innerHTML = `
-        <h2>Your Career Recommendations</h2>
-        <p>Based on your MBTI type (${mbtiType}) and Holland codes (${hollandCodes.map(code => code.toUpperCase()).join(', ')})</p>
-    `;
-    resultsDiv.appendChild(header);
-
-    // Display each recommendation as a card
-    recommendations.forEach(recommendation => {
-        try {
-            DEBUG.info('Creating card for:', recommendation);
-            
-            // Create a column for the card
-            const cardCol = document.createElement('div');
-            cardCol.className = 'career-card-col';
-            
-            // Create and append the career card
-            const card = displayCareerCard(recommendation.title, mbtiType, hollandCodes);
-            
-            if (card) {
-                cardCol.appendChild(card);
-                cardContainer.appendChild(cardCol);
-            }
-        } catch (error) {
-            DEBUG.error(`Error displaying career card for ${JSON.stringify(recommendation)}:`, error);
-        }
-    });
-
-    // Add the card container to the results
-    resultsDiv.appendChild(cardContainer);
-    
-    // Show the results section
-    resultsDiv.style.display = 'block';
-    resultsDiv.scrollIntoView({ behavior: 'smooth' });
-
-    // Add action buttons for saving/printing results
-    addActionButtons(resultsDiv);
-}
-
-// Update the form submission handler
-document.getElementById('careerForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    DEBUG.info('Form submitted');
-    
-    try {
-        DEBUG.info('Form submitted, processing...');
-        const formData = new FormData(this);
-
-        // Get MBTI type from form data
-        const mbtiType = getMBTIType(formData);
-        DEBUG.info('MBTI Type:', mbtiType);
-
-        // Get Holland codes from form data
-        const hollandCodes = getHollandCodes(formData);
-        DEBUG.info('Holland Codes:', hollandCodes);
-
-        if (!mbtiType) {
-            showNotification('Please complete the MBTI assessment.', 'warning');
-            return;
-        }
-        
-        if (!hollandCodes || hollandCodes.length === 0) {
-            showNotification('Please select at least one Holland code.', 'warning');
-            return;
-        }
-
-        // Get recommendations based on MBTI type and Holland codes
-        let recommendations;
-        try {
-            DEBUG.info('Getting recommendations with:', { mbtiType, hollandCodes });
-            recommendations = getRecommendations(mbtiType, hollandCodes);
-            DEBUG.info('Career recommendations:', recommendations);
-            
-            if (!recommendations || !Array.isArray(recommendations)) {
-                throw new Error(`Invalid recommendations format: ${JSON.stringify(recommendations)}`);
-            }
-        } catch (error) {
-            DEBUG.error('Error getting recommendations:', error);
-            showNotification('Error getting career recommendations. Please try again.', 'error');
-            return;
-        }
-
-        // Display the recommendations
-        try {
-            DEBUG.info('Displaying recommendations:', { recommendations, mbtiType, hollandCodes });
-            displayRecommendations(recommendations, mbtiType, hollandCodes, formData);
-            
-            // Show the results section
-            const resultsDiv = document.getElementById('results');
-            if (resultsDiv) {
-                resultsDiv.style.display = 'block';
-                resultsDiv.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                throw new Error('Results div not found');
-            }
-        } catch (error) {
-            DEBUG.error('Error displaying recommendations:', error);
-            showNotification('Error displaying recommendations. Please try again.', 'error');
-            return;
-        }
-        
-    } catch (error) {
-        DEBUG.error('Error processing form submission:', error);
-        showNotification('An error occurred while processing your selections. Please try again.', 'error');
-    }
-});
-
+/**
+ * Initialize form with dynamic content and event listeners
+ */
 function initializeForm() {
     const form = document.getElementById('careerForm');
     const yearSelect = document.getElementById('birthYear');
@@ -639,7 +49,7 @@ function initializeForm() {
     yearSelect.innerHTML = '<option value="">Select Year</option>';
     for (let year = maxYear; year >= minYear; year--) {
         const option = document.createElement('option');
-        option.value = year.toString(); // Ensure year is a string
+        option.value = year.toString();
         option.textContent = year;
         yearSelect.appendChild(option);
     }
@@ -652,7 +62,7 @@ function initializeForm() {
     ];
     for (let month = 1; month <= 12; month++) {
         const option = document.createElement('option');
-        option.value = month.toString(); // Ensure month is a string
+        option.value = month.toString();
         option.textContent = monthNames[month - 1];
         monthSelect.appendChild(option);
     }
@@ -667,493 +77,191 @@ function initializeForm() {
             }
         });
     });
+
+    // Add form submission handler
+    form.addEventListener('submit', handleFormSubmit);
 }
 
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    document.body.appendChild(notification);
+/**
+ * Handle form submission
+ * @param {Event} event - Form submission event
+ */
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    DEBUG.info('Form submitted');
 
-    // Remove notification after animation ends
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-
-// Initialize form when DOM is loaded
-document.addEventListener('DOMContentLoaded', async function() {
     try {
-        DEBUG.info('Initializing application');
-        initializeForm();
-
-        // Get form elements
-        const form = document.getElementById('careerForm');
+        const formData = new FormData(event.target);
         
-        form.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            
-            try {
-                DEBUG.info('Form submitted, processing...');
-                const formData = new FormData(form);
+        // Get MBTI type from form data or event detail
+        const mbtiType = event.detail?.mbtiType || getMBTIType(formData);
+        if (!mbtiType || mbtiType === 'XXXX') {
+            throw new Error('Please complete the MBTI assessment');
+        }
+        DEBUG.info('MBTI Type:', mbtiType);
 
-                // Get MBTI type from form data
-                const mbtiType = getMBTIType(formData);
-                DEBUG.info('MBTI Type:', mbtiType);
-
-                // Get Holland codes from form data
-                const hollandCodes = getHollandCodes(formData);
-                DEBUG.info('Holland Codes:', hollandCodes);
-
-                if (!mbtiType) {
-                    showNotification('Please complete all MBTI questions.', 'warning');
-                    return;
-                }
-
-                if (!hollandCodes || hollandCodes.length === 0) {
-                    showNotification('Please select at least one Holland Code personality type.', 'warning');
-                    return;
-                }
-
-                // Get career recommendations
-                const recommendations = getCareerRecommendations(mbtiType, hollandCodes);
-                DEBUG.info('Career recommendations:', recommendations);
-
-                if (recommendations && recommendations.length > 0) {
-                    // Store results for later use
-                    const results = {
-                        mbtiType,
-                        hollandCodes,
-                        recommendations,
-                        selectedCareer: recommendations[0]
-                    };
-
-                    // Display recommendations
-                    displayRecommendations(recommendations, mbtiType, hollandCodes, formData);
-                } else {
-                    showNotification('No recommendations found for your personality type.', 'warning');
-                }
-                
-            } catch (error) {
-                DEBUG.error('Error processing form:', error);
-                showNotification('There was an error processing your information. Please try again.', 'error');
+        // Get Holland codes from form data or event detail
+        let hollandCodes = event.detail?.hollandCodes;
+        if (!hollandCodes) {
+            const selectedCodes = formData.getAll('hollandCodes[]');
+            if (!selectedCodes || selectedCodes.length === 0) {
+                throw new Error('Please select at least one Holland Code');
             }
-        });
-
+            hollandCodes = selectedCodes;
+        }
+        
+        DEBUG.info('Selected Holland codes:', hollandCodes);
+        
+        // Convert full Holland code names to single letters
+        const convertedCodes = getHollandCodes(hollandCodes);
+        DEBUG.info('Converted Holland codes:', convertedCodes);
+        
+        // Get and display recommendations
+        const recommendations = await getCareerRecommendations(mbtiType, convertedCodes);
+        await displayRecommendations(recommendations, mbtiType, convertedCodes, formData);
+        
+        // Get and display training recommendations
+        const trainingRecs = getTrainingRecommendations(mbtiType, convertedCodes, formData);
+        displayTrainingRecommendations(trainingRecs);
+        
+        // Add action buttons and scroll to results
+        addActionButtons(document.getElementById('results'));
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
     } catch (error) {
-        console.error('Initialization failed:', error);
+        DEBUG.error('Error processing form submission:', error);
+        showNotification(error.message, 'error');
     }
-});
+}
+
+/**
+ * Get MBTI type from form data
+ * @param {FormData} formData - Form data object
+ * @returns {string} MBTI type string
+ */
+function getMBTIType(formData) {
+    // Check if MBTI type is provided in event detail (for auto-fill)
+    if (formData.mbtiType) {
+        return formData.mbtiType;
+    }
+
+    // Otherwise get from form inputs
+    const ei = formData.get('ei-preference')?.toUpperCase() || 'X';
+    const sn = formData.get('sn-preference')?.toUpperCase() || 'X';
+    const tf = formData.get('tf-preference')?.toUpperCase() || 'X';
+    const jp = formData.get('jp-preference')?.toUpperCase() || 'X';
+    
+    return `${ei}${sn}${tf}${jp}`;
+}
 
 /**
  * Get career recommendations based on personality assessments
  * @param {string} mbtiType - The MBTI personality type
- * @param {Array} hollandCodes - Selected Holland codes
- * @returns {Array} Array of career recommendations
+ * @param {Array<string>} hollandCodes - Array of Holland codes
+ * @returns {Array<{title: string, score: number}>} Array of career recommendations with scores
  */
-function getCareerRecommendations(mbtiType, hollandCodes) {
-    DEBUG.info('Getting recommendations for:', { mbtiType, hollandCodes });
+async function getCareerRecommendations(mbtiType, hollandCodes) {
+    DEBUG.info('Getting career recommendations for:', { mbtiType, hollandCodes });
     
-    // MBTI-based career recommendations
-    const mbtiRecommendations = {
-        // Analysts (NT)
-        'INTJ': {
-            'R': ['Construction Project Manager', 'Site Supervisor', 'Safety Inspector'],
-            'I': ['Structural Engineer', 'Civil Engineer', 'Building Inspector'],
-            'C': ['Construction Estimator', 'Quality Control Manager', 'Building Code Inspector']
-        },
-        'INTP': {
-            technical: ['Construction Research Engineer', 'Systems Integration Specialist', 'Technical Consultant'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ENTJ': {
-            technical: ['Construction Executive', 'Program Director', 'Operations Manager'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ENTP': {
-            technical: ['Innovation Manager', 'Business Development Director', 'Strategy Consultant'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
+    // Get all possible MBTI types that match the given type with X wildcards
+    const getPossibleTypes = (type) => {
+        const positions = [];
         
-        // Diplomats (NF)
-        'INFJ': {
-            technical: ['Sustainability Manager', 'Environmental Compliance Officer', 'Safety Director'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'INFP': {
-            technical: ['Green Building Consultant', 'Environmental Impact Analyst', 'Workplace Safety Specialist'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ENFJ': {
-            technical: ['Training Director', 'Team Development Manager', 'HR Director'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ENFP': {
-            technical: ['Client Relations Director', 'Construction Business Developer', 'Project Development Manager'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        
-        // Sentinels (SJ)
-        'ISTJ': {
-            technical: ['Quality Control Manager', 'Compliance Officer', 'Technical Director'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ISFJ': {
-            technical: ['Safety Coordinator', 'Quality Assurance Specialist', 'Resource Manager'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ESTJ': {
-            technical: ['Project Manager', 'Site Superintendent', 'Operations Director'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ESFJ': {
-            technical: ['Client Services Manager', 'Team Coordinator', 'Community Relations Director'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        
-        // Explorers (SP)
-        'ISTP': {
-            technical: ['Technical Specialist', 'Equipment Manager', 'Site Engineer'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ISFP': {
-            technical: ['Design Implementation Specialist', 'Interior Construction Coordinator', 'Materials Specialist'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ESTP': {
-            technical: ['Site Manager', 'Field Operations Director', 'Emergency Response Coordinator'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
-        },
-        'ESFP': {
-            technical: ['Site Safety Coordinator', 'Team Leader', 'Public Relations Manager'],
-            soft: ['Leadership', 'Communication', 'Planning', 'Budgeting']
+        // Find positions of 'X' characters
+        for (let i = 0; i < type.length; i++) {
+            if (type[i] === 'X') positions.push(i);
         }
-    };
-    
-    // Get base recommendations from MBTI type
-    let recommendations = [];
-    if (mbtiRecommendations[mbtiType]) {
-        // Get all recommendations for this MBTI type across all categories/codes
-        const allRecommendations = Object.values(mbtiRecommendations[mbtiType])
-            .flat()
-            .filter(Boolean) // Remove any null/undefined values
-            .map(rec => typeof rec === 'string' ? rec : rec.title); // Ensure we always have strings
         
-        recommendations = allRecommendations.map(title => ({
-            title,
-            description: `Specialized role combining ${mbtiType} personality traits with ${hollandCodes.join('/')} interests.`,
-            responsibilities: [
-                'Lead and coordinate construction projects',
-                'Implement industry best practices',
-                'Manage teams and resources',
-                'Drive project success'
-            ],
-            skills: [
-                'Advanced technical knowledge',
-                'Leadership abilities',
-                'Project management',
-                'Problem-solving'
-            ],
-            education: 'Relevant degree or certification preferred',
-            salaryRange: {
-                starting: '$60,000 - $80,000',
-                experienced: '$90,000 - $120,000'
+        // If no X's, return just the original type
+        if (positions.length === 0) return [type];
+        
+        // Generate all possible combinations
+        const possibilities = ['EI', 'SN', 'TF', 'JP'];
+        let combinations = [type];
+        
+        positions.forEach(pos => {
+            const dimensionIndex = Math.floor(pos / 1);
+            const dimension = possibilities[dimensionIndex];
+            const newCombinations = [];
+            
+            combinations.forEach(current => {
+                dimension.split('').forEach(option => {
+                    const chars = current.split('');
+                    chars[pos] = option;
+                    newCombinations.push(chars.join(''));
+                });
+            });
+            
+            combinations = newCombinations;
+        });
+        
+        return combinations.filter(t => !t.includes('X'));
+    };
+
+    // Get all matching MBTI types
+    const allMatchingTypes = getPossibleTypes(mbtiType);
+    DEBUG.info('All possible MBTI types:', allMatchingTypes);
+
+    // Create a map to store career recommendations with their scores
+    const recommendationsMap = new Map();
+
+    // Calculate base score for recommendations
+    const flexibilityCount = (mbtiType.match(/X/g) || []).length;
+    const baseScore = 1 / (flexibilityCount + 1);
+
+    // Gather and score recommendations
+    allMatchingTypes.forEach(type => {
+        if (careerRecommendations[type]) {
+            hollandCodes.forEach(code => {
+                if (careerRecommendations[type][code]) {
+                    careerRecommendations[type][code].forEach(career => {
+                        const currentScore = recommendationsMap.get(career)?.score || 0;
+                        const matchScore = baseScore / hollandCodes.length;
+                        
+                        recommendationsMap.set(career, {
+                            title: career,
+                            score: currentScore + matchScore,
+                            mbtiTypes: [...(recommendationsMap.get(career)?.mbtiTypes || []), type],
+                            hollandCodes: [...(recommendationsMap.get(career)?.hollandCodes || []), code]
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+    // Convert map to array and sort by score
+    const sortedRecommendations = Array.from(recommendationsMap.values())
+        .sort((a, b) => b.score - a.score)
+        .map(item => ({
+            title: item.title,
+            score: item.score,
+            matchDetails: {
+                mbtiTypes: [...new Set(item.mbtiTypes)],
+                hollandCodes: [...new Set(item.hollandCodes)]
             }
         }));
-    }
-    
-    DEBUG.info('MBTI recommendations:', recommendations);
-    
-    // Filter and sort recommendations based on Holland codes
-    const matchingCareers = recommendations.filter(career => {
-        // Simple matching algorithm - could be made more sophisticated
-        return hollandCodes.some(code => 
-            career.title.toLowerCase().includes(getHollandCodeKeywords(code))
-        );
-    });
-    
-    DEBUG.info('Matching careers:', matchingCareers);
-    
-    return matchingCareers.length > 0 ? matchingCareers : recommendations.slice(0, 3);
-}
 
-function getHollandCodeKeywords(code) {
-    const keywords = {
-        'realistic': ['technical', 'engineer', 'specialist'],
-        'investigative': ['research', 'analyst', 'systems'],
-        'artistic': ['design', 'creative', 'innovation'],
-        'social': ['training', 'coordinator', 'relations'],
-        'enterprising': ['manager', 'director', 'business'],
-        'conventional': ['compliance', 'quality', 'control']
-    };
-    
-    return keywords[code] || [];
-}
-
-function getMBTIType(formData) {
-    return (formData.get('mbtiEI') || '') +
-           (formData.get('mbtiSN') || '') +
-           (formData.get('mbtiTF') || '') +
-           (formData.get('mbtiJP') || '');
-}
-
-function getHollandCodes(formData) {
-    DEBUG.info('Getting Holland codes from form data');
-    const hollandCodes = [];
-    
-    // Get all selected Holland codes
-    const selectedCodes = formData.getAll('hollandCode');
-    DEBUG.info('Selected Holland codes from form:', selectedCodes);
-    
-    // Use the full names for Holland codes
-    selectedCodes.forEach(value => {
-        if (value) {
-            hollandCodes.push(value.toLowerCase());
-        }
-    });
-    
-    DEBUG.info('Holland codes:', hollandCodes);
-    return hollandCodes;
+    DEBUG.info('Final sorted recommendations:', sortedRecommendations);
+    return sortedRecommendations;
 }
 
 /**
- * Save a career for later reference
- * @param {string} careerTitle - Title of the career to save
- * @param {Event} event - Click event
+ * Convert Holland codes from form data to single-letter codes
+ * @param {Array<string>} codes - Array of Holland code strings
+ * @returns {Array<string>} Array of single-letter Holland codes
  */
-function saveCareer(careerTitle, event) {
-    event.preventDefault();
-    // Store in localStorage
-    const savedCareers = JSON.parse(localStorage.getItem('savedCareers') || '[]');
-    if (!savedCareers.includes(careerTitle)) {
-        savedCareers.push(careerTitle);
-        localStorage.setItem('savedCareers', JSON.stringify(savedCareers));
-        showNotification(`${careerTitle} has been saved to your profile`, 'success');
-    } else {
-        showNotification(`${careerTitle} is already saved`, 'info');
-    }
-}
-
-/**
- * Handle learn more action for a career
- * @param {string} careerTitle - Title of the career
- * @param {Event} event - Click event
- */
-function applyForPosition(careerTitle, event) {
-    event.preventDefault();
-    
-    // Create career-specific URLs based on title
-    const careerUrls = {
-        'Construction Project Manager': 'https://www.embersstaffing.com/careers/construction-project-manager',
-        'Safety Manager': 'https://www.embersstaffing.com/careers/safety-manager',
-        'Sustainability Consultant': 'https://www.embersstaffing.com/careers/sustainability-consultant',
-        'Construction Professional': 'https://www.embersstaffing.com/careers/construction'
+function getHollandCodes(codes) {
+    const codeMap = {
+        'realistic': 'R',
+        'investigative': 'I',
+        'artistic': 'A',
+        'social': 'S',
+        'enterprising': 'E',
+        'conventional': 'C'
     };
-
-    // Get the specific URL or use the default careers page
-    const careerUrl = careerUrls[careerTitle] || 'https://www.embersstaffing.com/careers';
     
-    // Open in new tab
-    window.open(careerUrl, '_blank');
-    
-    // Show notification
-    showNotification(`Opening career details for ${careerTitle}`, 'info');
+    return codes.map(code => codeMap[code.toLowerCase()] || code);
 }
-
-// Make applyForPosition available globally
-window.applyForPosition = applyForPosition;
-
-const careerRecommendations = {
-    'ISTJ': {
-        'R': ['Construction Project Manager', 'Site Supervisor', 'Safety Inspector'],
-        'I': ['Structural Engineer', 'Civil Engineer', 'Building Inspector'],
-        'C': ['Construction Estimator', 'Quality Control Manager', 'Building Code Inspector']
-    },
-    'ISFJ': {
-        'S': ['Construction Safety Manager', 'Environmental Compliance Officer', 'Site Safety Coordinator'],
-        'C': ['Construction Document Controller', 'Quality Assurance Specialist', 'Resource Manager'],
-        'R': ['Facilities Manager', 'Maintenance Supervisor', 'Building Systems Specialist']
-    },
-    'INFJ': {
-        'A': ['Sustainable Design Specialist', 'Green Building Consultant', 'Architecture Project Manager'],
-        'S': ['Construction Training Manager', 'Safety Program Developer', 'Environmental Impact Analyst'],
-        'I': ['Building Systems Designer', 'Urban Planning Specialist', 'Sustainability Consultant']
-    },
-    'INTJ': {
-        'I': ['Construction Technology Specialist', 'BIM Manager', 'Systems Integration Engineer'],
-        'E': ['Construction Innovation Manager', 'Process Improvement Specialist', 'Technical Director'],
-        'A': ['Design-Build Coordinator', 'Construction Solutions Architect', 'Project Innovation Lead']
-    },
-    'ISTP': {
-        'R': ['Heavy Equipment Operator', 'Crane Operator', 'Mechanical Systems Specialist'],
-        'I': ['Construction Equipment Technician', 'Robotics Specialist', 'Automation Technician'],
-        'E': ['Site Operations Manager', 'Equipment Fleet Manager', 'Technical Operations Lead']
-    },
-    'ISFP': {
-        'A': ['Interior Finishing Specialist', 'Architectural Detailer', 'Design Implementation Specialist'],
-        'R': ['Skilled Craftsperson', 'Custom Fabricator', 'Specialty Trade Contractor'],
-        'S': ['Site Beautification Specialist', 'Landscape Implementation Lead', 'Finishing Coordinator']
-    },
-    'INFP': {
-        'A': ['Sustainable Design Coordinator', 'Green Building Specialist', 'Environmental Design Consultant'],
-        'S': ['Community Relations Manager', 'Environmental Impact Coordinator', 'Sustainability Advocate'],
-        'I': ['Design Research Specialist', 'Building Performance Analyst', 'Innovation Consultant']
-    },
-    'INTP': {
-        'I': ['Construction Systems Analyst', 'Building Technology Specialist', 'Technical Solutions Architect'],
-        'A': ['Design Technology Specialist', 'Digital Construction Manager', 'Virtual Design Coordinator'],
-        'E': ['Construction Research Specialist', 'Building Science Expert', 'Technical Innovation Lead']
-    },
-    'ESTP': {
-        'E': ['Construction Operations Manager', 'Site Logistics Coordinator', 'Field Operations Director'],
-        'R': ['General Contractor', 'Construction Superintendent', 'Project Execution Manager'],
-        'C': ['Construction Procurement Manager', 'Contract Administrator', 'Project Controls Manager']
-    },
-    'ESFP': {
-        'S': ['Construction Client Relations Manager', 'Public Relations Coordinator', 'Community Outreach Specialist'],
-        'E': ['Site Team Leader', 'Construction Crew Supervisor', 'Field Operations Coordinator'],
-        'A': ['Interior Design Implementation Lead', 'Space Planning Coordinator', 'Design-Build Liaison']
-    },
-    'ENFP': {
-        'S': ['Construction Training Coordinator', 'Team Development Manager', 'Workforce Engagement Specialist'],
-        'E': ['Construction Business Developer', 'Client Relations Director', 'Project Development Manager'],
-        'A': ['Design Innovation Specialist', 'Creative Solutions Manager', 'Project Vision Coordinator']
-    },
-    'ENTP': {
-        'E': ['Construction Strategy Manager', 'Innovation Director', 'Business Development Lead'],
-        'I': ['Construction Technology Manager', 'Digital Solutions Architect', 'Technical Innovation Manager'],
-        'A': ['Design Integration Specialist', 'Solutions Architecture Manager', 'Innovation Consultant']
-    },
-    'ESTJ': {
-        'E': ['Construction Executive', 'Project Director', 'Operations Manager'],
-        'C': ['Construction Manager', 'Project Manager', 'Site Manager'],
-        'R': ['Production Manager', 'Field Operations Director', 'Implementation Manager']
-    },
-    'ESFJ': {
-        'S': ['Construction HR Manager', 'Team Relations Coordinator', 'Safety Culture Manager'],
-        'E': ['Construction Office Manager', 'Administrative Director', 'Support Services Manager'],
-        'C': ['Quality Assurance Manager', 'Compliance Coordinator', 'Standards Implementation Lead']
-    },
-    'ENFJ': {
-        'S': ['Construction Training Director', 'Workforce Development Manager', 'Team Building Specialist'],
-        'E': ['Project Leadership Manager', 'Strategic Relations Director', 'Development Coordinator'],
-        'A': ['Design Team Leader', 'Creative Director', 'Project Vision Manager']
-    },
-    'ENTJ': {
-        'E': ['Construction Company CEO', 'Executive Director', 'Strategic Operations Manager'],
-        'I': ['Technical Director', 'Innovation Strategy Manager', 'Systems Integration Director'],
-        'C': ['Program Director', 'Portfolio Manager', 'Enterprise Solutions Manager']
-    }
-};
-
-// Training recommendations based on experience level
-const trainingRecommendations = {
-    'entry': {
-        'general': [
-            'OSHA 10-Hour Construction Safety Course',
-            'First Aid and CPR Certification',
-            'Basic Construction Math',
-            'Blueprint Reading Fundamentals',
-            'Construction Tools and Equipment Safety'
-        ],
-        'specific': {
-            'project_management': [
-                'Construction Project Management Basics',
-                'Microsoft Office Suite (Excel, Project)',
-                'Construction Scheduling Fundamentals',
-                'Basic Cost Estimation'
-            ],
-            'skilled_trades': [
-                'Trade-Specific Apprenticeship Programs',
-                'Hand and Power Tool Safety',
-                'Basic Welding Safety',
-                'Material Handling Training'
-            ],
-            'engineering': [
-                'AutoCAD Basics',
-                'Construction Materials Science',
-                'Basic Structural Principles',
-                'Site Survey Fundamentals'
-            ],
-            'supervision': [
-                'Leadership Skills for New Supervisors',
-                'Construction Communication Basics',
-                'Team Building Fundamentals',
-                'Basic Project Planning'
-            ]
-        }
-    },
-    'intermediate': {
-        'general': [
-            'OSHA 30-Hour Construction Safety Course',
-            'Advanced Blueprint Reading',
-            'Construction Quality Control',
-            'Risk Management Basics',
-            'Construction Contract Fundamentals'
-        ],
-        'specific': {
-            'project_management': [
-                'PMP Certification Prep',
-                'Advanced Construction Scheduling',
-                'Construction Cost Control',
-                'Construction Technology Solutions'
-            ],
-            'skilled_trades': [
-                'Advanced Trade Certifications',
-                'Equipment Operation Certification',
-                'Advanced Safety Training',
-                'Quality Control Inspection'
-            ],
-            'engineering': [
-                'BIM Software Training',
-                'Advanced Structural Analysis',
-                'Construction Methods and Materials',
-                'Environmental Compliance'
-            ],
-            'supervision': [
-                'Advanced Leadership Training',
-                'Project Team Management',
-                'Construction Law Basics',
-                'Resource Management'
-            ]
-        }
-    },
-    'experienced': {
-        'general': [
-            'Construction Risk Management',
-            'Advanced Contract Management',
-            'Construction Finance and Accounting',
-            'Sustainable Construction Practices',
-            'Construction Law and Ethics'
-        ],
-        'specific': {
-            'project_management': [
-                'Program Management Professional (PgMP)',
-                'Construction Executive Management',
-                'Strategic Project Management',
-                'Advanced Risk Management'
-            ],
-            'skilled_trades': [
-                'Master Trade Certifications',
-                'Train-the-Trainer Programs',
-                'Safety Management Systems',
-                'Quality Management Systems'
-            ],
-            'engineering': [
-                'Advanced BIM Management',
-                'Construction Innovation and Technology',
-                'Sustainable Design and Construction',
-                'Value Engineering'
-            ],
-            'supervision': [
-                'Executive Leadership Development',
-                'Strategic Planning',
-                'Change Management',
-                'Advanced Project Controls'
-            ]
-        }
-    }
-};
 
 /**
  * Get training recommendations based on MBTI, Holland codes, and experience
@@ -1244,6 +352,10 @@ function getTrainingRecommendations(mbtiType, hollandCodes, formData) {
     };
 }
 
+/**
+ * Display training recommendations
+ * @param {Object} training - Training recommendations object
+ */
 function displayTrainingRecommendations(training) {
     DEBUG.info('Displaying training recommendations:', training);
     
@@ -1280,6 +392,388 @@ function displayTrainingRecommendations(training) {
     
     return trainingDiv;
 }
+
+/**
+ * Display career recommendations with details and scores
+ * @param {Array<{title: string, score: number}>} recommendations - Array of career recommendations with scores
+ * @param {string} mbtiType - MBTI personality type
+ * @param {Array<string>} hollandCodes - Array of Holland codes
+ * @param {FormData} formData - Form data
+ */
+async function displayRecommendations(recommendations, mbtiType, hollandCodes, formData) {
+    try {
+        DEBUG.info('Displaying recommendations:', { recommendations, mbtiType, hollandCodes });
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = ''; // Clear previous results
+        
+        if (!recommendations || recommendations.length === 0) {
+            resultsDiv.innerHTML = `
+                <div class="alert alert-warning">
+                    <h4>No Recommendations Found</h4>
+                    <p>We couldn't find any career matches for your profile. Try adjusting your preferences or contact us for personalized guidance.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Display personality profile summary
+        const profileSummary = document.createElement('div');
+        profileSummary.className = 'profile-summary mb-4';
+        profileSummary.innerHTML = `
+            <h3>Your Career Profile</h3>
+            <p><strong>MBTI Type:</strong> ${mbtiType}</p>
+            <p><strong>Holland Codes:</strong> ${hollandCodes.join(', ') || 'Not specified'}</p>
+        `;
+        resultsDiv.appendChild(profileSummary);
+        
+        // Create recommendations container
+        const recsContainer = document.createElement('div');
+        recsContainer.className = 'recommendations-container';
+        
+        // Display each recommendation with score and details
+        for (const rec of recommendations) {
+            try {
+                const details = await getCareerInfo(rec.title);
+                const recCard = document.createElement('div');
+                recCard.className = 'recommendation-card mb-4';
+                
+                // Calculate match percentage for display
+                const matchPercentage = Math.round(rec.score * 100);
+                
+                recCard.innerHTML = `
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0">${rec.title}</h4>
+                            <span class="badge ${getMatchBadgeClass(matchPercentage)}">
+                                ${matchPercentage}% Match
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            ${details ? `
+                                <p class="career-description">${details.description || 'No description available'}</p>
+                                <div class="career-details">
+                                    <h5>Required Education</h5>
+                                    <ul>
+                                        ${details.education?.degrees?.map(deg => `<li>${deg}</li>`).join('') || '<li>Education requirements not specified</li>'}
+                                    </ul>
+                                    
+                                    <h5>Key Skills</h5>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h6>Technical Skills</h6>
+                                            <ul>
+                                                ${details.skills?.technical?.map(skill => `<li>${skill}</li>`).join('') || '<li>Technical skills not specified</li>'}
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h6>Soft Skills</h6>
+                                            <ul>
+                                                ${details.skills?.soft?.map(skill => `<li>${skill}</li>`).join('') || '<li>Soft skills not specified</li>'}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <h5>Salary Range</h5>
+                                    <p>Entry Level: ${details.salary?.entry || 'Not specified'}</p>
+                                    <p>Mid-Career: ${details.salary?.mid || 'Not specified'}</p>
+                                </div>
+                            ` : `
+                                <div class="alert alert-info">
+                                    Detailed information for this career is not available at the moment.
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                `;
+                
+                recsContainer.appendChild(recCard);
+            } catch (error) {
+                DEBUG.error('Error displaying career details:', error);
+                // Continue with next recommendation if one fails
+                continue;
+            }
+        }
+        
+        resultsDiv.appendChild(recsContainer);
+        
+    } catch (error) {
+        DEBUG.error('Error in displayRecommendations:', error);
+        document.getElementById('results').innerHTML = `
+            <div class="alert alert-danger">
+                <h4>Error Displaying Results</h4>
+                <p>An error occurred while displaying your career recommendations. Please try again or contact support if the problem persists.</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * Get the appropriate badge class based on match percentage
+ * @param {number} percentage - Match percentage
+ * @returns {string} Bootstrap badge class
+ */
+function getMatchBadgeClass(percentage) {
+    if (percentage >= 80) return 'bg-success';
+    if (percentage >= 60) return 'bg-primary';
+    if (percentage >= 40) return 'bg-info';
+    if (percentage >= 20) return 'bg-warning';
+    return 'bg-secondary';
+}
+
+/**
+ * Save a career for later reference
+ * @param {string} careerTitle - Title of the career to save
+ * @param {Event} event - Click event
+ */
+function saveCareer(careerTitle, event) {
+    event.preventDefault();
+    // Store in localStorage
+    const savedCareers = JSON.parse(localStorage.getItem('savedCareers') || '[]');
+    if (!savedCareers.includes(careerTitle)) {
+        savedCareers.push(careerTitle);
+        localStorage.setItem('savedCareers', JSON.stringify(savedCareers));
+        showNotification(`${careerTitle} has been saved to your profile`, 'success');
+    } else {
+        showNotification(`${careerTitle} is already saved`, 'info');
+    }
+}
+
+/**
+ * Handle learn more action for a career
+ * @param {string} careerTitle - Title of the career
+ * @param {Event} event - Click event
+ */
+function applyForPosition(careerTitle, event) {
+    event.preventDefault();
+    
+    // Create career-specific URLs based on title
+    const careerUrls = {
+        'Construction Project Manager': 'https://www.embersstaffing.com/careers/construction-project-manager',
+        'Safety Manager': 'https://www.embersstaffing.com/careers/safety-manager',
+        'Sustainability Consultant': 'https://www.embersstaffing.com/careers/sustainability-consultant',
+        'Construction Professional': 'https://www.embersstaffing.com/careers/construction'
+    };
+
+    // Get the specific URL or use the default careers page
+    const careerUrl = careerUrls[careerTitle] || 'https://www.embersstaffing.com/careers';
+    
+    // Open in new tab
+    window.open(careerUrl, '_blank');
+    
+    // Show notification
+    showNotification(`Opening career details for ${careerTitle}`, 'info');
+}
+
+// Make applyForPosition available globally
+window.applyForPosition = applyForPosition;
+
+const careerRecommendations = {
+    'ISTJ': {
+        'R': ['Construction Project Manager', 'Site Supervisor', 'Safety Inspector'],
+        'I': ['Structural Engineer', 'Civil Engineer', 'Building Inspector'],
+        'C': ['Construction Estimator', 'Quality Control Manager', 'Building Code Inspector']
+    },
+    'ISFJ': {
+        'S': ['Safety Manager', 'Quality Control Inspector', 'Construction Administrator'],
+        'C': ['Document Controller', 'Project Coordinator', 'Administrative Manager']
+    },
+    'INFJ': {
+        'S': ['Sustainability Consultant', 'Environmental Specialist', 'Training Coordinator'],
+        'A': ['BIM Specialist', 'Design Coordinator', 'Interior Designer']
+    },
+    'INTJ': {
+        'I': ['Civil Engineer', 'Structural Engineer', 'Project Controls Manager'],
+        'A': ['BIM Specialist', 'Construction Technology Specialist', 'Systems Architect']
+    },
+    'ISTP': {
+        'R': ['Heavy Equipment Operator', 'Construction Foreman', 'Mechanical Technician'],
+        'I': ['Building Systems Technician', 'Equipment Maintenance Specialist', 'Field Engineer']
+    },
+    'ISFP': {
+        'A': ['Interior Designer', 'Landscape Designer', 'Architectural Drafter'],
+        'R': ['Skilled Tradesperson', 'Renovation Specialist', 'Site Technician']
+    },
+    'INFP': {
+        'S': ['Environmental Consultant', 'Sustainability Specialist', 'Community Relations Manager'],
+        'A': ['Architectural Designer', 'Design Consultant', 'Space Planning Specialist']
+    },
+    'INTP': {
+        'I': ['Structural Engineer', 'Building Systems Engineer', 'Construction Software Developer'],
+        'A': ['BIM Specialist', 'Virtual Design Coordinator', 'Technical Architect']
+    },
+    'ESTP': {
+        'R': ['Construction Foreman', 'Site Supervisor', 'Equipment Manager'],
+        'E': ['Business Development Manager', 'Sales Manager', 'Operations Manager']
+    },
+    'ESFP': {
+        'E': ['Real Estate Developer', 'Sales Representative', 'Client Relations Manager'],
+        'S': ['Safety Coordinator', 'Training Specialist', 'Community Liaison']
+    },
+    'ENFP': {
+        'E': ['Client Relations Director', 'Business Development Director', 'Marketing Manager'],
+        'S': ['Training Director', 'Public Relations Manager', 'Community Engagement Specialist']
+    },
+    'ENTP': {
+        'E': ['Innovation Director', 'Strategy Consultant', 'Business Development Manager'],
+        'I': ['Construction Technology Specialist', 'Systems Integration Manager', 'Process Improvement Specialist']
+    },
+    'ESTJ': {
+        'E': ['Construction Operations Manager', 'Project Director', 'General Contractor'],
+        'C': ['Quality Assurance Manager', 'Compliance Manager', 'Operations Director']
+    },
+    'ESFJ': {
+        'S': ['Human Resources Manager', 'Training Coordinator', 'Safety Director'],
+        'E': ['Client Relations Manager', 'Team Lead', 'Operations Supervisor']
+    },
+    'ENFJ': {
+        'S': ['Training Director', 'Human Resources Director', 'Community Relations Manager'],
+        'E': ['Business Development Director', 'Regional Manager', 'Operations Director']
+    },
+    'ENTJ': {
+        'E': ['Construction Company CEO', 'Executive Director', 'Strategic Operations Manager'],
+        'I': ['Technical Director', 'Innovation Strategy Manager', 'Systems Integration Director']
+    },
+    'ENFJ': {
+        'S': [
+            'Training Director',
+            'HR Director',
+            'Client Relations Director'
+        ],
+        'E': [
+            'Construction Project Manager',
+            'Construction Superintendent',
+            'Site Supervisor'
+        ],
+        'C': [
+            'Safety Director',
+            'Construction Estimator'
+        ]
+    },
+    'ENFP': {
+        'S': [
+            'Training Director',
+            'HR Director',
+            'Client Relations Director'
+        ],
+        'E': [
+            'Construction Project Manager',
+            'Site Supervisor'
+        ],
+        'A': [
+            'Construction Estimator',
+            'Safety Director'
+        ]
+    }
+};
+
+// Training recommendations based on experience level
+const trainingRecommendations = {
+    'entry': {
+        'general': [
+            'OSHA 10-Hour Construction Safety Course',
+            'First Aid and CPR Certification',
+            'Basic Construction Math',
+            'Blueprint Reading Fundamentals',
+            'Construction Tools and Equipment Safety'
+        ],
+        'specific': {
+            'project-management': [
+                'Construction Project Management Basics',
+                'Microsoft Office Suite (Excel, Project)',
+                'Construction Scheduling Fundamentals',
+                'Basic Cost Estimation'
+            ],
+            'skilled_trades': [
+                'Trade-Specific Apprenticeship Programs',
+                'Hand and Power Tool Safety',
+                'Basic Welding Safety',
+                'Material Handling Training'
+            ],
+            'engineering': [
+                'AutoCAD Basics',
+                'Construction Materials Science',
+                'Basic Structural Principles',
+                'Site Survey Fundamentals'
+            ],
+            'supervision': [
+                'Leadership Skills for New Supervisors',
+                'Construction Communication Basics',
+                'Team Building Fundamentals',
+                'Basic Project Planning'
+            ]
+        }
+    },
+    'intermediate': {
+        'general': [
+            'OSHA 30-Hour Construction Safety Course',
+            'Advanced Blueprint Reading',
+            'Construction Quality Control',
+            'Risk Management Basics',
+            'Construction Contract Fundamentals'
+        ],
+        'specific': {
+            'project-management': [
+                'PMP Certification Prep',
+                'Advanced Construction Scheduling',
+                'Construction Cost Control',
+                'Construction Technology Solutions'
+            ],
+            'skilled_trades': [
+                'Advanced Trade Certifications',
+                'Equipment Operation Certification',
+                'Advanced Safety Training',
+                'Quality Control Inspection'
+            ],
+            'engineering': [
+                'BIM Software Training',
+                'Advanced Structural Analysis',
+                'Construction Methods and Materials',
+                'Environmental Compliance'
+            ],
+            'supervision': [
+                'Advanced Leadership Training',
+                'Project Team Management',
+                'Construction Law Basics',
+                'Resource Management'
+            ]
+        }
+    },
+    'experienced': {
+        'general': [
+            'Construction Risk Management',
+            'Advanced Contract Management',
+            'Construction Finance and Accounting',
+            'Sustainable Construction Practices',
+            'Construction Law and Ethics'
+        ],
+        'specific': {
+            'project-management': [
+                'Program Management Professional (PgMP)',
+                'Construction Executive Management',
+                'Strategic Project Management',
+                'Advanced Risk Management'
+            ],
+            'skilled_trades': [
+                'Master Trade Certifications',
+                'Train-the-Trainer Programs',
+                'Safety Management Systems',
+                'Quality Management Systems'
+            ],
+            'engineering': [
+                'Advanced BIM Management',
+                'Construction Innovation and Technology',
+                'Sustainable Design and Construction',
+                'Value Engineering'
+            ],
+            'supervision': [
+                'Executive Leadership Development',
+                'Strategic Planning',
+                'Change Management',
+                'Advanced Project Controls'
+            ]
+        }
+    }
+};
 
 /**
  * Generate and download results as PDF
@@ -1385,78 +879,91 @@ function printResults() {
     }
 }
 
-// Add the action buttons after displaying recommendations
-function addActionButtons(resultsDiv) {
-    DEBUG.info('Adding action buttons');
+/**
+ * Initialize form mode controls
+ */
+function initializeFillModeControls() {
+    const fillModeToggle = document.getElementById('fillModeToggle');
+    const form = document.getElementById('careerForm');
     
-    const actionButtons = document.createElement('div');
-    actionButtons.className = 'action-buttons mt-4 mb-4';
-    actionButtons.innerHTML = `
-        <div class="d-flex justify-content-center flex-wrap gap-4">
-            <div class="action-card text-center" onclick="saveAsPDF()">
-                <div class="action-icon mb-2">
-                    <i class="fas fa-file-pdf fa-2x text-danger"></i>
-                </div>
-                <h5 class="action-title">Save as PDF</h5>
-                <p class="action-description text-muted">Download your career recommendations</p>
-            </div>
-            <div class="action-card text-center" onclick="printResults()">
-                <div class="action-icon mb-2">
-                    <i class="fas fa-print fa-2x text-primary"></i>
-                </div>
-                <h5 class="action-title">Print Results</h5>
-                <p class="action-description text-muted">Print your career recommendations</p>
-            </div>
-        </div>
-    `;
+    // Initialize state
+    CONFIG.AUTO_FILL_MODE = fillModeToggle.checked;
+    updateFormMode();
     
-    // Add CSS for action cards
-    const style = document.createElement('style');
-    style.textContent = `
-        .action-card {
-            padding: 1.5rem;
-            border-radius: 10px;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            width: 200px;
-        }
+    // Handle toggle changes
+    fillModeToggle.addEventListener('change', async (event) => {
+        CONFIG.AUTO_FILL_MODE = event.target.checked;
         
-        .action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .action-icon {
-            background: #f8f9fa;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-        }
-        
-        .action-title {
-            margin: 0.5rem 0;
-            font-weight: 600;
-        }
-        
-        .action-description {
-            font-size: 0.9rem;
-            margin-bottom: 0;
-        }
-        
-        @media print {
-            .action-buttons {
-                display: none !important;
+        if (CONFIG.AUTO_FILL_MODE) {
+            try {
+                DEBUG.info('Auto-filling form');
+                await autoFillSurvey();
+                updateFormMode();
+            } catch (error) {
+                DEBUG.error('Error auto-filling form:', error);
+                showNotification('Error auto-filling form. Please try again or fill manually.', 'error');
             }
+        } else {
+            form.reset();
+            updateFormMode();
         }
-    `;
-    document.head.appendChild(style);
-    
-    resultsDiv.appendChild(actionButtons);
-    DEBUG.info('Action buttons added successfully');
+    });
 }
+
+/**
+ * Update form based on current fill mode
+ */
+function updateFormMode() {
+    const form = document.getElementById('careerForm');
+    const inputs = form.querySelectorAll('input:not(#fillModeToggle), select, textarea');
+    
+    if (CONFIG.AUTO_FILL_MODE) {
+        // Store original required state and disable inputs
+        inputs.forEach(input => {
+            input.setAttribute('data-original-required', input.required);
+            input.required = false;
+            input.disabled = true;
+        });
+        
+        showNotification('Auto-fill mode enabled. Form will be filled automatically.', 'info');
+    } else {
+        // Restore original required state and enable inputs
+        inputs.forEach(input => {
+            const originalRequired = input.getAttribute('data-original-required');
+            if (originalRequired !== null) {
+                input.required = originalRequired === 'true';
+            }
+            input.disabled = false;
+        });
+        
+        showNotification('Manual fill mode enabled. Please fill out the form manually.', 'info');
+    }
+}
+
+// Initialize form when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        DEBUG.info('Initializing application');
+        initializeForm();
+        initializeFillModeControls();
+    } catch (error) {
+        DEBUG.error('Error during initialization:', error);
+        showNotification('Error initializing application. Please refresh the page.', 'error');
+    }
+});
+
+// Export functions for use in other modules
+export {
+    initializeForm,
+    getCareerRecommendations,
+    getHollandCodes,
+    getMBTIType,
+    displayRecommendations,
+    displayTrainingRecommendations,
+    saveCareer,
+    applyForPosition
+};
+
+// Make certain functions available globally
+window.saveCareer = saveCareer;
+window.applyForPosition = applyForPosition;

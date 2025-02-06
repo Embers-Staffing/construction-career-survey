@@ -19,491 +19,515 @@
             <div class="logo-container mb-3">
                 <img src="images/logo.svg" alt="Construction Career Explorer Logo" class="logo">
             </div>
+            <div class="px-4 py-5 my-5 text-center">
+                <div class="col-lg-6 mx-auto">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <button type="button" class="btn btn-primary btn-lg px-4 gap-3" onclick="window.location.href='#survey'">
+                            Start Survey
+                        </button>
+                    </div>
+                </div>
+            </div>
             <h1 class="mb-2">Construction Career Explorer</h1>
             <p class="lead text-muted">Discover Your Path in Construction and Property Development</p>
-        </div>
-        
-        <div class="progress-indicator mb-4">
-            <div class="progress-step active" data-section="personal">
-                <div class="step-number">1</div>
-                <div class="step-label">Personal Profile</div>
-            </div>
-            <div class="progress-step" data-section="personality">
-                <div class="step-number">2</div>
-                <div class="step-label">Personality & Skills</div>
-            </div>
-            <div class="progress-step" data-section="preferences">
-                <div class="step-number">3</div>
-                <div class="step-label">Work Preferences</div>
-            </div>
-            <div class="progress-step" data-section="goals">
-                <div class="step-number">4</div>
-                <div class="step-label">Goals & Development</div>
-            </div>
-        </div>
-        
-        <form id="careerForm" class="needs-validation" novalidate>
-            <!-- Section 1: Personal Profile -->
-            <div id="personal" class="section mb-5">
-                <h2>Personal Profile</h2>
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label" for="firstName">First Name</label>
-                        <input type="text" class="form-control" name="firstName" id="firstName" required>
-                        <div class="invalid-feedback">Please enter your first name.</div>
+            
+            <!-- Fill Mode Controls -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="fillModeToggle">
+                            <label class="form-check-label" for="fillModeToggle">
+                                <i class="fas fa-robot me-2"></i>Auto-Fill Mode
+                            </label>
+                        </div>
                     </div>
-                    
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label" for="lastName">Last Name</label>
-                        <input type="text" class="form-control" name="lastName" id="lastName" required>
-                        <div class="invalid-feedback">Please enter your last name.</div>
+                    <small class="text-muted mt-2 d-block">
+                        Toggle between manual and automatic form filling modes
+                    </small>
+                </div>
+            </div>
+
+            <div class="progress-indicator mb-4">
+                <div class="progress-step active" data-section="personal">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Personal Profile</div>
+                </div>
+                <div class="progress-step" data-section="personality">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Personality & Skills</div>
+                </div>
+                <div class="progress-step" data-section="preferences">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Work Preferences</div>
+                </div>
+                <div class="progress-step" data-section="goals">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Goals & Development</div>
+                </div>
+            </div>
+        
+            <form id="careerForm" class="needs-validation" novalidate>
+                <!-- Section 1: Personal Profile -->
+                <div id="personal" class="section mb-5">
+                    <h2>Personal Profile</h2>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label" for="firstName">First Name</label>
+                            <input type="text" class="form-control" name="firstName" id="firstName" required>
+                            <div class="invalid-feedback">Please enter your first name.</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label" for="lastName">Last Name</label>
+                            <input type="text" class="form-control" name="lastName" id="lastName" required>
+                            <div class="invalid-feedback">Please enter your last name.</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label class="form-label" for="birthYear">Birth Year</label>
+                                    <select class="form-select" name="birthYear" id="birthYear" required>
+                                        <option value="">Select Year</option>
+                                        <!-- Years will be populated by JavaScript -->
+                                    </select>
+                                    <div class="invalid-feedback">Please select your birth year.</div>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="birthMonth">Birth Month</label>
+                                    <select class="form-select" name="birthMonth" id="birthMonth" required>
+                                        <option value="">Select Month</option>
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select your birth month.</div>
+                                </div>
+                            </div>
+                            <div class="age-display mt-2" style="display: none;"></div>
+                            <div class="invalid-feedback">Please select your birth date (must be 16-70 years old).</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label" for="constructionExperience">Years in Construction</label>
+                            <select class="form-select" name="constructionExperience" id="constructionExperience" required>
+                                <option value="0" selected>New to Construction</option>
+                                <option value="1">1 year</option>
+                                <option value="2">2 years</option>
+                                <option value="3">3 years</option>
+                                <option value="4">4 years</option>
+                                <option value="5">5-10 years</option>
+                                <option value="10">10-15 years</option>
+                                <option value="15">15-20 years</option>
+                                <option value="20">20+ years</option>
+                            </select>
+                            <div class="invalid-feedback">Please select your experience level.</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-4">
-                        <div class="row">
-                            <div class="col-6">
-                                <label class="form-label" for="birthYear">Birth Year</label>
-                                <select class="form-select" name="birthYear" id="birthYear" required>
-                                    <option value="">Select Year</option>
-                                    <!-- Years will be populated by JavaScript -->
-                                </select>
-                                <div class="invalid-feedback">Please select your birth year.</div>
+                <!-- Section 2: Personality & Skills (Combines personality tests and skills) -->
+                <div id="personality" class="section mb-5">
+                    <h2>Personality & Skills</h2>
+                    
+                    <!-- Myers-Briggs Assessment -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Myers-Briggs Personality Assessment</h3>
+                        <p class="text-muted mb-3">You may select both options if you feel you exhibit traits from both sides.</p>
+                        
+                        <div class="mb-3">
+                            <h4 class="form-label h6">How do you prefer to focus your attention?</h4>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiEI" value="E" id="mbtiEI-E">
+                                <label class="form-check-label" for="mbtiEI-E">Externally - energized by social interaction (Extroversion)</label>
                             </div>
-                            <div class="col-6">
-                                <label class="form-label" for="birthMonth">Birth Month</label>
-                                <select class="form-select" name="birthMonth" id="birthMonth" required>
-                                    <option value="">Select Month</option>
-                                    <option value="1">January</option>
-                                    <option value="2">February</option>
-                                    <option value="3">March</option>
-                                    <option value="4">April</option>
-                                    <option value="5">May</option>
-                                    <option value="6">June</option>
-                                    <option value="7">July</option>
-                                    <option value="8">August</option>
-                                    <option value="9">September</option>
-                                    <option value="10">October</option>
-                                    <option value="11">November</option>
-                                    <option value="12">December</option>
-                                </select>
-                                <div class="invalid-feedback">Please select your birth month.</div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiEI" value="I" id="mbtiEI-I">
+                                <label class="form-check-label" for="mbtiEI-I">Internally - energized by quiet reflection (Introversion)</label>
                             </div>
                         </div>
-                        <div class="age-display mt-2" style="display: none;"></div>
-                        <div class="invalid-feedback">Please select your birth date (must be 16-70 years old).</div>
+
+                        <div class="mb-3">
+                            <h4 class="form-label h6">How do you prefer to take in information?</h4>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiSN" value="S" id="mbtiSN-S">
+                                <label class="form-check-label" for="mbtiSN-S">Through concrete facts and details (Sensing)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiSN" value="N" id="mbtiSN-N">
+                                <label class="form-check-label" for="mbtiSN-N">Through patterns and possibilities (Intuition)</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h4 class="form-label h6">How do you prefer to make decisions?</h4>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiTF" value="T" id="mbtiTF-T">
+                                <label class="form-check-label" for="mbtiTF-T">Based on logic and objective analysis (Thinking)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiTF" value="F" id="mbtiTF-F">
+                                <label class="form-check-label" for="mbtiTF-F">Based on values and people impact (Feeling)</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h4 class="form-label h6">How do you prefer to organize your life?</h4>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiJP" value="J" id="mbtiJP-J">
+                                <label class="form-check-label" for="mbtiJP-J">Structured and planned (Judging)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="mbtiJP" value="P" id="mbtiJP-P">
+                                <label class="form-check-label" for="mbtiJP-P">Flexible and adaptable (Perceiving)</label>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Holland Code Assessment -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Holland Code Career Assessment</h3>
+                        <p class="text-muted mb-3">Select up to 3 personality types that best describe you:</p>
+                        
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="realistic" id="hollandCode-realistic">
+                                    <label class="form-check-label" for="hollandCode-realistic">
+                                        <strong>Realistic (R)</strong>
+                                        <p class="text-muted mb-0">You enjoy working with your hands, tools, machines, or animals. You value practical things you can see and touch.</p>
+                                        <small class="text-muted">Good for: Trades, Equipment Operation, Technical Work</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="investigative" id="hollandCode-investigative">
+                                    <label class="form-check-label" for="hollandCode-investigative">
+                                        <strong>Investigative (I)</strong>
+                                        <p class="text-muted mb-0">You like to solve complex problems, analyze data, and understand how things work.</p>
+                                        <small class="text-muted">Good for: Engineering, Estimation, Technical Planning</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="artistic" id="hollandCode-artistic">
+                                    <label class="form-check-label" for="hollandCode-artistic">
+                                        <strong>Artistic (A)</strong>
+                                        <p class="text-muted mb-0">You value creativity, innovation, and unique solutions to problems.</p>
+                                        <small class="text-muted">Good for: Design, BIM Modeling, Virtual Construction</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="social" id="hollandCode-social">
+                                    <label class="form-check-label" for="hollandCode-social">
+                                        <strong>Social (S)</strong>
+                                        <p class="text-muted mb-0">You enjoy working with and helping others, teaching, or providing guidance.</p>
+                                        <small class="text-muted">Good for: Safety Training, Team Leadership, Project Coordination</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="enterprising" id="hollandCode-enterprising">
+                                    <label class="form-check-label" for="hollandCode-enterprising">
+                                        <strong>Enterprising (E)</strong>
+                                        <p class="text-muted mb-0">You like to lead, persuade others, and make business decisions.</p>
+                                        <small class="text-muted">Good for: Project Management, Business Development, Company Leadership</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="conventional" id="hollandCode-conventional">
+                                    <label class="form-check-label" for="hollandCode-conventional">
+                                        <strong>Conventional (C)</strong>
+                                        <p class="text-muted mb-0">You are detail-oriented, organized, and good with numbers and processes.</p>
+                                        <small class="text-muted">Good for: Cost Estimation, Quality Control, Documentation</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Skills -->
+                <div id="skills" class="section mb-5">
+                    <h2>Skills & Experience</h2>
                     
-                    <div class="col-md-6 mb-4">
-                        <label class="form-label" for="constructionExperience">Years in Construction</label>
-                        <select class="form-select" name="constructionExperience" id="constructionExperience" required>
-                            <option value="0" selected>New to Construction</option>
-                            <option value="1">1 year</option>
-                            <option value="2">2 years</option>
-                            <option value="3">3 years</option>
-                            <option value="4">4 years</option>
-                            <option value="5">5-10 years</option>
-                            <option value="10">10-15 years</option>
-                            <option value="15">15-20 years</option>
-                            <option value="20">20+ years</option>
+                    <div class="mb-4">
+                        <h3 class="form-label">What technical skills do you currently have? (Select all that apply)</h3>
+                        <div id="technicalSkills-list">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="technicalSkills" value="hand-tools" id="technicalSkills-hand-tools">
+                                <label class="form-check-label" for="technicalSkills-hand-tools">Hand and power tools</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="technicalSkills" value="blueprint" id="technicalSkills-blueprint">
+                                <label class="form-check-label" for="technicalSkills-blueprint">Blueprint reading</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="technicalSkills" value="math" id="technicalSkills-math">
+                                <label class="form-check-label" for="technicalSkills-math">Construction math and measurements</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="technicalSkills" value="safety" id="technicalSkills-safety">
+                                <label class="form-check-label" for="technicalSkills-safety">Safety procedures and protocols</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="technicalSkills" value="equipment" id="technicalSkills-equipment">
+                                <label class="form-check-label" for="technicalSkills-equipment">Heavy equipment operation</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="technicalSkills" value="computer" id="technicalSkills-computer">
+                                <label class="form-check-label" for="technicalSkills-computer">Computer and software skills</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="form-label h6">Do you have any construction-related certifications?</h4>
+                        <select class="form-select" name="certificationAwareness" id="certificationAwareness" required>
+                            <option value="">Choose...</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No, but I'm interested in getting certified</option>
+                            <option value="not-interested">No, and I'm not currently interested</option>
+                            <option value="unsure">I need more information about certifications</option>
                         </select>
-                        <div class="invalid-feedback">Please select your experience level.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 2: Personality & Skills (Combines personality tests and skills) -->
-            <div id="personality" class="section mb-5">
-                <h2>Personality & Skills</h2>
-                
-                <!-- Myers-Briggs Assessment -->
-                <div class="mb-4">
-                    <h3 class="h5 mb-3">Myers-Briggs Personality Assessment</h3>
-                    
-                    <div class="mb-3">
-                        <h4 class="form-label h6">How do you prefer to focus your attention?</h4>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiEI" value="E" id="mbtiEI-E" required>
-                            <label class="form-check-label" for="mbtiEI-E">Externally - energized by social interaction (Extroversion)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiEI" value="I" id="mbtiEI-I">
-                            <label class="form-check-label" for="mbtiEI-I">Internally - energized by quiet reflection (Introversion)</label>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <h4 class="form-label h6">How do you prefer to take in information?</h4>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiSN" value="S" id="mbtiSN-S" required>
-                            <label class="form-check-label" for="mbtiSN-S">Through concrete facts and details (Sensing)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiSN" value="N" id="mbtiSN-N">
-                            <label class="form-check-label" for="mbtiSN-N">Through patterns and possibilities (Intuition)</label>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <h4 class="form-label h6">How do you prefer to make decisions?</h4>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiTF" value="T" id="mbtiTF-T" required>
-                            <label class="form-check-label" for="mbtiTF-T">Based on logic and objective analysis (Thinking)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiTF" value="F" id="mbtiTF-F">
-                            <label class="form-check-label" for="mbtiTF-F">Based on values and people impact (Feeling)</label>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <h4 class="form-label h6">How do you prefer to organize your life?</h4>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiJP" value="J" id="mbtiJP-J" required>
-                            <label class="form-check-label" for="mbtiJP-J">Structured and planned (Judging)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="mbtiJP" value="P" id="mbtiJP-P">
-                            <label class="form-check-label" for="mbtiJP-P">Flexible and adaptable (Perceiving)</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Holland Code Assessment -->
-                <div class="mb-4">
-                    <h3 class="h5 mb-3">Holland Code Career Assessment</h3>
-                    <p class="text-muted mb-3">Select up to 3 personality types that best describe you:</p>
-                    
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="realistic" id="hollandCode-realistic">
-                                <label class="form-check-label" for="hollandCode-realistic">
-                                    <strong>Realistic (R)</strong>
-                                    <p class="text-muted mb-0">You enjoy working with your hands, tools, machines, or animals. You value practical things you can see and touch.</p>
-                                    <small class="text-muted">Good for: Trades, Equipment Operation, Technical Work</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="investigative" id="hollandCode-investigative">
-                                <label class="form-check-label" for="hollandCode-investigative">
-                                    <strong>Investigative (I)</strong>
-                                    <p class="text-muted mb-0">You like to solve complex problems, analyze data, and understand how things work.</p>
-                                    <small class="text-muted">Good for: Engineering, Estimation, Technical Planning</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="artistic" id="hollandCode-artistic">
-                                <label class="form-check-label" for="hollandCode-artistic">
-                                    <strong>Artistic (A)</strong>
-                                    <p class="text-muted mb-0">You value creativity, innovation, and unique solutions to problems.</p>
-                                    <small class="text-muted">Good for: Design, BIM Modeling, Virtual Construction</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="social" id="hollandCode-social">
-                                <label class="form-check-label" for="hollandCode-social">
-                                    <strong>Social (S)</strong>
-                                    <p class="text-muted mb-0">You enjoy working with and helping others, teaching, or providing guidance.</p>
-                                    <small class="text-muted">Good for: Safety Training, Team Leadership, Project Coordination</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="enterprising" id="hollandCode-enterprising">
-                                <label class="form-check-label" for="hollandCode-enterprising">
-                                    <strong>Enterprising (E)</strong>
-                                    <p class="text-muted mb-0">You like to lead, persuade others, and make business decisions.</p>
-                                    <small class="text-muted">Good for: Project Management, Business Development, Company Leadership</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="form-check">
-                                <input class="form-check-input holland-code" type="checkbox" name="hollandCode" value="conventional" id="hollandCode-conventional">
-                                <label class="form-check-label" for="hollandCode-conventional">
-                                    <strong>Conventional (C)</strong>
-                                    <p class="text-muted mb-0">You are detail-oriented, organized, and good with numbers and processes.</p>
-                                    <small class="text-muted">Good for: Cost Estimation, Quality Control, Documentation</small>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 3: Skills -->
-            <div id="skills" class="section mb-5">
-                <h2>Skills & Experience</h2>
-                
-                <div class="mb-4">
-                    <h3 class="form-label">What technical skills do you currently have? (Select all that apply)</h3>
-                    <div id="technicalSkills-list">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="technicalSkills" value="hand-tools" id="technicalSkills-hand-tools">
-                            <label class="form-check-label" for="technicalSkills-hand-tools">Hand and power tools</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="technicalSkills" value="blueprint" id="technicalSkills-blueprint">
-                            <label class="form-check-label" for="technicalSkills-blueprint">Blueprint reading</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="technicalSkills" value="math" id="technicalSkills-math">
-                            <label class="form-check-label" for="technicalSkills-math">Construction math and measurements</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="technicalSkills" value="safety" id="technicalSkills-safety">
-                            <label class="form-check-label" for="technicalSkills-safety">Safety procedures and protocols</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="technicalSkills" value="equipment" id="technicalSkills-equipment">
-                            <label class="form-check-label" for="technicalSkills-equipment">Heavy equipment operation</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="technicalSkills" value="computer" id="technicalSkills-computer">
-                            <label class="form-check-label" for="technicalSkills-computer">Computer and software skills</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <h4 class="form-label h6">Do you have any construction-related certifications?</h4>
-                    <select class="form-select" name="certificationAwareness" id="certificationAwareness" required>
-                        <option value="">Choose...</option>
-                        <option value="yes">Yes</option>
-                        <option value="no">No, but I'm interested in getting certified</option>
-                        <option value="not-interested">No, and I'm not currently interested</option>
-                        <option value="unsure">I need more information about certifications</option>
-                    </select>
-                    <div class="invalid-feedback">Please select an option.</div>
-                </div>
-            </div>
-
-            <!-- Section 4: Work Preferences (Combines career interests and environment) -->
-            <div id="preferences" class="section mb-5">
-                <h2>Work Preferences</h2>
-                
-                <div class="mb-4">
-                    <h3 class="form-label">Which construction roles interest you the most? (Choose up to three)</h3>
-                    <div id="careerInterests-list">
-                        <div class="form-check">
-                            <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="trades" id="careerInterests-trades">
-                            <label class="form-check-label" for="careerInterests-trades">Tradesperson (e.g., electrician, plumber, carpenter)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="heavy-machinery" id="careerInterests-heavy-machinery">
-                            <label class="form-check-label" for="careerInterests-heavy-machinery">Heavy Machinery Operator</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="tech-specialist" id="careerInterests-tech-specialist">
-                            <label class="form-check-label" for="careerInterests-tech-specialist">Construction Technology Specialist (drones, VR, AI)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="estimator" id="careerInterests-estimator">
-                            <label class="form-check-label" for="careerInterests-estimator">Cost Estimator/Quantity Surveyor</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="project-management" id="careerInterests-project-management">
-                            <label class="form-check-label" for="careerInterests-project-management">Project Management</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <h3 class="form-label">Which construction technologies interest you? (Select all that apply)</h3>
-                    <div id="techInterests-list">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="techInterests" value="drones" id="techInterests-drones">
-                            <label class="form-check-label" for="techInterests-drones">Drone mapping and surveying</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="techInterests" value="vr-ar" id="techInterests-vr-ar">
-                            <label class="form-check-label" for="techInterests-vr-ar">Virtual/Augmented Reality</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="techInterests" value="bim" id="techInterests-bim">
-                            <label class="form-check-label" for="techInterests-bim">Building Information Modeling (BIM)</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="techInterests" value="ai" id="techInterests-ai">
-                            <label class="form-check-label" for="techInterests-ai">AI and automation</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mb-4">
-                    <h4 class="form-label h6">What type of work environment do you prefer?</h4>
-                    <div id="environmentComfort-list">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="environmentComfort" value="outdoor" id="environmentComfort-outdoor" required>
-                            <label class="form-check-label" for="environmentComfort-outdoor">Primarily outdoor work</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="environmentComfort" value="indoor" id="environmentComfort-indoor">
-                            <label class="form-check-label" for="environmentComfort-indoor">Primarily indoor work</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="environmentComfort" value="mixed" id="environmentComfort-mixed">
-                            <label class="form-check-label" for="environmentComfort-mixed">Mix of indoor and outdoor work</label>
-                        </div>
                         <div class="invalid-feedback">Please select an option.</div>
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <h4 class="form-label h6">Are you willing to travel for work?</h4>
-                    <select class="form-select" name="travelWillingness" id="travelWillingness" required>
-                        <option value="">Choose...</option>
-                        <option value="no-travel">No travel - local work only</option>
-                        <option value="occasional">Occasional travel (few times per year)</option>
-                        <option value="regular">Regular travel (monthly)</option>
-                        <option value="extensive">Extensive travel (weekly)</option>
-                    </select>
-                    <div class="invalid-feedback">Please select an option.</div>
-                </div>
-            </div>
+                <!-- Section 4: Work Preferences (Combines career interests and environment) -->
+                <div id="preferences" class="section mb-5">
+                    <h2>Work Preferences</h2>
+                    
+                    <div class="mb-4">
+                        <h3 class="form-label">Which construction roles interest you the most? (Choose up to three)</h3>
+                        <div id="careerInterests-list">
+                            <div class="form-check">
+                                <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="trades" id="careerInterests-trades">
+                                <label class="form-check-label" for="careerInterests-trades">Tradesperson (e.g., electrician, plumber, carpenter)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="heavy-machinery" id="careerInterests-heavy-machinery">
+                                <label class="form-check-label" for="careerInterests-heavy-machinery">Heavy Machinery Operator</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="tech-specialist" id="careerInterests-tech-specialist">
+                                <label class="form-check-label" for="careerInterests-tech-specialist">Construction Technology Specialist (drones, VR, AI)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="estimator" id="careerInterests-estimator">
+                                <label class="form-check-label" for="careerInterests-estimator">Cost Estimator/Quantity Surveyor</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input career-choice" type="checkbox" name="careerInterests" value="project-management" id="careerInterests-project-management">
+                                <label class="form-check-label" for="careerInterests-project-management">Project Management</label>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- Section 4: Goals & Development (Combines goals and professional development) -->
-            <div id="goals" class="section mb-5">
-                <h2>Goals & Development</h2>
-                
-                <div class="mb-4">
-                    <h3 class="form-label">What are your career goals? (Select up to 3)</h3>
-                    <div id="careerGoals-list">
-                        <div class="form-check">
-                            <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="leadership" id="careerGoals-leadership">
-                            <label class="form-check-label" for="careerGoals-leadership">Advance to leadership positions</label>
+                    <div class="mb-4">
+                        <h3 class="form-label">Which construction technologies interest you? (Select all that apply)</h3>
+                        <div id="techInterests-list">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="techInterests" value="drones" id="techInterests-drones">
+                                <label class="form-check-label" for="techInterests-drones">Drone mapping and surveying</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="techInterests" value="vr-ar" id="techInterests-vr-ar">
+                                <label class="form-check-label" for="techInterests-vr-ar">Virtual/Augmented Reality</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="techInterests" value="bim" id="techInterests-bim">
+                                <label class="form-check-label" for="techInterests-bim">Building Information Modeling (BIM)</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="techInterests" value="ai" id="techInterests-ai">
+                                <label class="form-check-label" for="techInterests-ai">AI and automation</label>
+                            </div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="specialist" id="careerGoals-specialist">
-                            <label class="form-check-label" for="careerGoals-specialist">Become a specialist in my field</label>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="form-label h6">What type of work environment do you prefer?</h4>
+                        <div id="environmentComfort-list">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="environmentComfort" value="outdoor" id="environmentComfort-outdoor" required>
+                                <label class="form-check-label" for="environmentComfort-outdoor">Primarily outdoor work</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="environmentComfort" value="indoor" id="environmentComfort-indoor">
+                                <label class="form-check-label" for="environmentComfort-indoor">Primarily indoor work</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="environmentComfort" value="mixed" id="environmentComfort-mixed">
+                                <label class="form-check-label" for="environmentComfort-mixed">Mix of indoor and outdoor work</label>
+                            </div>
+                            <div class="invalid-feedback">Please select an option.</div>
                         </div>
-                        <div class="form-check">
-                            <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="business" id="careerGoals-business">
-                            <label class="form-check-label" for="careerGoals-business">Start my own business</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="innovation" id="careerGoals-innovation">
-                            <label class="form-check-label" for="careerGoals-innovation">Work with new technologies</label>
-                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h4 class="form-label h6">Are you willing to travel for work?</h4>
+                        <select class="form-select" name="travelWillingness" id="travelWillingness" required>
+                            <option value="">Choose...</option>
+                            <option value="no-travel">No travel - local work only</option>
+                            <option value="occasional">Occasional travel (few times per year)</option>
+                            <option value="regular">Regular travel (monthly)</option>
+                            <option value="extensive">Extensive travel (weekly)</option>
+                        </select>
+                        <div class="invalid-feedback">Please select an option.</div>
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <h4 class="form-label h6">How do you prefer to advance your career?</h4>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="advancementPreference" value="education" id="advancementPreference-education" required>
-                        <label class="form-check-label" for="advancementPreference-education">Through formal education and certifications</label>
+                <!-- Section 4: Goals & Development (Combines goals and professional development) -->
+                <div id="goals" class="section mb-5">
+                    <h2>Goals & Development</h2>
+                    
+                    <div class="mb-4">
+                        <h3 class="form-label">What are your career goals? (Select up to 3)</h3>
+                        <div id="careerGoals-list">
+                            <div class="form-check">
+                                <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="leadership" id="careerGoals-leadership">
+                                <label class="form-check-label" for="careerGoals-leadership">Advance to leadership positions</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="specialist" id="careerGoals-specialist">
+                                <label class="form-check-label" for="careerGoals-specialist">Become a specialist in my field</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="business" id="careerGoals-business">
+                                <label class="form-check-label" for="careerGoals-business">Start my own business</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input career-goal" type="checkbox" name="careerGoals" value="innovation" id="careerGoals-innovation">
+                                <label class="form-check-label" for="careerGoals-innovation">Work with new technologies</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="advancementPreference" value="experience" id="advancementPreference-experience">
-                        <label class="form-check-label" for="advancementPreference-experience">Through hands-on experience and mentorship</label>
+
+                    <div class="mb-4">
+                        <h4 class="form-label h6">How do you prefer to advance your career?</h4>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="advancementPreference" value="education" id="advancementPreference-education" required>
+                            <label class="form-check-label" for="advancementPreference-education">Through formal education and certifications</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="advancementPreference" value="experience" id="advancementPreference-experience">
+                            <label class="form-check-label" for="advancementPreference-experience">Through hands-on experience and mentorship</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="advancementPreference" value="both" id="advancementPreference-both">
+                            <label class="form-check-label" for="advancementPreference-both">A combination of both</label>
+                        </div>
+                        <div class="invalid-feedback">Please select an option.</div>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="advancementPreference" value="both" id="advancementPreference-both">
-                        <label class="form-check-label" for="advancementPreference-both">A combination of both</label>
+
+                    <div class="mb-4">
+                        <h4 class="form-label h6">What type of mentorship would you prefer?</h4>
+                        <select class="form-select" name="mentorshipType" id="mentorshipType" required>
+                            <option value="">Choose...</option>
+                            <option value="one-on-one">One-on-one mentorship</option>
+                            <option value="group">Group mentorship</option>
+                            <option value="peer">Peer mentorship</option>
+                            <option value="industry">Industry expert mentorship</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a mentorship preference.</div>
                     </div>
-                    <div class="invalid-feedback">Please select an option.</div>
+
+                    <div class="mb-4">
+                        <h4 class="form-label h6">What is your target salary range?</h4>
+                        <select class="form-select" name="salaryTarget" id="salaryTarget" required>
+                            <option value="">Choose...</option>
+                            <option value="30-40k">$30,000 - $40,000</option>
+                            <option value="40-50k">$40,000 - $50,000</option>
+                            <option value="50-60k">$50,000 - $60,000</option>
+                            <option value="60-70k">$60,000 - $70,000</option>
+                            <option value="70-80k">$70,000 - $80,000</option>
+                            <option value="80-100k">$80,000 - $100,000</option>
+                            <option value="100k+">$100,000+</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a salary range.</div>
+                    </div>
                 </div>
 
-                <div class="mb-4">
-                    <h4 class="form-label h6">What type of mentorship would you prefer?</h4>
-                    <select class="form-select" name="mentorshipType" id="mentorshipType" required>
-                        <option value="">Choose...</option>
-                        <option value="one-on-one">One-on-one mentorship</option>
-                        <option value="group">Group mentorship</option>
-                        <option value="peer">Peer mentorship</option>
-                        <option value="industry">Industry expert mentorship</option>
-                    </select>
-                    <div class="invalid-feedback">Please select a mentorship preference.</div>
-                </div>
+                <!-- Add margin to button -->
+                <button type="submit" class="btn btn-primary mb-5">Get Career Recommendations</button>
+            </form>
 
-                <div class="mb-4">
-                    <h4 class="form-label h6">What is your target salary range?</h4>
-                    <select class="form-select" name="salaryTarget" id="salaryTarget" required>
-                        <option value="">Choose...</option>
-                        <option value="30-40k">$30,000 - $40,000</option>
-                        <option value="40-50k">$40,000 - $50,000</option>
-                        <option value="50-60k">$50,000 - $60,000</option>
-                        <option value="60-70k">$60,000 - $70,000</option>
-                        <option value="70-80k">$70,000 - $80,000</option>
-                        <option value="80-100k">$80,000 - $100,000</option>
-                        <option value="100k+">$100,000+</option>
-                    </select>
-                    <div class="invalid-feedback">Please select a salary range.</div>
+            <!-- Results section -->
+            <div id="results" class="mt-5 mb-5" style="display: none;">
+                <h2>Your Career Recommendations</h2>
+                <div id="resultsContent"></div>
+                <div id="careerFlowchart" class="mt-4">
+                    <div class="flowchart-container"></div>
+                </div>
+                <div id="trainingResources" class="mt-4">
+                    <div class="resources-container"></div>
                 </div>
             </div>
 
-            <!-- Add margin to button -->
-            <button type="submit" class="btn btn-primary mb-5">Get Career Recommendations</button>
-        </form>
+            <!-- Footer at the very bottom -->
+            <footer class="text-center py-4 mt-5 border-top">
+                <div class="footer-content">
+                    <p class="mb-0">
+                        <span class="copyright">&copy; 2025 <a href="https://embersstaffing.com/">Embers Staffing Solutions</a></span>
+                        <span class="separator">|</span>
+                        <span class="built-by">Built by <a href="https://bigfootcrane.com/" class="bigfoot-link">Bigfoot</a></span>
+                    </p>
+                </div>
+            </footer>
+        </div>  <!-- End of container -->
 
-        <!-- Results section -->
-        <div id="results" class="mt-5 mb-5" style="display: none;">
-            <h2>Your Career Recommendations</h2>
-            <div id="resultsContent"></div>
-            <div id="careerFlowchart" class="mt-4">
-                <div class="flowchart-container"></div>
-            </div>
-            <div id="trainingResources" class="mt-4">
-                <div class="resources-container"></div>
-            </div>
-        </div>
-
-        <!-- Footer at the very bottom -->
-        <footer class="text-center py-4 mt-5 border-top">
-            <div class="footer-content">
-                <p class="mb-0">
-                    <span class="copyright">&copy; 2025 <a href="https://embersstaffing.com/">Embers Staffing Solutions</a></span>
-                    <span class="separator">|</span>
-                    <span class="built-by">Built by <a href="https://bigfootcrane.com/" class="bigfoot-link">Bigfoot</a></span>
-                </p>
-            </div>
-        </footer>
-    </div>  <!-- End of container -->
-
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Application Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script type="module" src="script.js"></script>
-    
-    <!-- Test Scripts (only in development) -->
-    <script type="module">
-        const hostname = window.location.hostname;
-        if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === 'embers-staffing.github.io') {
-            import('./tests/autoFill.js')
-                .then(module => {
-                    module.addAutoFillButton();
-                })
-                .catch(error => {
-                    console.error('Error loading auto-fill script:', error);
-                });
-        }
-    </script>
-</body>
+        <!-- Bootstrap Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        
+        <!-- Application Scripts -->
+        <script type="module">
+            import { initializeForm } from './script.js';
+            import { autoFillSurvey } from './autoFill.js';
+            
+            // Initialize form and set up auto-fill
+            window.addEventListener('DOMContentLoaded', () => {
+                try {
+                    initializeForm();
+                    window.autoFillSurvey = autoFillSurvey;
+                } catch (error) {
+                    console.error('Error during initialization:', error);
+                }
+            });
+        </script>
+    </body>
 </html>
