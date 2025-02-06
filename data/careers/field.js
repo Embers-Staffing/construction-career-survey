@@ -32,44 +32,108 @@ export const fieldCareers = {
         ],
         skills: {
             technical: [
-                'Canadian Building Codes',
-                'Construction Methods',
-                'Safety Protocols',
+                'Blueprint Reading',
+                'Construction Scheduling',
                 'Quality Control',
-                'Schedule Management'
+                'Safety Management',
+                'Building Code Knowledge'
             ],
             soft: [
                 'Leadership',
-                'Problem-solving',
                 'Communication',
-                'Decision Making',
-                'Team Management'
+                'Problem Solving',
+                'Team Management',
+                'Decision Making'
             ]
         },
         salary: {
-            entry: '$70,000 - $85,000 CAD',
-            mid: '$85,000 - $110,000 CAD',
-            senior: '$110,000 - $145,000 CAD',
-            source: 'Based on Canadian Job Bank data 2025'
+            entry: '$75,000 - $90,000 CAD',
+            mid: '$90,000 - $120,000 CAD',
+            senior: '$120,000 - $150,000 CAD'
+        }
+    },
+    'Site Supervisor': {
+        description: 'A Site Supervisor oversees daily construction operations, coordinates workers and subcontractors, and ensures site safety and productivity.',
+        education: {
+            degrees: [
+                'Diploma in Construction Technology',
+                'Trade certification with supervisory experience'
+            ],
+            schools: [
+                {
+                    name: 'George Brown College',
+                    program: 'Construction Engineering Technology',
+                    link: 'https://www.georgebrown.ca/programs/construction-engineering-technology-program-t105'
+                }
+            ]
         },
-        responsibilities: [
-            'Supervise construction sites',
-            'Ensure compliance with provincial regulations',
-            'Coordinate workers and subcontractors',
-            'Monitor project progress',
-            'Quality control'
+        certifications: [
+            'Site Supervisor Safety Training Scheme (SSSTS)',
+            'First Aid Certification',
+            'Construction Safety Training System (CSTS)'
         ],
-        industryTrends: [
-            'Digital documentation tools',
-            'Real-time project tracking',
-            'Advanced safety protocols',
-            'Cold weather construction techniques'
+        skills: {
+            technical: [
+                'Site Management',
+                'Safety Protocols',
+                'Schedule Management',
+                'Quality Control',
+                'Resource Allocation'
+            ],
+            soft: [
+                'Leadership',
+                'Communication',
+                'Organization',
+                'Problem Solving',
+                'Team Coordination'
+            ]
+        },
+        salary: {
+            entry: '$65,000 - $80,000 CAD',
+            mid: '$80,000 - $100,000 CAD',
+            senior: '$100,000 - $120,000 CAD'
+        }
+    },
+    'Construction Foreman': {
+        description: 'A Construction Foreman leads and coordinates construction crews, ensuring work quality, safety compliance, and project timeline adherence.',
+        education: {
+            degrees: [
+                'Trade certification in relevant field',
+                'Construction Management Certificate'
+            ],
+            schools: [
+                {
+                    name: 'SAIT',
+                    program: 'Construction Management Certificate',
+                    link: 'https://www.sait.ca/programs-and-courses/certificates/construction-management'
+                }
+            ]
+        },
+        certifications: [
+            'Supervisory Training Program',
+            'Safety Management Certification',
+            'First Aid and CPR'
         ],
-        careerPath: {
-            entry: 'Assistant Superintendent',
-            mid: 'Superintendent',
-            senior: 'Senior Superintendent',
-            executive: 'General Superintendent'
+        skills: {
+            technical: [
+                'Trade Expertise',
+                'Blueprint Reading',
+                'Safety Management',
+                'Equipment Operation',
+                'Quality Control'
+            ],
+            soft: [
+                'Leadership',
+                'Communication',
+                'Problem Solving',
+                'Team Management',
+                'Time Management'
+            ]
+        },
+        salary: {
+            entry: '$60,000 - $75,000 CAD',
+            mid: '$75,000 - $90,000 CAD',
+            senior: '$90,000 - $110,000 CAD'
         }
     }
 };

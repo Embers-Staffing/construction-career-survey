@@ -85,49 +85,120 @@ export const careerData = {
  * Get career recommendations based on MBTI type and Holland codes
  * @param {string} mbtiType - The MBTI personality type
  * @param {string[]} hollandCodes - Array of Holland codes
- * @returns {string[]} Array of recommended career titles
+ * @returns {Array<{title: string, score: number}>} Array of recommended careers with scores
  */
 export function getRecommendations(mbtiType, hollandCodes = []) {
     try {
         DEBUG.info('Getting recommendations for:', { mbtiType, hollandCodes });
         
-        // Get MBTI-based recommendations
-        const mbtiRecommendations = new Set(careerData.recommendations[mbtiType] || []);
-        DEBUG.info('MBTI recommendations:', Array.from(mbtiRecommendations));
+        // Initialize scoring weights
+        const MBTI_WEIGHT = 0.6;
+        const HOLLAND_WEIGHT = 0.4;
         
-        // If no Holland codes provided, return MBTI recommendations
-        if (!hollandCodes || hollandCodes.length === 0) {
-            DEBUG.info('No Holland codes provided, returning MBTI recommendations:', Array.from(mbtiRecommendations));
-            return Array.from(mbtiRecommendations);
-        }
+        // Get all possible MBTI types that match the pattern with X
+        const possibleTypes = getPossibleMBTITypes(mbtiType);
+        DEBUG.info('Possible MBTI types:', possibleTypes);
         
-        // Get Holland code based recommendations
-        const hollandRecommendations = new Set();
-        hollandCodes.forEach(code => {
-            const codeRecs = careerData.hollandCodeMapping[code.toLowerCase()] || [];
-            codeRecs.forEach(rec => hollandRecommendations.add(rec));
+        // Calculate MBTI-based recommendations with scores
+        const recommendationsMap = new Map();
+        
+        // Score based on MBTI type matches
+        possibleTypes.forEach(type => {
+            const typeRecommendations = careerData.recommendations[type] || [];
+            const matchScore = calculateMBTIMatchScore(mbtiType, type);
+            
+            typeRecommendations.forEach(career => {
+                const currentScore = recommendationsMap.get(career)?.score || 0;
+                recommendationsMap.set(career, {
+                    title: career,
+                    score: Math.max(currentScore, matchScore * MBTI_WEIGHT)
+                });
+            });
         });
-        DEBUG.info('Holland recommendations:', Array.from(hollandRecommendations));
         
-        // Find intersection between MBTI and Holland recommendations
-        const finalRecommendations = Array.from(mbtiRecommendations)
-            .filter(rec => hollandRecommendations.has(rec));
-        
-        // If no matches found, return top 3 from each set
-        if (finalRecommendations.length === 0) {
-            const mbtiTop3 = Array.from(mbtiRecommendations).slice(0, 3);
-            const hollandTop3 = Array.from(hollandRecommendations).slice(0, 3);
-            const combinedRecs = [...new Set([...mbtiTop3, ...hollandTop3])];
-            DEBUG.info('No direct matches, returning combined recommendations:', combinedRecs);
-            return combinedRecs;
+        // Add Holland code based scoring
+        if (hollandCodes && hollandCodes.length > 0) {
+            hollandCodes.forEach((code, index) => {
+                const codeRecs = careerData.hollandCodeMapping[code.toLowerCase()] || [];
+                const hollandScore = (hollandCodes.length - index) / hollandCodes.length; // Higher priority to first codes
+                
+                codeRecs.forEach(career => {
+                    const current = recommendationsMap.get(career) || { title: career, score: 0 };
+                    const hollandBonus = hollandScore * HOLLAND_WEIGHT;
+                    recommendationsMap.set(career, {
+                        title: career,
+                        score: current.score + hollandBonus
+                    });
+                });
+            });
         }
         
-        DEBUG.info('Found matching recommendations:', finalRecommendations);
-        return finalRecommendations;
+        // Sort recommendations by score and convert to array
+        const recommendations = Array.from(recommendationsMap.values())
+            .sort((a, b) => b.score - a.score)
+            .map(item => ({
+                ...item,
+                score: Math.round(item.score * 100) / 100 // Round to 2 decimal places
+            }));
+            
+        DEBUG.info('Final recommendations with scores:', recommendations);
+        return recommendations;
+        
     } catch (error) {
-        DEBUG.error('Error in getRecommendations:', error);
+        DEBUG.error('Error getting recommendations:', error);
         return [];
     }
+}
+
+/**
+ * Calculate how well two MBTI types match
+ * @param {string} inputType - Input MBTI type with possible X wildcards
+ * @param {string} matchType - Full MBTI type to match against
+ * @returns {number} Match score between 0 and 1
+ */
+function calculateMBTIMatchScore(inputType, matchType) {
+    let matchCount = 0;
+    
+    for (let i = 0; i < 4; i++) {
+        if (inputType[i] === 'X' || inputType[i] === matchType[i]) {
+            matchCount++;
+        }
+    }
+    
+    return matchCount / 4;
+}
+
+/**
+ * Get all possible MBTI types that match a pattern with X wildcards
+ * @param {string} mbtiType - MBTI type with possible X wildcards
+ * @returns {string[]} Array of matching MBTI types
+ */
+function getPossibleMBTITypes(mbtiType) {
+    const positions = [];
+    for (let i = 0; i < mbtiType.length; i++) {
+        if (mbtiType[i] === 'X') positions.push(i);
+    }
+    
+    if (positions.length === 0) return [mbtiType];
+    
+    const possibilities = ['EI', 'SN', 'TF', 'JP'];
+    let combinations = [mbtiType];
+    
+    positions.forEach(pos => {
+        const index = Math.floor(pos / 1);
+        const chars = possibilities[index];
+        const newCombos = [];
+        
+        combinations.forEach(combo => {
+            chars.split('').forEach(char => {
+                newCombos.push(combo.substring(0, pos) + char + combo.substring(pos + 1));
+            });
+        });
+        
+        combinations = newCombos;
+    });
+    
+    return combinations;
 }
 
 /**
